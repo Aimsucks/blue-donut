@@ -1,0 +1,46 @@
+{% extends 'content_page.html' %}
+{% load static %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block header %}
+<div class="container-fluid">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt toggles-ignore mx-auto py-5">
+            <div class="py-2 text-center text-lg-left">
+                <h1 class="display-3 mb-0">
+                    <span data-ng-bind="selected.palette.name" class="ng-binding">bluedonut.space</span>
+                </h1>
+                <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">Welcome to bluedonut.space, a set of tools to help you while you live within the big blue donut.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Route Planner</h2>
+            <p>Use the Route Planner to help you navigate your way through blue space as efficiently as possible. This tool will aid you in taking advantage of our vast jump bridge network. </p>
+            <p><a class="btn btn-primary" href="#" role="button">Set destination</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Scans</h2>
+            <p>Need to submit a d-scan or local scan to your FC? You're one click and a copy-paste away from having a link directly added to your clipboard so you can share it as quickly as possible.</p>
+            <p><a class="btn btn-secondary disabled" href="#" role="button">Currently Disabled</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Appraisal</h2>
+            <p>Take advantage of the Evepraisal API with a much nicer interface. Copy-paste your stuff into the box and within seconds you will have an appraisal of all of it, customized to the percentage you want.</p>
+            <p><a class="btn btn-secondary disabled" href="#" role="button">Currently Disabled</a></p>
+        </div>
+    </div>
+
+    <hr>
+
+</div> <!-- /container -->
+{% endblock %}

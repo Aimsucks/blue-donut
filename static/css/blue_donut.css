@@ -1,0 +1,93 @@
+.header-link {
+    color: white !important
+}
+
+.module-table td {
+    vertical-align: middle
+}
+
+.contract-table td {
+    vertical-align: middle
+}
+
+.module-table tr.item {
+    height: 75px;
+}
+
+.module-dropdown {
+    padding: 0px;
+}
+
+.navbar-fill {
+    flex-grow: 1.0;
+}
+
+.module-accordion-header {
+    padding: 0px;
+}
+
+.module-accordion-button {
+    padding: 4px 8px 4px 8px;
+}
+
+.list-group-item {
+    padding: 8px;
+}
+
+@media screen and (max-device-width: 640px) {
+    .btn-copy-contract-link {
+        display: none !important;
+    }
+}
+
+html {
+    overflow-y:scroll;
+}
+
+.jumbotron {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.btn-mini {
+    height: 24px;
+    padding: 0px;
+}
+
+.avatar {
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+.jumbotron-tabs {
+    margin-top: 0px !important;
+}
+
+.nav-tabs {
+    border: 0px;
+}
+
+.nav-link {
+    border-top-color: transparent !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0.25rem !important;
+    border-bottom-right-radius: 0.25rem !important;
+    margin-right: 0.25rem;
+}
+
+.btn-std-size {
+    width: 60px;
+}
+
+#module-table {
+    width: 100% !important;
+}
+
+@media(max-width:767px) {
+    h1 {
+        font-size: 24pt !important;
+    }
+}
