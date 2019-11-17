@@ -23,8 +23,8 @@
             <h2>Popular Destinations</h2>
             <p>Below is a list of precompiled popular destinations for you to choose from.</p>
             <input type="submit" class="mr-3 btn btn-primary" value="D-PNP9" onclick="buttonClick('D-PNP9');">
-            <input type="submit" class="mr-3 btn btn-primary" value="YAP-TN" onclick="buttonClick('YAP-TN');">
-            <input type="submit" class="mr-3 btn btn-primary" value="QLPX-J" onclick="buttonClick('QLPX-J');">
+            <input type="submit" class="mr-3 btn btn-primary" value="GE-8JV" onclick="buttonClick('GE-8JV');">
+            <input type="submit" class="mr-3 btn btn-primary" value="PZMA-E" onclick="buttonClick('PZMA-E');">
         </div>
         <div class="col-md-6">
             <h2>Create Your Own</h2>
@@ -36,7 +36,7 @@
                         {{ form }}
                     </div>
                     <input type="hidden" id="character_id" name="character_id" value="">
-                    <input type="submit" id="destinationSubmit" value="Set destination" class="btn btn-primary mb-2">
+                    <input type="submit" id="destinationSubmit" value="Set destination" class="btn btn-primary mb-2" onclick="document.getElementById('character_id').value = get_active_character();">
                 </form>
             </div>
         </div>  
@@ -51,11 +51,11 @@
 $(document).ready(function(){
    $(".active").removeClass("active");
    $("#route_planner").addClass("active");
-   document.getElementById("character_id").value = get_active_character();
 });
 
 function buttonClick(button) {
     document.getElementById('destinationInput').value = button;
+    document.getElementById("character_id").value = get_active_character();
     document.getElementById('destinationForm').submit();
 }
 
