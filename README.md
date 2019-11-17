@@ -5,6 +5,8 @@ It's main purpose is route planning using the expansive Ansiblex Jump Gate netwo
 
 So far I haven't included any tests or CI. There are plans to incorporate everything, but for now we just have to deal with it.
 
+Made with inspiration from Sharad Heft's [website](https://github.com/StephenSwat/eve-abyssal-market).
+
 ## Installation
 
 Figure it out.
