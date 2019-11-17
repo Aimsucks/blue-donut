@@ -7,7 +7,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Discover your route through the Blue Donut with Blue Donut Star Map.">
+    <meta name="description" content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition.">
+    <meta name="author" content="Aimsucks">
+    <meta name="theme-color" content="#375A7F">
+
+    <meta content="{% block title %}{% endblock %}" property="og:title">
+
+    <meta content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition." property="og:description">
+    <meta content="{% static 'img/favicon.png' %}" property='og:image'>
+    <link type="application/json+oembed" href="{% static 'json/oembed.json' %}" />
 
     <title>{% block title %}{% endblock %} - Blue Donut</title>
 
