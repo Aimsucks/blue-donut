@@ -5,28 +5,27 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition.">
-    <meta name="author" content="Aimsucks">
-    <meta name="theme-color" content="#375A7F">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition.">
+  <meta name="author" content="Aimsucks">
+  <meta name="theme-color" content="#375A7F">
 
-    <meta content="{% block title %}{% endblock %}" property="og:title">
+  <meta content="Blue Donut" property="og:author">
+  <meta content="{% block title %}{% endblock %}" property="og:title">
+  <meta content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition." property="og:description">
+  <meta content="{% static 'img/favicon.png' %}" property='og:image'>
 
-    <meta content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition." property="og:description">
-    <meta content="{% static 'img/favicon.png' %}" property='og:image'>
-    <link type="application/json+oembed" href="{% static 'json/oembed.json' %}" />
+  <title>Blue Donut</title>
 
-    <title>Blue Donut</title>
+  {% block metadata %}{% endblock %}
 
-    {% block metadata %}{% endblock %}
+  {% block extra_styling %}{% endblock %}
 
-    {% block extra_styling %}{% endblock %}
-
-    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" />
-    <script src="https://kit.fontawesome.com/59213b9e2d.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/darkly/bootstrap.min.css" />
-    <link rel="stylesheet" href="{% static 'css/blue_donut.css' %}" />
+  <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" />
+  <script src="https://kit.fontawesome.com/59213b9e2d.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/darkly/bootstrap.min.css" />
+  <link rel="stylesheet" href="{% static 'css/blue_donut.css' %}" />
 </head>
 
 <body>
