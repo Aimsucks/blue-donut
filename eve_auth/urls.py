@@ -2,9 +2,6 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 import eve_auth.views
-from eve_esi import EsiManager
-
-EsiManager()._initialize_app()
 
 app_name = 'eve_auth'
 

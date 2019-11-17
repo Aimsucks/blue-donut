@@ -5,16 +5,6 @@ import networkx as nx
 
 G = nx.Graph()
 
-nodes = SolarSystems.objects.values_list('solarSystemID', flat=True)
-edges = SolarSystemJumps.objects.values_list(
-    'fromSolarSystemID', 'toSolarSystemID')
-bridges = AnsiblexJumpGates.objects.values_list(
-    'fromSolarSystemID', 'toSolarSystemID')
-
-G.add_nodes_from(nodes)
-G.add_edges_from(edges, type="gate")
-G.add_edges_from(bridges, type="bridge")
-
 
 class RoutePlannerBackend:
     def generate(self, source, destination):
