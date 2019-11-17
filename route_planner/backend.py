@@ -7,7 +7,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 G = nx.Graph()
-logger.debug("Graph created.")
 
 
 class RoutePlannerBackend:
