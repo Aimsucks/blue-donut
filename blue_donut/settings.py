@@ -130,5 +130,9 @@ LOGGING = {
             'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
         },
+        'route_planner': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+        },
     }
 }

@@ -2,6 +2,9 @@ from eve_sde.models import SolarSystems, SolarSystemJumps
 from jump_bridges.models import AnsiblexJumpGates
 import networkx as nx
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 G = nx.Graph()
 
@@ -28,6 +31,7 @@ class RoutePlannerBackend:
 
     def updateGraph(self):
         G.clear()
+        logger.debug("Graph cleared.")
 
         nodes = SolarSystems.objects.values_list('solarSystemID', flat=True)
         edges = SolarSystemJumps.objects.values_list(
@@ -36,5 +40,8 @@ class RoutePlannerBackend:
             'fromSolarSystemID', 'toSolarSystemID')
 
         G.add_nodes_from(nodes)
+        logger.debug("Graph nodes added.")
         G.add_edges_from(edges, type="gate")
+        logger.debug("Standard gate edges added.")
         G.add_edges_from(bridges, type="bridge")
+        logger.debug("Ansiblex gate edges added.")
