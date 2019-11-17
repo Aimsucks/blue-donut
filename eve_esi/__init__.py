@@ -92,3 +92,5 @@ class EsiManager:
 
 
 ESI = EsiManager()
+
+ESI._initialize_app()

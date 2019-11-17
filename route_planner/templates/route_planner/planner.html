@@ -1,35 +1,103 @@
 {% extends 'content_page.html' %}
 {% load static %}
+{% load bootstrap4 %}
 
 {% block title %}Route Planner{% endblock %}
 
 {% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
-        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+        <div class="col-xl-7 container-alt toggles-ignore mx-auto">
             <h1 class="display-3 mb-0">
-                <span data-ng-bind="selected.palette.name" class="ng-binding">{{ user.username }}</span>
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Route Planner</span>
             </h1>
-
-            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
-            Smile! That's you!
-            </p>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <a class="btn btn-primary text-light" href="{% url 'eve_auth:login' %}">Add character</a>
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Popular Destinations</h2>
+            <p>Below is a list of precompiled popular destinations for you to choose from.</p>
+            <input type="submit" class="mr-3 btn btn-primary" value="D-PNP9" onclick="buttonClick('D-PNP9');">
+            <input type="submit" class="mr-3 btn btn-primary" value="YAP-TN" onclick="buttonClick('YAP-TN');">
+            <input type="submit" class="mr-3 btn btn-primary" value="QLPX-J" onclick="buttonClick('QLPX-J');">
+        </div>
+        <div class="col-md-6">
+            <h2>Create Your Own</h2>
+            <p>Enter your destination and Blue Donut will do the rest.</p>
+            <div class="input-group" id="prefetch">
+                <form class="form-inline" id="destinationForm" action="/planner/" method="post">
+                    <div class="form-group mr-3 mb-2">
+                        {% csrf_token %}
+                        {{ form }}
+                    </div>
+                    <input type="hidden" id="character_id" name="character_id" value="">
+                    <input type="submit" id="destinationSubmit" value="Set destination" class="btn btn-primary mb-2">
+                </form>
+            </div>
+        </div>  
+    </div>
 </div>
 {% endblock %}
 
 {% block trailing_js %}
+<script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+
 <script>
 $(document).ready(function(){
    $(".active").removeClass("active");
    $("#route_planner").addClass("active");
+   document.getElementById("character_id").value = get_active_character();
 });
+
+function buttonClick(button) {
+    document.getElementById('destinationInput').value = button;
+    document.getElementById('destinationForm').submit();
+}
+
+var systems = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.whitespace,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  // url points to a json file that contains an array of country names, see
+  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+  prefetch: '../static/json/systems.json'
+});
+
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+var $typeahead = $('#prefetch .typeahead').typeahead(null, {
+  name: 'systems',
+  source: systems
+});
+
+var selected      = null;
+var originalVal   = null;
+
+// When the typeahead becomes active reset these values.
+$typeahead.on("typeahead:active", function(aEvent) {
+   selected       = null;
+   originalVal    = $typeahead.typeahead("val");
+})
+
+// When a suggestion gets selected save that
+$typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
+   selected = aSuggestion;
+});
+
+// Once user leaves the component and a change was registered
+// check whether or not something was selected. If not reset to
+// the original value.
+$typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
+   if (!selected) {
+      $typeahead.typeahead("val", originalVal);
+   }
+
+   // Do something with the selected value here as needed...
+});   
 </script>
+
 {% endblock %}

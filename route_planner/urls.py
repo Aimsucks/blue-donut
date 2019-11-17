@@ -6,5 +6,5 @@ app_name = 'route_planner'
 
 
 urlpatterns = [
-    path('', route_planner.views.PlannerView.as_view(), name='planner')
+    path('', route_planner.views.PlannerView.as_view(), name='planner'),
 ]

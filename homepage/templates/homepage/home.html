@@ -1,14 +1,12 @@
 {% extends 'content_page.html' %}
 {% load static %}
 
-{% block title %}
-Home
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block header %}
 <div class="container-fluid">
     <div class="row align-items-center bg-primary check-contrast py-5">
-        <div class="col-xl-9 container-alt toggles-ignore mx-auto py-5">
+        <div class="col-xl-7 container-alt toggles-ignore mx-auto py-5">
             <div class="py-2 text-center text-lg-left">
                 <h1 class="display-3 mb-0">
                     <span data-ng-bind="selected.palette.name" class="ng-binding">bluedonut.space</span>
@@ -26,7 +24,7 @@ Home
         <div class="col-md-4">
             <h2>Route Planner</h2>
             <p>Use the Route Planner to help you navigate your way through blue space as efficiently as possible. This tool will aid you in taking advantage of our vast jump bridge network. </p>
-            <p><a class="btn btn-primary" href="#" role="button">Set destination</a></p>
+            <p><a class="btn btn-primary" href="{% url 'route_planner:planner' %}" role="button">Set destination</a></p>
         </div>
         <div class="col-md-4">
             <h2>Scans</h2>
@@ -42,5 +40,5 @@ Home
 
     <hr>
 
-</div> <!-- /container -->
+</div>
 {% endblock %}
