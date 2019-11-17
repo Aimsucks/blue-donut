@@ -8,4 +8,3 @@ class EveAuthConfig(AppConfig):
 
     def ready(self):
         EsiManager()._initialize_app()
-        pass
