@@ -1,12 +1,7 @@
-FROM python:3.8
-
-ADD . /app
-WORKDIR /app
-
-COPY requirements.txt requirements.txt
+FROM python:3
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+COPY requirements.txt /code/
 RUN pip install -r requirements.txt
-
-COPY . .
-
-CMD ["python", "manage.py", "makemigrations"]
-CMD ["python", "manage.py", "migrate"]
+COPY . /code/
