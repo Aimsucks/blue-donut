@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-from route_planner.backend import RoutePlannerBackend
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -9,5 +9,6 @@ class RoutePlannerConfig(AppConfig):
     name = 'route_planner'
 
     def ready(self):
+        from .backend import RoutePlannerBackend
         RoutePlannerBackend().updateGraph()
         logger.debug("Running initial graph update!")
