@@ -15,15 +15,13 @@ G = nx.Graph()
 class RoutePlannerBackend:
     def generate(self, character, character_id, system):
 
-        # req = ESI.request(
-        #     'get_characters_character_id_location',
-        #     client=character.get_client(),
-        #     character_id=int(character_id)
-        # ).data
-        # source = req.solar_system_id
-        # source_name = req.solar_system_name
-        source = 30000475
-        source_name = 'QLPX-J'
+        req = ESI.request(
+            'get_characters_character_id_location',
+            client=character.get_client(),
+            character_id=int(character_id)
+        ).data
+        source = req.solar_system_id
+        source_name = req.solar_system_name
 
         destination = SolarSystems.objects.values_list(
             'solarSystemID', flat=True).get(solarSystemName=system)
