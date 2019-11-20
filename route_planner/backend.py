@@ -21,7 +21,8 @@ class RoutePlannerBackend:
             character_id=int(character_id)
         ).data
         source = req.solar_system_id
-        source_name = req.solar_system_name
+        source_name = SolarSystems.objects.values_list(
+            'solarSystemID', flat=True).get(solarSystemName=source)
 
         destination = SolarSystems.objects.values_list(
             'solarSystemID', flat=True).get(solarSystemName=system)
