@@ -1,6 +1,9 @@
+import networkx as nx
+import re
+
+from eve_esi import ESI
 from eve_sde.models import SolarSystems, SolarSystemJumps
 from jump_bridges.models import AnsiblexJumpGates
-import networkx as nx
 
 import logging
 
@@ -10,24 +13,53 @@ G = nx.Graph()
 
 
 class RoutePlannerBackend:
-    def generate(self, source, destination):
-        start = source
-        finish = SolarSystems.objects.values_list(
-            'solarSystemID', flat=True).get(solarSystemName=destination)
+    def generate(self, character, character_id, system):
 
-        path = nx.shortest_path(G, start, finish)
+        # req = ESI.request(
+        #     'get_characters_character_id_location',
+        #     client=character.get_client(),
+        #     character_id=int(character_id)
+        # ).data
+        # source = req.solar_system_id
+        # source_name = req.solar_system_name
+        source = 30000475
+        source_name = 'QLPX-J'
+
+        destination = SolarSystems.objects.values_list(
+            'solarSystemID', flat=True).get(solarSystemName=system)
+
+        path = nx.shortest_path(G, source, destination)
+        path_length = len(path)-1
 
         jb_path = []
-
         for i in range(len(path)-1):
             if G.get_edge_data(path[i], path[i+1])['type'] == 'bridge':
                 jb_path.append(AnsiblexJumpGates.objects.values_list(
                     'structureID', flat=True).get(
                     fromSolarSystemID=path[i], toSolarSystemID=path[i+1]))
+        if jb_path[:-1] != destination:
+            jb_path.append(destination)
 
-        jb_path.append(finish)
+        dotlan_path = source_name
+        for i in range(len(path)-1):
+            if G.get_edge_data(path[i], path[i+1])['type'] == 'bridge':
+                bridged_path = '::' + SolarSystems.objects.values_list(
+                    'solarSystemName', flat=True).get(solarSystemID=path[i+1])
+                dotlan_path += bridged_path
 
-        return jb_path
+            else:
+                gated_path = ':' + SolarSystems.objects.values_list(
+                    'solarSystemName', flat=True).get(solarSystemID=path[i+1])
+                dotlan_path += gated_path
+        dotlan_path = re.sub('(?<!:)(:[^:\s]+)(?=:)(?!::)', '', dotlan_path)
+
+        result = {
+            'esi': jb_path,
+            'dotlan': dotlan_path,
+            'length': path_length
+        }
+
+        return result
 
     def updateGraph(self):
         G.clear()

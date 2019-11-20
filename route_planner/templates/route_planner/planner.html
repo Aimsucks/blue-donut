@@ -21,14 +21,12 @@
     <div class="row">
         <div class="col-md-6">
             <h2>Popular Destinations</h2>
-            <p>Below is a list of precompiled popular destinations for you to choose from.</p>
             <input type="submit" class="mr-3 btn btn-primary" value="D-PNP9" onclick="buttonClick('D-PNP9');">
             <input type="submit" class="mr-3 btn btn-primary" value="GE-8JV" onclick="buttonClick('GE-8JV');">
             <input type="submit" class="mr-3 btn btn-primary" value="PZMA-E" onclick="buttonClick('PZMA-E');">
         </div>
         <div class="col-md-6">
             <h2>Create Your Own</h2>
-            <p>Enter your destination and Blue Donut will do the rest.</p>
             <div class="input-group" id="prefetch">
                 <form class="form-inline" id="destinationForm" action="/planner/" method="post">
                     <div class="form-group mr-3 mb-2">
@@ -36,17 +34,38 @@
                         {{ form }}
                     </div>
                     <input type="hidden" id="character_id" name="character_id" value="">
-                    <input type="submit" id="destinationSubmit" value="Set destination" class="btn btn-primary mb-2" onclick="document.getElementById('character_id').value = get_active_character();">
+                    <input type="submit" id="destinationVerify" name="verify" value="Verify" class="btn btn-primary mb-2" onclick="document.getElementById('character_id').value = get_active_character();">
+                    <input type="submit" id="destinationSubmit" name="generate" value="Generate" class="btn btn-primary ml-3 mb-2" onclick="document.getElementById('character_id').value = get_active_character();">
+                    <small class="form-text text-muted mt-0">Please only input correct system names.</small>
                 </form>
             </div>
         </div>  
     </div>
+    {% if mapDisplay %}
+    <div class="row justify-content-start mt-5">
+        <div class="col-6">
+            <object id="map" class="rounded" width="100%" height="100%" data="http://evemaps.dotlan.net/svg/Universe.svg?&path={{ dotlan }}" type="image/svg+xml">
+            </object>
+        </div>
+        <div class="col">
+            <h2 class="mb-0">{{ destination|default:"No Destination Set" }}</h2>
+            <p class="text-muted mb-2">Number of jumps: {{ jumps|default:"No destination set." }}</p>
+            {% if confirmButton %}
+            <form id="confirmForm" action="/planner/" method="post">
+                {% csrf_token %}
+                {{ button }}
+                <input type="hidden" id="character_id_confirm" name="character_id" value="">
+                <input type="submit" id="destinationConfirm" class="mr-3 btn btn-primary" name="confirm" value="Set destination" onclick="document.getElementById('character_id_confirm').value = get_active_character();">
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
 
 {% block trailing_js %}
-<script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
 <script>
 $(document).ready(function(){
    $(".active").removeClass("active");

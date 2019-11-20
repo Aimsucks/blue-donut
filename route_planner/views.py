@@ -20,12 +20,12 @@ class PlannerView(LoginRequiredMixin, View):
             'route_planner/planner.html',
             {
                 'form': form,
-                'button': button
             }
         )
 
     def post(self, request):
         form = DestinationForm(request.POST)
+        button = DestinationButton(request.POST)
 
         if form.is_valid():
             try:
@@ -35,34 +35,124 @@ class PlannerView(LoginRequiredMixin, View):
             except EveUser.DoesNotExist:
                 return HttpResponse(status=403)
 
-            req = ESI.request(
-                'get_characters_character_id_location',
-                client=character.get_client(),
-                character_id=int(request.POST['character_id'])
-            )
+            # req = ESI.request(
+            #     'get_characters_character_id_location',
+            #     client=character.get_client(),
+            #     character_id=int(request.POST['character_id'])
+            # )
 
-            source = req.data.solar_system_id
-            destination = form.data['destinationSystem']
+            # source = req.data.solar_system_id
+            # destination = form.data['destinationSystem']
 
-            planner = RoutePlannerBackend()
-            route = planner.generate(source, destination)
+            route = RoutePlannerBackend().generate(
+                character,
+                request.POST['character_id'],
+                form.data['destinationSystem']
+                )
 
-            for i in range(len(route)):
-                if i == 0:
-                    ESI.request(
-                        'post_ui_autopilot_waypoint',
-                        client=character.get_client(),
-                        add_to_beginning=False,
-                        clear_other_waypoints=True,
-                        destination_id=route[i]
-                    )
-                else:
-                    ESI.request(
-                        'post_ui_autopilot_waypoint',
-                        client=character.get_client(),
-                        add_to_beginning=False,
-                        clear_other_waypoints=False,
-                        destination_id=route[i]
-                    )
-
-            return redirect('/planner/')
+            if 'verify' in request.POST:
+                return render(
+                    request,
+                    'route_planner/planner.html',
+                    {
+                        'form': form,
+                        'button': button,
+                        'dotlan': route['dotlan'],
+                        'destination': form.data['destinationSystem'],
+                        'jumps': route['length'],
+                        'mapDisplay': True,
+                        'confirmButton': True,
+                    }
+                )
+                print('verify')
+            elif 'confirm' in request.POST:
+                # for i in range(len(route)):
+                #     if i == 0:
+                #         ESI.request(
+                #             'post_ui_autopilot_waypoint',
+                #             client=character.get_client(),
+                #             add_to_beginning=False,
+                #             clear_other_waypoints=True,
+                #             destination_id=route[i]
+                #         )
+                #     else:
+                #         ESI.request(
+                #             'post_ui_autopilot_waypoint',
+                #             client=character.get_client(),
+                #             add_to_beginning=False,
+                #             clear_other_waypoints=False,
+                #             destination_id=route[i]
+                #         )
+                print('confirm')
+                return render(
+                    request,
+                    'route_planner/planner.html',
+                    {
+                        'form': form,
+                        'dotlan': route['dotlan'],
+                        'destination': form.data['destinationSystem'],
+                        'jumps': route['length'],
+                        'mapDisplay': True,
+                        'confirmButton': False,
+                    }
+                )
+            elif 'generate' in request.POST:
+                # for i in range(len(route)):
+                #     if i == 0:
+                #         ESI.request(
+                #             'post_ui_autopilot_waypoint',
+                #             client=character.get_client(),
+                #             add_to_beginning=False,
+                #             clear_other_waypoints=True,
+                #             destination_id=route[i]
+                #         )
+                #     else:
+                #         ESI.request(
+                #             'post_ui_autopilot_waypoint',
+                #             client=character.get_client(),
+                #             add_to_beginning=False,
+                #             clear_other_waypoints=False,
+                #             destination_id=route[i]
+                #         )
+                print('generate')
+                return render(
+                    request,
+                    'route_planner/planner.html',
+                    {
+                        'form': form,
+                        'dotlan': route['dotlan'],
+                        'destination': form.data['destinationSystem'],
+                        'jumps': route['length'],
+                        'mapDisplay': True,
+                        'confirmButton': False,
+                    }
+                )
+            else:
+                # for i in range(len(route)):
+                #     if i == 0:
+                #         ESI.request(
+                #             'post_ui_autopilot_waypoint',
+                #             client=character.get_client(),
+                #             add_to_beginning=False,
+                #             clear_other_waypoints=True,
+                #             destination_id=route[i]
+                #         )
+                #     else:
+                #         ESI.request(
+                #             'post_ui_autopilot_waypoint',
+                #             client=character.get_client(),
+                #             add_to_beginning=False,
+                #             clear_other_waypoints=False,
+                #             destination_id=route[i]
+                #         )
+                print('quick')
+                return render(
+                    request,
+                    'route_planner/planner.html',
+                    {
+                        'form': form,
+                        'jumps': route['length'],
+                        'mapDisplay': False,
+                        'confirmButton': False,
+                    }
+                )
