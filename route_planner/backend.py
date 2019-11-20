@@ -22,7 +22,7 @@ class RoutePlannerBackend:
         ).data
         source = req.solar_system_id
         source_name = SolarSystems.objects.values_list(
-            'solarSystemID', flat=True).get(solarSystemName=source)
+            'solarSystemName', flat=True).get(solarSystemID=source)
 
         destination = SolarSystems.objects.values_list(
             'solarSystemID', flat=True).get(solarSystemName=system)

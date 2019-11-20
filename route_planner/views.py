@@ -35,20 +35,11 @@ class PlannerView(LoginRequiredMixin, View):
             except EveUser.DoesNotExist:
                 return HttpResponse(status=403)
 
-            req = ESI.request(
-                'get_characters_character_id_location',
-                client=character.get_client(),
-                character_id=int(request.POST['character_id'])
-            )
-
-            source = req.data.solar_system_id
-            destination = form.data['destinationSystem']
-
             route = RoutePlannerBackend().generate(
                 character,
                 request.POST['character_id'],
                 form.data['destinationSystem']
-                )
+            )
 
             if 'verify' in request.POST:
                 return render(
@@ -64,16 +55,15 @@ class PlannerView(LoginRequiredMixin, View):
                         'confirmButton': True,
                     }
                 )
-                print('verify')
             elif 'confirm' in request.POST:
-                for i in range(len(route)):
+                for i in range(len(route['esi'])):
                     if i == 0:
                         ESI.request(
                             'post_ui_autopilot_waypoint',
                             client=character.get_client(),
                             add_to_beginning=False,
                             clear_other_waypoints=True,
-                            destination_id=route[i]
+                            destination_id=route['esi'][i]
                         )
                     else:
                         ESI.request(
@@ -81,9 +71,8 @@ class PlannerView(LoginRequiredMixin, View):
                             client=character.get_client(),
                             add_to_beginning=False,
                             clear_other_waypoints=False,
-                            destination_id=route[i]
+                            destination_id=route['esi'][i]
                         )
-                print('confirm')
                 return render(
                     request,
                     'route_planner/planner.html',
@@ -97,14 +86,14 @@ class PlannerView(LoginRequiredMixin, View):
                     }
                 )
             elif 'generate' in request.POST:
-                for i in range(len(route)):
+                for i in range(len(route['esi'])):
                     if i == 0:
                         ESI.request(
                             'post_ui_autopilot_waypoint',
                             client=character.get_client(),
                             add_to_beginning=False,
                             clear_other_waypoints=True,
-                            destination_id=route[i]
+                            destination_id=route['esi'][i]
                         )
                     else:
                         ESI.request(
@@ -112,9 +101,8 @@ class PlannerView(LoginRequiredMixin, View):
                             client=character.get_client(),
                             add_to_beginning=False,
                             clear_other_waypoints=False,
-                            destination_id=route[i]
+                            destination_id=route['esi'][i]
                         )
-                print('generate')
                 return render(
                     request,
                     'route_planner/planner.html',
@@ -128,14 +116,14 @@ class PlannerView(LoginRequiredMixin, View):
                     }
                 )
             else:
-                for i in range(len(route)):
+                for i in range(len(route['esi'])):
                     if i == 0:
                         ESI.request(
                             'post_ui_autopilot_waypoint',
                             client=character.get_client(),
                             add_to_beginning=False,
                             clear_other_waypoints=True,
-                            destination_id=route[i]
+                            destination_id=route['esi'][i]
                         )
                     else:
                         ESI.request(
@@ -143,9 +131,8 @@ class PlannerView(LoginRequiredMixin, View):
                             client=character.get_client(),
                             add_to_beginning=False,
                             clear_other_waypoints=False,
-                            destination_id=route[i]
+                            destination_id=route['esi'][i]
                         )
-                print('quick')
                 return render(
                     request,
                     'route_planner/planner.html',
