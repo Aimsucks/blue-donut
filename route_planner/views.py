@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponse
 
 from eve_esi import ESI
@@ -13,7 +13,6 @@ from route_planner.backend import RoutePlannerBackend
 class PlannerView(LoginRequiredMixin, View):
     def get(self, request):
         form = DestinationForm()
-        button = DestinationButton()
 
         return render(
             request,
