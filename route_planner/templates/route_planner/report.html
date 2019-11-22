@@ -1,0 +1,111 @@
+{% extends 'content_page.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Report{% endblock %}
+
+{% block header %}
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="container-alt toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Report</span>
+            </h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form id="reportForm" action="/planner/report/" method="post">
+                {% csrf_token %}
+                <div class="form-row" id="prefetch">
+                    <div class="col text-center">
+                        <label for="fromSystem">From</label><br>
+                        <input type="text" id="fromSystem" name="fromSystem" class="form-control typeahead text-center" placeholder="System" required>
+                    </div>
+                    <div class="col text-center">
+                        <label for="toSystem">To</label><br>
+                        <input type="text" id="toSystem" name="toSystem" class="form-control typeahead text-center" placeholder="System" required>
+                    </div>
+                </div><br>
+                <div class="form-row">
+                    <p>If you would like to provide additional information about the missing/incorrect jump gate, please follow these instructions:</p>
+                    <ol>
+                        <li>Open up the <a class="text-info" href="https://i.imgur.com/8THEffw.png">info panel</a> on the system with the incorrect gate.</li>
+                        <li>Go to the <a class="text-info" href="https://i.imgur.com/2DI3pIb.png">Structures tab</a>.</li>
+                        <li><a class="text-info" href="https://i.imgur.com/ci7K7xJ.png">Drag</a> the jump bridge structure (it's name contains the systems it links) to a chat window and send it.</li>
+                        <li>Right click and <a class="text-info" href="https://i.imgur.com/lmocD4e.png">copy</a> the message.</li>
+                        <li>Paste it into a notepad and take the <a class="text-info" href="https://i.imgur.com/mIR8gpa.png">long number</a>. This is the structure ID.</li>
+                        <li>Put the structure ID in the input with the same label.</li>
+                    </ol>
+                    <p>As a note, it is common that if the structure ID is wrong but the system is right, when you go
+                        to the system, the jump bridge will not be highlighted yellow. After you take the jump bridge,
+                        your in-game route will tell you to go back to that system. This is because the structure was
+                        picked up and moved, so the structure ID changed.</p>
+                    <input type="text" id="structureID" name="structureID" class="form-control mt-2" placeholder="Structure ID">
+                </div>
+                <div class="form-row justify-content-center">
+                    <input type="hidden" id="characterID" name="characterID">
+                    <input type="submit" id="reportSubmit" name="submit" value="Submit" class="btn btn-primary mb-2 mt-4 btn-lg" onclick="document.getElementById('characterID').value = get_active_character();">
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block trailing_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
+<script>
+$(document).ready(function(){
+   $(".active").removeClass("active");
+});
+
+var systems = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.whitespace,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  // url points to a json file that contains an array of country names, see
+  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+  prefetch: '../../static/json/systems.json'
+});
+
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+var $typeahead = $('#prefetch .typeahead').typeahead(null, {
+  name: 'systems',
+  source: systems
+});
+
+var selected      = null;
+var originalVal   = null;
+
+// When the typeahead becomes active reset these values.
+$typeahead.on("typeahead:active", function(aEvent) {
+   selected       = null;
+   originalVal    = $typeahead.typeahead("val");
+})
+
+// When a suggestion gets selected save that
+$typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
+   selected = aSuggestion;
+});
+
+// Once user leaves the component and a change was registered
+// check whether or not something was selected. If not reset to
+// the original value.
+$typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
+   if (!selected) {
+      $typeahead.typeahead("val", originalVal);
+   }
+
+   // Do something with the selected value here as needed...
+});   
+</script>
+
+{% endblock %}
