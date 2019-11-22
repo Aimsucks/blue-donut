@@ -1,7 +1,6 @@
 import networkx as nx
 import re
 
-from eve_esi import ESI
 from eve_sde.models import SolarSystems, SolarSystemJumps
 from jump_bridges.models import AnsiblexJumpGates
 
@@ -13,21 +12,14 @@ G = nx.Graph()
 
 
 class RoutePlannerBackend:
-    def generate(self, character, character_id, system):
-
-        req = ESI.request(
-            'get_characters_character_id_location',
-            client=character.get_client(),
-            character_id=int(character_id)
-        ).data
-        source = req.solar_system_id
+    def generate(self, source_id, destination_name):
         source_name = SolarSystems.objects.values_list(
-            'solarSystemName', flat=True).get(solarSystemID=source)
+            'solarSystemName', flat=True).get(solarSystemID=source_id)
 
-        destination = SolarSystems.objects.values_list(
-            'solarSystemID', flat=True).get(solarSystemName=system)
+        destination_id = SolarSystems.objects.values_list(
+            'solarSystemID', flat=True).get(solarSystemName=destination_name)
 
-        path = nx.shortest_path(G, source, destination)
+        path = nx.shortest_path(G, source_id, destination_id)
         path_length = len(path)-1
 
         jb_path = []
@@ -36,8 +28,8 @@ class RoutePlannerBackend:
                 jb_path.append(AnsiblexJumpGates.objects.values_list(
                     'structureID', flat=True).get(
                     fromSolarSystemID=path[i], toSolarSystemID=path[i+1]))
-        if jb_path[:-1] != destination:
-            jb_path.append(destination)
+        if jb_path[:-1] != destination_id:
+            jb_path.append(destination_id)
 
         dotlan_path = source_name
         for i in range(len(path)-1):
