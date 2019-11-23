@@ -1,16 +1,45 @@
-# Blue Donut
+<h1 align="center">Blue Donut</h1>
 
-Blue Donut is a Django website to make a few annoying tasks in EVE Online easier for members of the Legacy Coalition.
-It's main purpose is route planning using the expansive Ansiblex Jump Gate network in our space.
+<div align="center">
+  <strong><i>Tools to help Legacy Coalition members live in their space.</i></strong>
+  <br>
+  <br>
 
-So far I haven't included any tests or CI. There are plans to incorporate everything, but for now we just have to deal with it.
+  <a href="https://github.com/Aimsucks/blue-donut/">
+    <img src="https://img.shields.io/pypi/pyversions/Django?style=for-the-badge" alt="Python Versions" />
+  </a>
 
-Made with inspiration from Sharad Heft's [website](https://github.com/StephenSwat/eve-abyssal-market).
+  <a href="https://github.com/Aimsucks/blue-donut/issues">
+    <img src="https://img.shields.io/github/issues/aimsucks/blue-donut?style=for-the-badge" alt="PyPi" />
+  </a>
+
+  <a href="https://discordapp.com/invite/UCK8ase">
+    <img src="https://img.shields.io/discord/645977792265322506?color=%237289DA&label=DISCORD&style=for-the-badge" alt="Discord" />
+  </a>
+
+  <a href="https://github.com/Aimsucks/blue-donut/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/aimsucks/blue-donut?style=for-the-badge" alt="Discord" />
+  </a>
+</div>
+
+<br>
+
+<div align="center">
+  This is a website that hosts a multitude of features. Currently the only supported feature (and on this repo) is a built-in route planner that is still being actively developed.
+  The route planner currently only supports manual input. Automatic updates are being actively worked on.
+</div>
 
 ## Installation
 
-Figure it out.
+Installation steps are still incomplete. For now, please contact Aimsucks#0001 on Discord if you need help.
+
+## License
+
+This project is licensed under MIT.
 
 ## Contributing
 
-Make a pull request or issue and I will get to it eventually. This is a learning experience for me.
+Feel free to contribute to this project, a helping hand is always appreciated.
+If you have any feature suggestions, don't hesitate to make an issue.
+
+[Join our discord server](https://discordapp.com/invite/UCK8ase).
