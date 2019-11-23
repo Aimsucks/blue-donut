@@ -1,19 +1,16 @@
 {% extends 'content_page.html' %}
 {% load static %}
-
 {% block title %}Blue Donut{% endblock %}
-
 {% block extra_styling %}
 <style>
-.masthead {
+    .masthead {
     background: url('{% static 'img/donut.png' %}'); 
     background-size: 750px;
     background-repeat: no-repeat; 
     background-position: center 30px;
-}
+    }
 </style>
 {% endblock %}
-
 {% block header %}
 <div class="container-fluid">
     <div class="row align-items-center bg-primary py-5 masthead">
@@ -28,7 +25,6 @@
     </div>
 </div>
 {% endblock %}
-
 {% block content %}
 <div class="container pt-5">
     <div class="row justify-content-center">
@@ -48,8 +44,5 @@
             <p><a class="btn btn-lg btn-secondary disabled" href="#" role="button">Currently Disabled</a></p>
         </div>
     </div>
-
-    <hr>
-
 </div>
 {% endblock %}

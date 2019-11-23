@@ -161,7 +161,8 @@ class ReportView(LoginRequiredMixin, View):
             timestamp='now'
         )
 
-        reportSubmitterIcon = "https://image.eveonline.com/Character/" + request.POST['characterID'] + "_32.jpg"
+        reportSubmitterIcon = "https://image.eveonline.com/Character/" + \
+            request.POST['characterID'] + "_32.jpg"
         footerIcon = "https://bluedonut.space/static/img/favicon.png"
 
         embed.set_author(name=reportSubmitter, icon_url=reportSubmitterIcon)

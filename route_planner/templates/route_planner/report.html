@@ -1,9 +1,7 @@
 {% extends 'content_page.html' %}
 {% load static %}
 {% load bootstrap4 %}
-
 {% block title %}Report{% endblock %}
-
 {% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
@@ -15,7 +13,6 @@
     </div>
 </div>
 {% endblock %}
-
 {% block content %}
 <div class="container pt-5">
     <div class="row">
@@ -32,7 +29,8 @@
                         <label for="toSystem">To</label><br>
                         <input type="text" id="toSystem" name="toSystem" class="form-control typeahead text-center" placeholder="System" required>
                     </div>
-                </div><br>
+                </div>
+                <br>
                 <div class="form-row">
                     <p>If you would like to provide additional information about the missing/incorrect jump gate, please follow these instructions:</p>
                     <ol>
@@ -46,7 +44,8 @@
                     <p>As a note, it is common that if the structure ID is wrong but the system is right, when you go
                         to the system, the jump bridge will not be highlighted yellow. After you take the jump bridge,
                         your in-game route will tell you to go back to that system. This is because the structure was
-                        picked up and moved, so the structure ID changed.</p>
+                        picked up and moved, so the structure ID changed.
+                    </p>
                     <input type="text" id="structureID" name="structureID" class="form-control mt-2" placeholder="Structure ID">
                 </div>
                 <div class="form-row justify-content-center">
@@ -59,53 +58,51 @@
     </div>
 </div>
 {% endblock %}
-
 {% block trailing_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
 <script>
-$(document).ready(function(){
-   $(".active").removeClass("active");
-});
-
-var systems = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.whitespace,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  // url points to a json file that contains an array of country names, see
-  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-  prefetch: '../../static/json/systems.json'
-});
-
-// passing in `null` for the `options` arguments will result in the default
-// options being used
-var $typeahead = $('#prefetch .typeahead').typeahead(null, {
-  name: 'systems',
-  source: systems
-});
-
-var selected      = null;
-var originalVal   = null;
-
-// When the typeahead becomes active reset these values.
-$typeahead.on("typeahead:active", function(aEvent) {
-   selected       = null;
-   originalVal    = $typeahead.typeahead("val");
-})
-
-// When a suggestion gets selected save that
-$typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
-   selected = aSuggestion;
-});
-
-// Once user leaves the component and a change was registered
-// check whether or not something was selected. If not reset to
-// the original value.
-$typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
-   if (!selected) {
-      $typeahead.typeahead("val", originalVal);
-   }
-
-   // Do something with the selected value here as needed...
-});   
+    $(document).ready(function(){
+       $(".active").removeClass("active");
+    });
+    
+    var systems = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      // url points to a json file that contains an array of country names, see
+      // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+      prefetch: '../../static/json/systems.json'
+    });
+    
+    // passing in `null` for the `options` arguments will result in the default
+    // options being used
+    var $typeahead = $('#prefetch .typeahead').typeahead(null, {
+      name: 'systems',
+      source: systems
+    });
+    
+    var selected      = null;
+    var originalVal   = null;
+    
+    // When the typeahead becomes active reset these values.
+    $typeahead.on("typeahead:active", function(aEvent) {
+       selected       = null;
+       originalVal    = $typeahead.typeahead("val");
+    })
+    
+    // When a suggestion gets selected save that
+    $typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
+       selected = aSuggestion;
+    });
+    
+    // Once user leaves the component and a change was registered
+    // check whether or not something was selected. If not reset to
+    // the original value.
+    $typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
+       if (!selected) {
+          $typeahead.typeahead("val", originalVal);
+       }
+    
+       // Do something with the selected value here as needed...
+    });   
 </script>
-
 {% endblock %}

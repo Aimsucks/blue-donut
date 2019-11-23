@@ -1,9 +1,7 @@
 {% extends 'content_page.html' %}
 {% load static %}
 {% load bootstrap4 %}
-
 {% block title %}Route Planner{% endblock %}
-
 {% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
@@ -15,14 +13,11 @@
     </div>
 </div>
 {% endblock %}
-
 {% block content %}
 <div class="container pt-5">
-
     <div class="row">
-
         <div class="col-md-6">
-            <h2><i class="fas fa-bookmark mr-3"></i>Destinations</h2>
+            <h2 class="text-center"><i class="fas fa-bookmark mr-3"></i>Destinations</h2>
             <div class="row">
                 <div class="col-md-4">
                     <div class="list-group">
@@ -59,39 +54,44 @@
                 <p class="mt-2">Favorites and recents are still a work in progress.</p>
             </div>
         </div>
-
         <div class="col-md-6">
-            <h2><i class="fas fa-pen mr-3"></i>Create Your Own</h2>
-            <div class="input-group" id="prefetch">
-                <form class="form-inline" id="destinationForm" action="/planner/" method="post">
-                    {% csrf_token %}
-                    <div class="form-group mr-3 mb-2">
-                        <input type="text" id="destinationInput" name="destination" class="form-control typeahead" placeholder="Destination" required>
+            <h2 class="text-center"><i class="fas fa-pen mr-3"></i>Create Your Own</h2>
+            <form id="destinationForm" action="/planner/" method="post">
+                {% csrf_token %}
+                <div class="form-row mb-1">
+                    <div id="prefetch" class="col-6">
+                        <input type="text" id="destinationInput" name="destination" class="form-control typeahead" placeholder="Destination" autocomplete="off" required>
+                    </div>
+                    <div class="col-3">
+                        <input type="submit" id="destinationVerify" name="verify" value="Verify" class="btn btn-block btn-primary" onclick="document.getElementById('character_id').value = get_active_character();">
+                    </div>
+                    <div class="col-3">
+                        <input type="submit" id="destinationSubmit" name="generate" value="Generate" class="btn btn-block btn-primary" onclick="document.getElementById('character_id').value = get_active_character();">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <small class="form-text text-muted mt-0">
+                        Please only input correct system names.
+                        </small>
+                        <small class="form-text text-muted mt-0">
+                        <a href="{% url 'route_planner:report' %}" class="text-info">
+                        Report an incorrect jump bridge.
+                        </a>
+                        </small>
                     </div>
                     <input type="hidden" id="character_id" name="character_id" value="">
-                    <input type="submit" id="destinationVerify" name="verify" value="Verify" class="btn btn-primary mb-2" onclick="document.getElementById('character_id').value = get_active_character();">
-                    <input type="submit" id="destinationSubmit" name="generate" value="Generate" class="btn btn-primary ml-3 mb-2" onclick="document.getElementById('character_id').value = get_active_character();">
-                    <small class="form-text text-muted mt-0">
-                        Please only input correct system names.
-                    </small>
-                    <small class="form-text text-muted ml-2 mt-0">
-                        <a href="{% url 'route_planner:report' %}" class="text-info">
-                            Report an incorrect jump bridge.
-                        </a>
-                    </small>
-                </form>
-            </div>
-        </div>  
+                </div>
+            </form>
+        </div>
     </div>
-
     {% if mapDisplay %}
-    <div class="row justify-content-start mt-5">
-
+    <div class="row justify-content-center">
         <div class="col-6">
-            <object id="map" class="rounded" width="100%" height="100%" data="https://freeburn.xyz/map/?&path={{ dotlan }}" type="image/svg+xml">
+            <object id="map" class="rounded" width="100%" data="https://freeburn.xyz/map/?&path={{ dotlan }}" type="image/svg+xml">
             </object>
         </div>
-        <div class="col">
+        <div class="col-2 text-center">
             <h2 class="mb-0">{{ destination|default:"No Destination Set" }}</h2>
             <p class="text-muted mb-2">{{ jumps|default:"No destination set." }} Jumps</p>
             {% if confirmButton %}
@@ -99,70 +99,66 @@
                 {% csrf_token %}
                 <input type="hidden" id="destinationButton" name="destination" value="{{ destination }}">
                 <input type="hidden" id="character_id_confirm" name="character_id" value="">
-                <input type="submit" id="destinationConfirm" class="mr-3 btn btn-primary" name="confirm" value="Set destination" onclick="document.getElementById('character_id_confirm').value = get_active_character();">
-                {% endif %}
+                <input type="submit" id="destinationConfirm" class="mr-3 btn btn-primary btn-block" name="confirm" value="Set destination" onclick="document.getElementById('character_id_confirm').value = get_active_character();">
+            {% endif %}
             </form>
         </div>
-
     </div>
     {% endif %}
-
 </div>
 {% endblock %}
-
 {% block trailing_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
 <script>
-$(document).ready(function(){
-   $(".active").removeClass("active");
-   $("#route_planner").addClass("active");
-});
-
-function buttonClick(button) {
-    document.getElementById('destinationInput').value = button;
-    document.getElementById("character_id").value = get_active_character();
-    document.getElementById('destinationForm').submit();
-}
-
-var systems = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.whitespace,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  // url points to a json file that contains an array of country names, see
-  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-  prefetch: '../static/json/systems.json'
-});
-
-// passing in `null` for the `options` arguments will result in the default
-// options being used
-var $typeahead = $('#prefetch .typeahead').typeahead(null, {
-  name: 'systems',
-  source: systems
-});
-
-var selected      = null;
-var originalVal   = null;
-
-// When the typeahead becomes active reset these values.
-$typeahead.on("typeahead:active", function(aEvent) {
-   selected       = null;
-   originalVal    = $typeahead.typeahead("val");
-})
-
-// When a suggestion gets selected save that
-$typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
-   selected = aSuggestion;
-});
-
-// Once user leaves the component and a change was registered
-// check whether or not something was selected. If not reset to
-// the original value.
-$typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
-   if (!selected) {
-      $typeahead.typeahead("val", originalVal);
-   }
-
-   // Do something with the selected value here as needed...
-});   
+    $(document).ready(function(){
+       $(".active").removeClass("active");
+       $("#route_planner").addClass("active");
+    });
+    
+    function buttonClick(button) {
+        document.getElementById('destinationInput').value = button;
+        document.getElementById("character_id").value = get_active_character();
+        document.getElementById('destinationForm').submit();
+    }
+    
+    var systems = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      // url points to a json file that contains an array of country names, see
+      // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+      prefetch: '../static/json/systems.json'
+    });
+    
+    // passing in `null` for the `options` arguments will result in the default
+    // options being used
+    var $typeahead = $('#prefetch .typeahead').typeahead(null, {
+      name: 'systems',
+      source: systems
+    });
+    
+    var selected      = null;
+    var originalVal   = null;
+    
+    // When the typeahead becomes active reset these values.
+    $typeahead.on("typeahead:active", function(aEvent) {
+       selected       = null;
+       originalVal    = $typeahead.typeahead("val");
+    })
+    
+    // When a suggestion gets selected save that
+    $typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
+       selected = aSuggestion;
+    });
+    
+    // Once user leaves the component and a change was registered
+    // check whether or not something was selected. If not reset to
+    // the original value.
+    $typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
+       if (!selected) {
+          $typeahead.typeahead("val", originalVal);
+       }
+    
+       // Do something with the selected value here as needed...
+    });   
 </script>
-
 {% endblock %}
