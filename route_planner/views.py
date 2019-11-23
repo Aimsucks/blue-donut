@@ -31,8 +31,6 @@ class PlannerView(LoginRequiredMixin, View):
             character_id=int(request.POST['character_id'])
         ).data.solar_system_id
 
-        req = 30000475
-
         route = RoutePlannerBackend().generate(
             req,
             request.POST['destination']
