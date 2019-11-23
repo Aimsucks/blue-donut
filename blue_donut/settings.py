@@ -2,11 +2,11 @@
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+############################
+# Django Settings
+############################
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'eve_auth',
@@ -55,6 +55,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blue_donut.wsgi.application'
 
+############################
+# Authentication
+############################
+
 AUTHENTICATION_BACKENDS = [
     'eve_auth.backend.EveAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
@@ -66,9 +70,9 @@ LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-
+############################
 # Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
+############################
 
 LANGUAGE_CODE = 'en-us'
 
@@ -82,15 +86,21 @@ USE_TZ = True
 
 DATETIME_FORMAT = 'F j, Y, H:i'
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+############################
+# Static Files
+############################
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+############################
+# Logging
+############################
 
 LOGGING = {
     'version': 1,

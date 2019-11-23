@@ -1,4 +1,5 @@
 from django.db import models
+from eve_sde.models import SolarSystems
 
 
 class AnsiblexJumpGates(models.Model):
@@ -7,6 +8,13 @@ class AnsiblexJumpGates(models.Model):
     toSolarSystemID = models.IntegerField()
 
     def __str__(self):
-        return (self.fromSolarSystemID, self.toSolarSystemID)
+        fromSolarSystem = SolarSystems.objects.values_list(
+            'solarSystemName', flat=True).get(
+                solarSystemID=self.fromSolarSystemID)
+        toSolarSystem = SolarSystems.objects.values_list(
+            'solarSystemName', flat=True).get(
+                solarSystemID=self.toSolarSystemID)
+
+        return (fromSolarSystem + " ≫ " + toSolarSystem)
 
 # add a model for logs of who updated it to put on the route_planner page

@@ -31,7 +31,27 @@
 
 ## Installation
 
-Installation steps are still incomplete. For now, please contact Aimsucks#0001 on Discord if you need help.
+Install Pipenv and then install the requirements.
+
+```commandline
+pip install pipenv
+pipenv install
+```
+
+Configure your settings by copying/renaming `blue_donut/example.local.py` to `blue_donut/local.py` and editing the file to fill in missing information.
+
+```commandline
+cp blue_donut/example.local.py blue_donut/local.py
+nano blue_donut/local.py
+```
+
+Run all migrations, download the maps, and then run the development server.
+
+```commandline
+pipenv run python manage.py migrate
+pipenv run python manage.py sde_get_map
+pipenv run python manage.py runserver
+```
 
 ## License
 

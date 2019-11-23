@@ -88,6 +88,5 @@ local_settings.py
 
 .vscode/
 db.sqlite3
-*/local.py
-Pipfile.lock
+local.py
 resources/
