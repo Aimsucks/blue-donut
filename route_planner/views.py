@@ -15,7 +15,11 @@ hook = Webhook(settings.WEBHOOK_URL)
 
 class PlannerView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'route_planner/planner.html')
+        recents = RoutePlannerBackend().getInfo(request.user, 'recents')
+        favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
+        return render(request, 'route_planner/planner.html',
+                      {'recents': recents,
+                       'favorites': favorites})
 
     def post(self, request):
         try:
@@ -37,10 +41,14 @@ class PlannerView(LoginRequiredMixin, View):
         )
 
         if 'verify' in request.POST:
+            recents = RoutePlannerBackend().getInfo(request.user, 'recents')
+            favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
             return render(
                 request,
                 'route_planner/planner.html',
                 {
+                    'recents': recents,
+                    'favorites': favorites,
                     'dotlan': route['dotlan'],
                     'destination': request.POST['destination'],
                     'jumps': route['length'],
@@ -49,6 +57,10 @@ class PlannerView(LoginRequiredMixin, View):
                 }
             )
         elif 'confirm' in request.POST:
+            RoutePlannerBackend().updateRecents(
+                request.user, request.POST['destination'])
+            recents = RoutePlannerBackend().getInfo(request.user, 'recents')
+            favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
             for i in range(len(route['esi'])):
                 if i == 0:
                     ESI.request(
@@ -70,6 +82,8 @@ class PlannerView(LoginRequiredMixin, View):
                 request,
                 'route_planner/planner.html',
                 {
+                    'recents': recents,
+                    'favorites': favorites,
                     'dotlan': route['dotlan'],
                     'destination': request.POST['destination'],
                     'jumps': route['length'],
@@ -78,6 +92,10 @@ class PlannerView(LoginRequiredMixin, View):
                 }
             )
         elif 'generate' in request.POST:
+            RoutePlannerBackend().updateRecents(
+                request.user, request.POST['destination'])
+            recents = RoutePlannerBackend().getInfo(request.user, 'recents')
+            favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
             for i in range(len(route['esi'])):
                 if i == 0:
                     ESI.request(
@@ -99,6 +117,8 @@ class PlannerView(LoginRequiredMixin, View):
                 request,
                 'route_planner/planner.html',
                 {
+                    'recents': recents,
+                    'favorites': favorites,
                     'dotlan': route['dotlan'],
                     'destination': request.POST['destination'],
                     'jumps': route['length'],
@@ -107,6 +127,10 @@ class PlannerView(LoginRequiredMixin, View):
                 }
             )
         else:
+            RoutePlannerBackend().updateRecents(
+                request.user, request.POST['destination'])
+            recents = RoutePlannerBackend().getInfo(request.user, 'recents')
+            favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
             for i in range(len(route['esi'])):
                 if i == 0:
                     ESI.request(
@@ -128,6 +152,8 @@ class PlannerView(LoginRequiredMixin, View):
                 request,
                 'route_planner/planner.html',
                 {
+                    'recents': recents,
+                    'favorites': favorites,
                     'jumps': route['length'],
                     'mapDisplay': False,
                     'confirmButton': False,
@@ -182,3 +208,14 @@ class SystemView(LoginRequiredMixin, View):
     def get(self, request, system):
         return render(request, 'route_planner/system.html', {'system': system})
 
+
+class EditView(LoginRequiredMixin, View):
+    def get(self, request):
+        favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
+        return render(request, 'route_planner/favorites.html',
+                      {'favorites': favorites})
+
+    def post(self, request):
+        favorites = request.POST.getlist('favorites')
+        RoutePlannerBackend().updateFavorites(request.user, favorites)
+        return redirect('/planner/')

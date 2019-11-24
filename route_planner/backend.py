@@ -1,8 +1,10 @@
 import networkx as nx
 import re
+import json
 
 from eve_sde.models import SolarSystems, SolarSystemJumps
 from jump_bridges.models import AnsiblexJumpGates
+from route_planner.models import PlannerLists
 
 import logging
 
@@ -68,3 +70,33 @@ class RoutePlannerBackend:
         logger.debug("Standard gate edges added.")
         G.add_edges_from(bridges, type="bridge")
         logger.debug("Ansiblex gate edges added.")
+
+    def getInfo(self, user, list_name):
+        try:
+            character = PlannerLists.objects.get(user_id=user)
+        except PlannerLists.DoesNotExist:
+            character = PlannerLists(user_id=user.id)
+            character.recents = json.dumps([None] * 5)
+            character.favorites = json.dumps([None] * 5)
+            character.save()
+
+        if list_name == 'favorites':
+            return json.loads(character.favorites)
+        if list_name == 'recents':
+            return json.loads(character.recents)
+
+    def updateRecents(self, user, system):
+        character = PlannerLists.objects.get(user_id=user)
+        recents = json.loads(character.recents)
+        recents.insert(0, system)
+        recents.pop()
+        character.recents = json.dumps(recents)
+        character.save()
+
+    def updateFavorites(self, user, favorites):
+        for i in range(len(favorites)):
+            if favorites[i] == '':
+                favorites[i] = None
+        character = PlannerLists.objects.get(user_id=user)
+        character.favorites = json.dumps(favorites)
+        character.save()
