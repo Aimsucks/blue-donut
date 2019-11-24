@@ -8,8 +8,8 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      style="background: #FFFFFF;"
      onload="init(evt)">
-<script type="text/javascript" xlink:href="http://s.dotlan.net/lib/wdb-708x598.js?1514581994"></script> 
-<script type="text/javascript" xlink:href="http://s.dotlan.net/lib/dotSvg.js?1556143747"></script> 
+<script type="text/javascript" xlink:href="https://s.dotlan.net/lib/wdb-708x598.js?1514581994"></script> 
+<script type="text/javascript" xlink:href="https://s.dotlan.net/lib/dotSvg.js?1556143747"></script> 
 
 <style type="text/css">
 <![CDATA[
