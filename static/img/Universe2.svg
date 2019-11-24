@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg version="1.1"
+     id="svgdoc"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     style="background: #FFFFFF;"
+     onload="init(evt)">
+<script type="text/javascript" xlink:href="http://s.dotlan.net/lib/wdb-708x598.js?1514581994"></script> 
+<script type="text/javascript" xlink:href="http://s.dotlan.net/lib/dotSvg.js?1556143747"></script> 
+
+<style type="text/css">
+<![CDATA[
+.j	{ stroke: #999999; stroke-width:1px; stroke-linecap: round;}
+.jc	{ stroke: #FF6666; stroke-width:1px; stroke-linecap: round;}
+.jr	{ stroke: #802080; stroke-width:1px; stroke-linecap: round;}
+.jx	{ stroke: #FFFF00; stroke-width:7px; stroke-opacity: 0.8; stroke-linecap: round;}
+.jxc	{ stroke: #FFFF00; stroke-width:7px; stroke-opacity: 0.8; stroke-linecap: round;}
+.jxr	{ stroke: #FFFF00; stroke-width:7px; stroke-opacity: 0.8; stroke-linecap: round;}
+.jb	{ stroke: #0000ff; stroke-width:2px; stroke-opacity: 0.6; fill: none; stroke-linecap: round;}
+.jb0 	{stroke: #0000FF; stroke-opacity: 0.6;}
+.jb1 	{stroke: #FF0000; stroke-opacity: 0.6;}
+.jb2 	{stroke: #387018; stroke-opacity: 0.6;}
+.jb3 	{stroke: #FF9900; stroke-opacity: 0.6;}
+.jb4 	{stroke: #663333; stroke-opacity: 0.6;}
+.jb5 	{stroke: #0099CC; stroke-opacity: 0.6;}
+.jb6 	{stroke: #FF00CC; stroke-opacity: 0.6;}
+.sd	{stroke: #555555; stroke-width: 1.5px; stroke-linecap: round;}
+.s	{stroke: #666666; stroke-width: 1px; fill: #ffffff; cursor: pointer; }
+.sl	{stroke: #666666; stroke-width: 1px; fill: #F08888; cursor: pointer; }
+.sh	{stroke: #666666; stroke-width: 1px; fill: #88B088; cursor: pointer; }
+.sa	{stroke: #ff0000; stroke-width: 1px; fill: #ffffff; cursor: pointer; }
+.sla	{stroke: #ff0000; stroke-width: 1px; fill: #F08888; cursor: pointer; }
+.sha	{stroke: #ff0000; stroke-width: 1px; fill: #88B088; cursor: pointer; }
+.sr	{stroke: #000000; stroke-width: 1px; fill: #ffffff; cursor: pointer; }
+.slr	{stroke: #000000; stroke-width: 1px; fill: #F08888; cursor: pointer; }
+.shr	{stroke: #000000; stroke-width: 1px; fill: #88B088; cursor: pointer; }
+.sw	{fill: #ffffff; stroke-width: 2; stroke: #00AA00; cursor: pointer; }
+.slw	{fill: #ffffff; stroke-width: 2; stroke: #00AA00; cursor: pointer; }
+.shw	{fill: #ffffff; stroke-width: 2; stroke: #00AA00; cursor: pointer; }
+.r	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #000000; dominant-baseline: middle; text-anchor: middle; cursor: pointer; }
+.rh	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #ffffff; dominant-baseline: middle; text-anchor: middle; stroke-width: 2; stroke: #ffffff;  stroke-opacity: 0.8;}
+.rr 	{font-family: Arial, Helvetica, sans-serif; font-size: 13px; fill: #000000; dominant-baseline: middle; text-anchor: middle; font-weight: bold; cursor: pointer; }
+.rrh	{font-family: Arial, Helvetica, sans-serif; font-size: 13px; fill: #ffffff; dominant-baseline: middle; text-anchor: middle; font-weight: bold; stroke-width: 2; stroke: #ffffff;  stroke-opacity: 0.8;}
+.c	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #444444; dominant-baseline: middle; text-anchor: middle; cursor: pointer; }
+.ch	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #444444; dominant-baseline: middle; text-anchor: middle; stroke-width: 2; stroke: #ffffff; stroke-opacity: 0.8;}
+.t	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #444444; dominant-baseline: middle;}
+.th	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #444444; dominant-baseline: middle; stroke-width: 2; stroke: #ffffff;  stroke-opacity: 0.8;}
+.tr	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #000000; dominant-baseline: middle;}
+.trh 	{font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: #000000; dominant-baseline: middle; stroke-width: 2; stroke: #ffffff;  stroke-opacity: 0.8;}
+.tw	{font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #000000; dominant-baseline: middle; font-weight: bold; }
+.twh	{font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #ffffff; dominant-baseline: middle; font-weight: bold; stroke-width: 2; stroke: #ffffff;  stroke-opacity: 0.8;}
+.h	{fill: none; stroke-width: 2; stroke: #000000; }
+.hw	{fill: #ffffff; stroke-width: 2; stroke: #00AA00; }
+]]>
+</style>
+
+<defs>
+<symbol id="s"><circle cx="6" cy="6" r="2" class="i1 s" /></symbol>
+<symbol id="sl"><circle cx="6" cy="6" r="2" class="i1 sl" /></symbol>
+<symbol id="sh"><circle cx="6" cy="6" r="2" class="i1 sh" /></symbol>
+<symbol id="ss"><rect x="3.5" y="3.5" width="5" height="5" class="i2 s" /></symbol>
+<symbol id="ssl"><rect x="3.5" y="3.5" width="5" height="5" class="i2 sl" /></symbol>
+<symbol id="ssh"><rect x="3.5" y="3.5" width="5" height="5" class="i2 sh" /></symbol>
+
+<symbol id="sr"><circle cx="6" cy="6" r="3.5" class="i3 sr" /></symbol>
+<symbol id="slr"><circle cx="6" cy="6" r="3.5" class="i3 slr" /></symbol>
+<symbol id="shr"><circle cx="6" cy="6" r="3.5" class="i3 shr" /></symbol>
+<symbol id="ssr"><rect x="2.5" y="2.5" r="7" width="7" height="7" class="i4 sr" /></symbol>
+<symbol id="sslr"><rect x="2.5" y="2.5" r="7" width="7" height="7" class="i4 slr" /></symbol>
+<symbol id="sshr"><rect x="2.5" y="2.5" r="7" width="7" height="7" class="i4 shr" /></symbol>
+<symbol id="sa"><circle cx="6" cy="6" r="3.5" class="i3 sa" /></symbol>
+<symbol id="sla"><circle cx="6" cy="6" r="3.5" class="i3 sla" /></symbol>
+<symbol id="sha"><circle cx="6" cy="6" r="3.5" class="i3 sha" /></symbol>
+<symbol id="ssa"><rect x="2.5" y="2.5" r="7" width="7" height="7" class="i4 sa" /></symbol>
+<symbol id="ssla"><rect x="2.5" y="2.5" r="7" width="7" height="7" class="i4 sla" /></symbol>
+<symbol id="ssha"><rect x="2.5" y="2.5" r="7" width="7" height="7" class="i4 sha" /></symbol>
+<symbol id="sw"><circle cx="6" cy="6" r="5" class="i5 sw" /></symbol>
+<symbol id="slw"><circle cx="6" cy="6" r="5" class="i5 slw" /></symbol>
+<symbol id="shw"><circle cx="6" cy="6" r="5" class="i5 shw" /></symbol>
+<symbol id="ssw"><circle cx="6" cy="6" r="5" class="i6 shw" /></symbol>
+<symbol id="sslw"><circle cx="6" cy="6" r="5" class="i6 shw" /></symbol>
+<symbol id="sshw"><circle cx="6" cy="6" r="5" class="i6 shw" /></symbol>
+</defs>
+
+<g id="map">
+  <g id="back" />
+  <g id="routes" />
+  <g id="connections" />
+  <g id="sysdots" />
+</g>
+<g id="systems" />
+<g id="systemnames" />
+<g id="constellations" />
+<g id="regionnames" />
+<g id="mapover">
+  <g id="jumps" />
+</g>
+<g id="sysover" />
+<g id="systextover" />
+
+<g id="controls" style="display: none;">
+  <image id="zoom_in"    x="5" y="5" width="16" height="16"  xlink:href="http://i.dotlan.net/images/icons/magnifier_zoom_in.png" style="cursor: pointer;" xlink:title="Zoom In" /> 
+  <image id="zoom_out"   x="5" y="23" width="16" height="16" xlink:href="http://i.dotlan.net/images/icons/magnifier_zoom_out.png" style="cursor: pointer;" xlink:title="Zoom Out" />
+  <image id="wheel_on"   x="5" y="42" width="16" height="16" xlink:href="http://i.dotlan.net/images/icons/mouse_add.png" style="cursor: pointer;" xlink:title="Enable Mousewheel Support" /> 
+  <image id="wheel_off"  x="5" y="42" width="16" height="16" xlink:href="http://i.dotlan.net/images/icons/mouse_delete.png" style="cursor: pointer; display: none;" xlink:title="Disable Mousewheel Support" /> 
+</g>
+
+<script type="text/javascript"><![CDATA[
+function init(E) {
+	SVGWorld.init(E,708,598);
+}
+]]></script>
+</svg>
