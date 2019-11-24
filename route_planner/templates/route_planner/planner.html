@@ -114,6 +114,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
 
 <script>
+var elementExists = document.getElementById("map");
+
+if(elementExists) {
     var clipboardButton = document.getElementById('linkButton');
     var clipboard = new ClipboardJS(clipboardButton);
 
@@ -143,6 +146,7 @@
         setTooltip('Failed!');
         hideTooltip();
     });
+}
 
     $(document).ready(function(){
        $(".active").removeClass("active");
