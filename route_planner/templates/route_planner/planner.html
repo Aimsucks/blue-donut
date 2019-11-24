@@ -99,9 +99,11 @@
                 {% csrf_token %}
                 <input type="hidden" id="destinationButton" name="destination" value="{{ destination }}">
                 <input type="hidden" id="character_id_confirm" name="character_id" value="">
-                <input type="submit" id="destinationConfirm" class="mr-3 btn btn-primary btn-block" name="confirm" value="Set destination" onclick="document.getElementById('character_id_confirm').value = get_active_character();">
-            {% endif %}
+                <input type="submit" id="destinationConfirm" class="mr-3 mb-2 btn btn-primary btn-block" name="confirm" value="Set destination" onclick="document.getElementById('character_id_confirm').value = get_active_character();">
+            
             </form>
+            {% endif %}
+            <button id="linkButton" type="button" class="btn btn-secondary btn-block" data-clipboard-text="https://bluedonut.space/planner/{{ destination }}">Copy sharable link</button>
         </div>
     </div>
     {% endif %}
@@ -109,7 +111,39 @@
 {% endblock %}
 {% block trailing_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+
 <script>
+    var clipboardButton = document.getElementById('linkButton');
+    var clipboard = new ClipboardJS(clipboardButton);
+
+    $('button').tooltip({
+        trigger: 'click',
+        placement: 'bottom'
+    });
+
+    function setTooltip(message) {
+    $('button').tooltip('hide')
+        .attr('data-original-title', message)
+        .tooltip('show');
+    }
+
+    function hideTooltip() {
+        setTimeout(function() {
+            $('button').tooltip('hide');
+        }, 1000);
+    }
+
+    clipboard.on('success', function(e) {
+        setTooltip('Copied!');
+        hideTooltip();
+    });
+
+    clipboard.on('error', function(e) {
+        setTooltip('Failed!');
+        hideTooltip();
+    });
+
     $(document).ready(function(){
        $(".active").removeClass("active");
        $("#route_planner").addClass("active");

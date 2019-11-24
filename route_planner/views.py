@@ -176,3 +176,9 @@ class ReportView(LoginRequiredMixin, View):
         hook.send(embed=embed)
 
         return redirect('/planner/')
+
+
+class SystemView(LoginRequiredMixin, View):
+    def get(self, request, system):
+        return render(request, 'route_planner/system.html', {'system': system})
+

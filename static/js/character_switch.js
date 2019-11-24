@@ -29,23 +29,23 @@ function populate_character_selector() {
 
     Object.keys(toons).forEach(function (key) {
         container.append(
-            '<a class="dropdown-item" href="javascript:set_active_character(' + key + 
-            ');"><img src="https://image.eveonline.com/Character/' + 
+            '<a class="dropdown-item" href="javascript:set_active_character(' + key +
+            ');"><img src="https://image.eveonline.com/Character/' +
             key + '_32.jpg" height="24px" class="avatar mr-2" />' + toons[key].name + '</a>'
         );
     });
 
     container.append(
-        '<a class="dropdown-item" href="' + 
-        url + 
+        '<a class="dropdown-item" href="' +
+        url +
         '"><i class="fas fa-plus ml-1 mr-2"></i></i>' +
         '  <span class="ml-1">Add character</span></a>'
     )
 }
 
-document.addEventListener('DOMContentLoaded', (event) => { 
+document.addEventListener('DOMContentLoaded', (event) => {
     if (user_logged_in) {
-        render_active_character(); 
-        populate_character_selector(); 
+        render_active_character();
+        populate_character_selector();
     }
 });

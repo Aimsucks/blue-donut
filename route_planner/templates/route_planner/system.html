@@ -1,0 +1,20 @@
+{% extends 'route_planner/planner.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}Route to {{ system }}{% endblock %}
+
+{% block trailing_js %}
+<script>
+    $(document).ready(function(){
+       $(".active").removeClass("active");
+       $("#route_planner").addClass("active");
+       systemPlanner();
+    });
+    
+    function systemPlanner() {
+        document.getElementById('destinationInput').value = "{{ system }}";
+        document.getElementById("character_id").value = get_active_character();
+        document.getElementById("destinationVerify").click();
+    }
+</script>
+{% endblock %}
