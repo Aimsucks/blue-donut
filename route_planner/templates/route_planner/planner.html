@@ -153,6 +153,8 @@ if(elementExists) {
     });
     
     function buttonClick(button) {
+        $("#destinationVerify").addClass("disabled");
+        $("#destinationSubmit").addClass("disabled");
         document.getElementById('destinationInput').value = button;
         document.getElementById("character_id").value = get_active_character();
         document.getElementById('destinationForm').submit();
