@@ -88,8 +88,12 @@ class RoutePlannerBackend:
     def updateRecents(self, user, system):
         character = PlannerLists.objects.get(user_id=user)
         recents = json.loads(character.recents)
-        recents.insert(0, system)
-        recents.pop()
+        if system not in recents:
+            recents.insert(0, system)
+            recents.pop()
+        else:
+            recents.remove(system)
+            recents.insert(0, system)
         character.recents = json.dumps(recents)
         character.save()
 

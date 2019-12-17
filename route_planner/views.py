@@ -154,8 +154,10 @@ class PlannerView(LoginRequiredMixin, View):
                 {
                     'recents': recents,
                     'favorites': favorites,
+                    'dotlan': route['dotlan'],
+                    'destination': request.POST['destination'],
                     'jumps': route['length'],
-                    'mapDisplay': False,
+                    'mapDisplay': True,
                     'confirmButton': False,
                 }
             )
