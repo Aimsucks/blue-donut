@@ -179,8 +179,30 @@ class ReportView(LoginRequiredMixin, View):
             character_id=int(request.POST['characterID'])
         ).data.name
 
+        outageType = request.POST['outageType']
+
+        if outageType == "offline":
+            embedDescription = "A jump gate is offline. Please contact the " \
+                "owner to rectify the situation."
+        elif outageType == "fuel":
+            embedDescription = "A jump gate is out of fuel. Please contact " \
+                "the owner to rectify the situation."
+        elif outageType == "incorrect":
+            embedDescription = "A pair of jump gates is correct. Use " \
+                "addional information or check ingame to verify the report " \
+                "is correct and fix the error."
+        elif outageType == "loopback":
+            embedDescription = "A jump gate has been moved but remains " \
+                "in the same system. Please update the structure ID."
+        elif outageType == "missing":
+            embedDescription = "A jump gate is missing. Check ingame " \
+                "and with logistics teams to see where it disappeared to."
+        else:
+            embedDescription = "There was a script error parsing the outage " \
+                "type."
+
         embed = Embed(
-            description='An Ansiblex Jump Gate outage has been reported.',
+            description=embedDescription,
             color=0x375A7F,
             timestamp='now'
         )
@@ -197,6 +219,11 @@ class ReportView(LoginRequiredMixin, View):
         if (request.POST['structureID']):
             embed.add_field(name="Structure ID",
                             value=request.POST['structureID'],
+                            inline=False)
+
+        if (request.POST['extraInformation']):
+            embed.add_field(name="Extra Information",
+                            value=request.POST['extraInformation'],
                             inline=False)
 
         hook.send(embed=embed)

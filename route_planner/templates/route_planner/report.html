@@ -20,37 +20,71 @@
         <div class="col-md-6">
             <form id="reportForm" action="/planner/report/" method="post">
                 {% csrf_token %}
-                <div class="form-row" id="prefetch">
-                    <div class="col text-center">
-                        <label for="fromSystem">From</label><br>
+                <div class="form-row text-center" id="prefetch">
+                    <div class="col">
+                        <label for="fromSystem">From</label>
                         <input type="text" id="fromSystem" name="fromSystem" class="form-control typeahead text-center" placeholder="System" required>
                     </div>
-                    <div class="col text-center">
-                        <label for="toSystem">To</label><br>
+                    <div class="col mb-3">
+                        <label for="toSystem">To</label>
                         <input type="text" id="toSystem" name="toSystem" class="form-control typeahead text-center" placeholder="System" required>
+                    </div>
+                </div>
+                <div class="form-row text-center">
+                    <div class="col">
+                        <label for="outageType">Outage Type</label>
+                        <select name="outageType" class="form-control" id="outageType" required>
+                            <option value="offline">Structure is offline</option>
+                            <option value="fuel">Structure is out of fuel</option>
+                            <option value="incorrect">Route planner connection is incorrect</option>
+                            <option value="loopback">In-game route tells you to loop back to old system</option>
+                            <option value="missing">Missing jump bridge connection</option>
+                        </select>
                     </div>
                 </div>
                 <br>
                 <div class="form-row">
-                    <p>If you would like to provide additional information about the missing/incorrect jump gate, please follow these instructions:</p>
-                    <ol>
-                        <li>Open up the <a class="text-info" href="https://i.imgur.com/8THEffw.png">info panel</a> on the system with the incorrect gate.</li>
-                        <li>Go to the <a class="text-info" href="https://i.imgur.com/2DI3pIb.png">Structures tab</a>.</li>
-                        <li><a class="text-info" href="https://i.imgur.com/ci7K7xJ.png">Drag</a> the jump bridge structure (it's name contains the systems it links) to a chat window and send it.</li>
-                        <li>Right click and <a class="text-info" href="https://i.imgur.com/lmocD4e.png">copy</a> the message.</li>
-                        <li>Paste it into a notepad and take the <a class="text-info" href="https://i.imgur.com/mIR8gpa.png">long number</a>. This is the structure ID.</li>
-                        <li>Put the structure ID in the input with the same label.</li>
-                    </ol>
-                    <p>As a note, it is common that if the structure ID is wrong but the system is right, when you go
-                        to the system, the jump bridge will not be highlighted yellow. After you take the jump bridge,
-                        your in-game route will tell you to go back to that system. This is because the structure was
-                        picked up and moved, so the structure ID changed.
-                    </p>
-                    <input type="text" id="structureID" name="structureID" class="form-control mt-2" placeholder="Structure ID">
+                    <div class="col">
+                        <p>If you would like to provide additional information about the missing/incorrect jump gate, please follow these instructions:</p>
+                        <ol>
+                            <li>Open up the <a class="text-info" href="https://i.imgur.com/8THEffw.png">info panel</a> on the system with the incorrect gate.</li>
+                            <li>Go to the <a class="text-info" href="https://i.imgur.com/2DI3pIb.png">Structures tab</a>.</li>
+                            <li><a class="text-info" href="https://i.imgur.com/ci7K7xJ.png">Drag</a> the jump bridge structure (it's name contains the systems it links) to a chat window and send it.</li>
+                            <li>Right click and <a class="text-info" href="https://i.imgur.com/lmocD4e.png">copy</a> the message.</li>
+                            <li>Paste it into a notepad and take the <a class="text-info" href="https://i.imgur.com/mIR8gpa.png">long number</a>. This is the structure ID.</li>
+                            <li>Put the structure ID in the input with the same label.</li>
+                        </ol>
+                        <p>
+                            As a note, it is common that if the structure ID is wrong but the system is right, when you go
+                            to the system, the jump bridge will not be highlighted yellow. After you take the jump bridge,
+                            your in-game route will tell you to go back to that system. This is because the structure was
+                            picked up and moved, so the structure ID changed. If this is the case, please select the fourth
+                            option in the drop-down.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" id="structureID" name="structureID" class="form-control mt-2" placeholder="Structure ID">
+                    </div>
+                </div>
+                <br>
+                <div class="form-row text-center">
+                    <div class="col">
+                        <label for="extraInformation">Extra Information</label>
+                        <textarea id="extraInformation" name="extraInformation" class="form-control" rows="3"></textarea>
+                    </div>
                 </div>
                 <div class="form-row justify-content-center">
-                    <input type="hidden" id="characterID" name="characterID">
-                    <input type="submit" id="reportSubmit" name="submit" value="Submit" class="btn btn-primary mb-2 mt-4 btn-lg" onclick="document.getElementById('characterID').value = get_active_character();">
+                    <div class="col-4">
+                        <input type="hidden" id="characterID" name="characterID">
+                        <input type="submit" id="reportSubmit" name="submit" value="Submit" class="btn btn-primary btn-block mb-2 mt-4 btn-lg" onclick="document.getElementById('characterID').value = get_active_character();">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+
+                    </div>
                 </div>
             </form>
         </div>
