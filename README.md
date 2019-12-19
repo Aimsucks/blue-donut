@@ -31,7 +31,7 @@
 
 ## Installation
 
-Install Pipenv and then install the requirements.
+Install Poetry and then install the requirements.
 
 ```commandline
 pip install poetry
