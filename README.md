@@ -10,7 +10,7 @@
   </a>
 
   <a href="https://github.com/Aimsucks/blue-donut/issues">
-    <img src="https://img.shields.io/github/issues/aimsucks/blue-donut?style=for-the-badge" alt="PyPi" />
+    <img src="https://img.shields.io/github/issues/aimsucks/blue_donut?style=for-the-badge" alt="PyPi" />
   </a>
 
   <a href="https://discordapp.com/invite/UCK8ase">
