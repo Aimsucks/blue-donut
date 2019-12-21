@@ -1,0 +1,15 @@
+{% extends 'route_planner/planner.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}Error{% endblock %}
+
+{% block message %}
+<div class="row justify-content-center mt-2">
+    <div class="col-2"> </div>
+    <div class="col-8 text-center">
+        <h2>Current System: <b>{{ system }}</b></h2>
+        <h2>{{ message }}</h2>
+    </div>
+    <div class="col-2"></div>
+</div>
+{% endblock %}

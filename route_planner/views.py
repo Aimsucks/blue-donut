@@ -8,6 +8,7 @@ from eve_esi import ESI
 from eve_auth.models import EveUser
 
 from route_planner.backend import RoutePlannerBackend
+from eve_sde.models import SolarSystems
 
 from dhooks import Webhook, Embed
 hook = Webhook(settings.WEBHOOK_URL)
@@ -34,6 +35,24 @@ class PlannerView(LoginRequiredMixin, View):
             client=character.get_client(),
             character_id=int(request.POST['character_id'])
         ).data.solar_system_id
+
+        source_name = SolarSystems.objects.values_list(
+            'solarSystemName', flat=True).get(solarSystemID=req)
+
+        if source_name[0] == "J":
+            recents = RoutePlannerBackend().getInfo(request.user, 'recents')
+            favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
+            return render(
+                request,
+                'route_planner/error.html',
+                {
+                    'recents': recents,
+                    'favorites': favorites,
+                    'mapDisplay': False,
+                    'system': source_name,
+                    'message': "You cannot generate a route from a wormhole."
+                }
+            )
 
         route = RoutePlannerBackend().generate(
             req,
