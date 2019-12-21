@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "blue_donut"
 version = "0.1.0"
-description = "C:\Program Files (x86)\Cmder"
+description = ""
 authors = ["Aimsucks <contact@aimsucks.space>"]
 license = "MIT"
 
