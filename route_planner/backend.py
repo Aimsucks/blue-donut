@@ -21,17 +21,28 @@ class RoutePlannerBackend:
         destination_id = SolarSystems.objects.values_list(
             'solarSystemID', flat=True).get(solarSystemName=destination_name)
 
+        print("----------")
+        print("Source: " + source_name)
+        print("Destination: " + destination_name)
+
         path = nx.shortest_path(G, source_id, destination_id)
         path_length = len(path)-1
 
         jb_path = []
         for i in range(len(path)-1):
             if G.get_edge_data(path[i], path[i+1])['type'] == 'bridge':
+                debug_first_system = SolarSystems.objects.values_list(
+                    'solarSystemName', flat=True).get(solarSystemID=path[i])
+                debug_second_system = SolarSystems.objects.values_list(
+                    'solarSystemName', flat=True).get(solarSystemID=path[i+1])
+                print(debug_first_system + " -> " + debug_second_system)
                 jb_path.append(AnsiblexJumpGates.objects.values_list(
                     'structureID', flat=True).get(
                     fromSolarSystemID=path[i], toSolarSystemID=path[i+1]))
         if jb_path[:-1] != destination_id:
             jb_path.append(destination_id)
+
+        print("Route generated successfully!")
 
         dotlan_path = source_name
         for i in range(len(path)-1):
