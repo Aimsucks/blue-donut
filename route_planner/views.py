@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import View
 from django.shortcuts import render, redirect
@@ -39,7 +41,7 @@ class PlannerView(LoginRequiredMixin, View):
         source_name = SolarSystems.objects.values_list(
             'solarSystemName', flat=True).get(solarSystemID=req)
 
-        if source_name[0] == "J":
+        if re.match(r'J[0-9]{6}', source_name) or source_name == "Thera":
             recents = RoutePlannerBackend().getInfo(request.user, 'recents')
             favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
             return render(
@@ -50,7 +52,7 @@ class PlannerView(LoginRequiredMixin, View):
                     'favorites': favorites,
                     'mapDisplay': False,
                     'system': source_name,
-                    'message': "You cannot generate a route from a wormhole."
+                    'message': "You cannot generate a route from a wormhole. Try forcing a session change."
                 }
             )
 
