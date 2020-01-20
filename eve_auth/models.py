@@ -42,6 +42,11 @@ class EveUser(models.Model):
     owner = models.ForeignKey(User, models.CASCADE, db_index=True,
                               related_name='characters')
 
+    scope_read_location = models.BooleanField()
+    scope_write_waypoint = models.BooleanField()
+    scope_search_structures = models.BooleanField()
+    scope_read_structures = models.BooleanField()
+
     access_token = models.CharField(max_length=8192)
     refresh_token = models.CharField(max_length=8192)
     token_expiry = models.DateTimeField()
@@ -85,8 +90,10 @@ class EveUser(models.Model):
                 self.tokens = res.refresh()
             except APIException as e:
                 if e.status_code == 400:
-                    self.scope_open_window = False
-                    self.scope_read_assets = False
+                    self.scope_read_location = False
+                    self.scope_write_waypoint = False
+                    self.scope_search_structures = False
+                    self.scope_read_structures = False
                     self.save()
 
                     raise EveUser.KeyDeletedException(
