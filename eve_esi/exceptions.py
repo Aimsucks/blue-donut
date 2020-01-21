@@ -1,6 +1,6 @@
 class EsiException(Exception):
     def __init__(self, endpoint, status, args):
-        message = "Endpoint '{endpoint}' returned status {status}. "
+        message = ("Endpoint '{}' returned status {}. ").format(endpoint, status)
         "Parameters: {params}.".format(
             endpoint=endpoint,
             status=status,

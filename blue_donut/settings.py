@@ -8,6 +8,8 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SESSION_COOKIE_SECURE = False
+
 INSTALLED_APPS = [
     'eve_auth',
     'eve_esi',

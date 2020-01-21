@@ -34,6 +34,20 @@ class AdminLoginView(View):
         )
 
 
+class SearchLoginView(View):
+    def get(self, request):
+
+        scopes = [
+            'esi-location.read_location.v1',
+            'esi-ui.write_waypoint.v1',
+            'esi-search.search_structures.v1',
+            'esi-universe.read_structures.v1'
+        ]
+
+        return redirect(
+            ESI.get_security().get_auth_uri(state=str(uuid4()), scopes=scopes)
+        )
+
 class CallbackView(View):
     def get(self, request):
         security = ESI.get_security()

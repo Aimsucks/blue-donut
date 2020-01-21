@@ -28,13 +28,13 @@ class ManagerView(AccessMixin, View):
         structure_list = []
         ansiblex_list = []
 
-        character = request.user.characters.get(character_id=2113697818)
+        character = request.user.characters.get(character_id=94944046)
 
         for item in search_list:
             structure_list.extend(ESI.request(
                 'get_characters_character_id_search',
                 client=character.get_client(),
-                character_id=2113697818,
+                character_id=94944046,
                 categories=['structure'],
                 search=search_string+item
             ).data.structure)

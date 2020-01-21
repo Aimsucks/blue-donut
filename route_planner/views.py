@@ -5,12 +5,14 @@ from django.views.generic.base import View
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.conf import settings
+from django.db.models import Q
 
 from eve_esi import ESI
 from eve_auth.models import EveUser
 
 from route_planner.backend import RoutePlannerBackend
 from eve_sde.models import SolarSystems
+from jump_bridges.models import AnsiblexJumpGates
 
 from dhooks import Webhook, Embed
 hook = Webhook(settings.WEBHOOK_URL)
@@ -250,6 +252,56 @@ class ReportView(LoginRequiredMixin, View):
                             inline=False)
 
         hook.send(embed=embed)
+        
+        system_name_check = SolarSystems.objects.values_list(
+            'solarSystemID', flat=True).get(solarSystemName=request.POST['fromSystem'])
+        gates = AnsiblexJumpGates.objects.filter(Q(fromSolarSystemID=system_name_check ) | Q(toSolarSystemID=system_name_check ))
+        print("Removing", gates)
+        gates.delete()
+
+
+        structure_list = []
+        ansiblex_list = []
+
+        character = request.user.characters.get(character_id=int(request.POST['characterID']))
+
+        try:
+            for item in request.POST['fromSystem']:
+                structure_list.extend(ESI.request(
+                'get_characters_character_id_search',
+                client=character.get_client(),
+                character_id=int(request.POST['characterID']),
+                categories=['structure'],
+                search=" » "+request.POST['fromSystem']
+                ).data.structure)
+                print(len(structure_list))
+                print(request.POST['fromSystem'])
+                print("---")
+        except:
+            print(str(request.POST['characterID']) + " does not have rights in " + str(request.POST['fromSystem']) )
+            
+
+
+        structure_list = list(dict.fromkeys(structure_list))
+        print(len(structure_list))
+
+        print("---")
+        print(structure_list)
+
+        for item in structure_list:
+            req = ESI.request(
+                'get_universe_structures_structure_id',
+                client=character.get_client(),
+                structure_id=item
+            ).data.name.split(' ')
+
+            formatted_string = str(item) + " " + req[0] + " --> " + req[2]
+            addgate = AnsiblexJumpGates(structureID=int(item), fromSolarSystemID=int(SolarSystems.objects.values_list('solarSystemID', flat=True).get(solarSystemName=req[0])), toSolarSystemID=int(SolarSystems.objects.values_list('solarSystemID', flat=True).get(solarSystemName=req[2])))
+            addgate.save()
+            print("added gates", formatted_string)
+
+        print("Finished!")
+
 
         return redirect('/planner/')
 
