@@ -17,49 +17,73 @@ How do you get the master list of structure IDs so you dont duplicate already-fo
     and only do newly discovered ones from a different character's search?
 
 How do we log everyone out so they have to re-authenticate with new scopes?
+
+How do we automatically populate alliance and corporation IDs?
 """
 
 class JumpBridgesBackend:
     def search_routine(self, request, alliances):
         print("Beginning jump gate search routine.")
 
+        missing_alliances = []
+        jump_gates = []
+
         for alliance in alliances:
+            characters = EveUser.objects.filter(alliance_id=alliance)
 
-            """
-            Need a try + except here in case we don't have a character from a certain alliance!
-            """
-            members = EveUser.objects.filter(alliance_id=alliance)
-            print("Found {} character(s) in {}.".format(len(members), alliance))
-
-            member = random.choice(members)
+            # Check if there is a character in the desired alliance. If not, skip this iteration.
+            if len(characters) == 0:
+                print("No members found. Skipping alliance {}."
+                      .format(alliance))
+                missing_alliances.append(alliance)
+                continue
+            else:
+                print("Found {} character(s) in {}."
+                      .format(len(characters), alliance))
 
             # Verify this person is in the correct alliance.
-            alliance_esi = ESI.request(
-                'get_characters_character_id',
-                character_id=member.character_id
-            ).data.alliance_id
+            exclude_list = []
 
-            """
-            Add something here to update the character's alliance if it isn't correct in the database.
-            """
-
-            while alliance_esi != alliance:
-                member = random.choice(members)
+            while True:
+                character = random.choice(characters)
+                print("Checking if character {} is in alliance {}."
+                      .format(character.name, alliance))
 
                 alliance_esi = ESI.request(
                     'get_characters_character_id',
-                    character_id=member
+                    character_id=character.character_id
                 ).data.alliance_id
 
-            print("Character {} is verified as a member of alliance {}.".format(member.name, alliance))
+                if alliance == alliance_esi:
+                    print("Character {} is verified as a member of alliance {}."
+                          .format(character.name, alliance))
+                    break
+                else:
+                    print("Character's alliance has changed. Updating to {}."
+                          .format(alliance_esi))
+                    character.alliance_id = alliance_esi
+                    character.save()
 
-            character = request.user.characters.get(character_id=member.character_id)
+                    # Add the faulty character to the exclude list to avoid getting them again.
+                    exclude_list.append(character.id)
+                    characters = characters.exclude(id__in=exclude_list)
+
+            """
+            Need some kind of exception for if we ever have an entire list of characters not work
+                out, e.g. 10 characters in list and all fail, what do we do?
+            """
+
+            character = request.user.characters.get(character_id=character.character_id)
             print(character)
 
-            print(len(JumpBridgesBackend.deep_search(self, character)))
+            # print(len(JumpBridgesBackend.deep_search(self, character)))
+
+        print("Could not find members in the following alliances: {}"
+              .format(missing_alliances))
 
     def deep_search(self, character):
-        print("Beginning deep search with character {}.".format(character.name))
+        print("Beginning deep search with character {}."
+              .format(character.name))
 
         structure_ids = []
 
@@ -109,6 +133,8 @@ class JumpBridgesBackend:
 
         """
         Still need to add code to update database or produce a list with the shit thats going in.
+
+        Also need double checking 
         """
 
     def update_characters(self):
