@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 
 from eve_auth.models import EveUser
 
+from eve_esi import ESI
+
 SCOPE_NAMES = {
     'read_location': 'esi-location.read_location.v1',
     'write_waypoint': 'esi-ui.write_waypoint.v1',
@@ -11,12 +13,10 @@ SCOPE_NAMES = {
 
 class EveAuthBackend:
     def authenticate(self, request, info=None, tokens=None):
-        print(info)
-
         character_id = info['sub'].replace('CHARACTER:EVE:', '')
         name = info['name']
         scopes = info['scp']
-        
+
         try:
             character = EveUser.objects.get(character_id=character_id)
         except EveUser.DoesNotExist:
@@ -37,6 +37,17 @@ class EveAuthBackend:
         character.scope_search_structures = SCOPE_NAMES['search_structures'] in scopes
         character.scope_read_structures = SCOPE_NAMES['read_structures'] in scopes
         character.tokens = tokens
+
+        esi_data = ESI.request(
+            'get_characters_character_id',
+            character_id=character_id
+        ).data
+
+        try:
+            character.alliance_id = esi_data.alliance_id
+        except KeyError:
+            character.alliance_id = 0
+        character.corporation_id = esi_data.corporation_id
 
         character.save()
 

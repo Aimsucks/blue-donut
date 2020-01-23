@@ -7,6 +7,8 @@ class AnsiblexJumpGates(models.Model):
     fromSolarSystemID = models.IntegerField()
     toSolarSystemID = models.IntegerField()
 
+    ownerID = models.BigIntegerField()
+
     def __str__(self):
         fromSolarSystem = SolarSystems.objects.values_list(
             'solarSystemName', flat=True).get(
@@ -17,4 +19,17 @@ class AnsiblexJumpGates(models.Model):
 
         return (fromSolarSystem + " ≫ " + toSolarSystem)
 
-# add a model for logs of who updated it to put on the route_planner page
+
+"""
+Add a model for alliances that is *easily* editable from the admin interface (including order!)
+    for searching with the new jump gate automation tool.
+
+List:
+1. TEST
+2. BRAVE
+3. REQ
+4. IOU
+5. VINDI
+6. W4RP
+7. AOM
+"""

@@ -15,9 +15,6 @@ search_string = " » "
 """
 Concerns:
 
-How do you get the master list of structure IDs so you dont duplicate already-found gates
-    and only do newly discovered ones from a different character's search?
-
 How do we log everyone out so they have to re-authenticate with new scopes?
 
 How do we automatically populate alliance and corporation IDs?
@@ -88,10 +85,8 @@ class JumpBridgesBackend:
 
             # Add results from the structure search to ignored gates for future searches
             excluded_gates.extend(new_gate_ids)
-            print(excluded_gates)
 
             jump_gates.extend(new_gate_info)
-            print(jump_gates)
 
             # For loop is over - iterate to next alliance after adding the gates to the two lists
 
@@ -134,7 +129,7 @@ class JumpBridgesBackend:
             structure_ids.extend(ESI.request(
                 'get_characters_character_id_search',
                 client=character.get_client(),
-                character_id=2113697818,
+                character_id=character.character_id,
                 categories=['structure'],
                 search=search_string+item
             ).data.structure)
