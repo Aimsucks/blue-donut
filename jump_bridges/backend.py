@@ -1,5 +1,6 @@
 from eve_auth.models import EveUser
-# from jump_bridges.models import AnsiblexJumpGates
+from jump_bridges.models import AnsiblexJumpGates
+from eve_sde.models import SolarSystems
 from eve_esi import ESI
 import random
 
@@ -7,7 +8,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-search_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+# search_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+search_list = "A"
 search_string = " » "
 
 """
@@ -26,6 +28,7 @@ class JumpBridgesBackend:
         print("Beginning jump gate search routine.")
 
         missing_alliances = []
+        excluded_gates = []
         jump_gates = []
 
         for alliance in alliances:
@@ -49,10 +52,13 @@ class JumpBridgesBackend:
                 print("Checking if character {} is in alliance {}."
                       .format(character.name, alliance))
 
-                alliance_esi = ESI.request(
-                    'get_characters_character_id',
-                    character_id=character.character_id
-                ).data.alliance_id
+                try:
+                    alliance_esi = ESI.request(
+                        'get_characters_character_id',
+                        character_id=character.character_id
+                    ).data.alliance_id
+                except KeyError:
+                    alliance_esi = 0
 
                 if alliance == alliance_esi:
                     print("Character {} is verified as a member of alliance {}."
@@ -68,26 +74,61 @@ class JumpBridgesBackend:
                     exclude_list.append(character.id)
                     characters = characters.exclude(id__in=exclude_list)
 
-            """
-            Need some kind of exception for if we ever have an entire list of characters not work
-                out, e.g. 10 characters in list and all fail, what do we do?
-            """
+                if not characters:
+                    break
+
+            if not characters:
+                print("Character list has been exhausted. Skipping alliance {}."
+                      .format(alliance))
+                continue
 
             character = request.user.characters.get(character_id=character.character_id)
-            print(character)
 
-            # print(len(JumpBridgesBackend.deep_search(self, character)))
+            new_gate_ids, new_gate_info = self.structure_search(character, excluded_gates)
 
-        print("Could not find members in the following alliances: {}"
-              .format(missing_alliances))
+            # Add results from the structure search to ignored gates for future searches
+            excluded_gates.extend(new_gate_ids)
+            print(excluded_gates)
 
-    def deep_search(self, character):
+            jump_gates.extend(new_gate_info)
+            print(jump_gates)
+
+            # For loop is over - iterate to next alliance after adding the gates to the two lists
+
+        print("Updating database with {} total jump gates."
+              .format(len(jump_gates)))
+
+        # Clear the database and all all the gates to it
+        AnsiblexJumpGates.objects.all().delete()
+
+        for gate in jump_gates:
+            fromSolarSystemID = SolarSystems.objects.values_list(
+                'solarSystemID', flat=True).get(
+                    solarSystemName=gate['from'])
+            toSolarSystemID = SolarSystems.objects.values_list(
+                'solarSystemID', flat=True).get(
+                    solarSystemName=gate['to'])
+            AnsiblexJumpGates(
+                structureID=gate['id'],
+                fromSolarSystemID=fromSolarSystemID,
+                toSolarSystemID=toSolarSystemID,
+                ownerID=gate['owner']
+            ).save()
+
+        print("Completed jump gate update routine.")
+        print("Jump gates found: {}"
+              .format(len(jump_gates)))
+        if missing_alliances:
+            print("Could not find members in the following alliances: {}"
+                  .format(missing_alliances))
+
+    def structure_search(self, character, known_structures):
         print("Beginning deep search with character {}."
               .format(character.name))
 
         structure_ids = []
 
-        # Search /characters/{character_id}/search/ for the ">>" character and some letters
+        # Search /characters/{character_id}/search/ for the "»" character and some letters
         # and add everything to a list
         for item in search_list:
             structure_ids.extend(ESI.request(
@@ -101,19 +142,36 @@ class JumpBridgesBackend:
             # Log the length of the structure list after every iteration
             print(len(structure_ids))
 
-        print("---")
+        print("List complete with {} structure IDs. Removing duplicates."
+              .format(len(structure_ids)))
 
-        # Remove all duplicates from the list
         structure_ids = list(dict.fromkeys(structure_ids))
+        print("Duplicates removed. New total: {}"
+              .format(len(structure_ids)))
 
-        print(len(structure_ids))
+        # Remove any structures we've already found
+        structure_list = [x for x in structure_ids if x not in known_structures]
 
-        print("---")
+        print("Total structures to index: {}"
+              .format(len(structure_list)))
 
-        structure_list = []
+        # Get information about each structure
+        structure_info = self.structure_parse(character, structure_list)
+
+        return structure_list, structure_info
+
+    def structure_parse(self, character, structure_list):
+        structure_info = []
 
         # Now query /universe/structures/{structure_id}/ to get information about each gate
-        for item in structure_ids:
+        for item in structure_list:
+
+            """
+            Thinking about making it
+                for index, item in enumerate(structure_list):
+            so I can print the index every 10 or so times to gauge how fast it's going
+            """
+
             req = ESI.request(
                 'get_universe_structures_structure_id',
                 client=character.get_client(),
@@ -122,20 +180,16 @@ class JumpBridgesBackend:
 
             name = req.name.split(' ')
 
-            structure_list.extend({
+            structure = {
                 'id': item,
                 'from': name[0],
                 'to': name[2],
                 'owner': req.owner_id
-            })
+            }
 
-        return structure_list
+            structure_info.append(structure.copy())
 
-        """
-        Still need to add code to update database or produce a list with the shit thats going in.
-
-        Also need double checking 
-        """
+        return structure_info
 
     def update_characters(self):
         print("Updating character alliances and corporations.")
