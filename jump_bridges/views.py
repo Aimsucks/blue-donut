@@ -25,9 +25,9 @@ Need to figure out an interface for the automation tool.
 class ManagerView(AccessMixin, View):
 
     def get(self, request):
-        JumpBridgesBackend().search_routine(request, [498125261])
+        JumpBridgesBackend().search_routine([498125261])
         # JumpBridgesBackend.update_characters(self)
-        # JumpBridgesBackend.test_function(self)
+        # JumpBridgesBackend().test_function(request)
 
         return render(
             request,

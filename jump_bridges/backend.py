@@ -8,20 +8,20 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# search_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-search_list = "A"
+search_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 search_string = " » "
 
 """
 Concerns:
 
 How do we log everyone out so they have to re-authenticate with new scopes?
+ - Drop all sessions and force everyone to log in again.
 
 How do we automatically populate alliance and corporation IDs?
 """
 
 class JumpBridgesBackend:
-    def search_routine(self, request, alliances):
+    def search_routine(self, alliances):
         print("Beginning jump gate search routine.")
 
         missing_alliances = []
@@ -29,7 +29,9 @@ class JumpBridgesBackend:
         jump_gates = []
 
         for alliance in alliances:
-            characters = EveUser.objects.filter(alliance_id=alliance)
+            characters = EveUser.objects.filter(alliance_id=alliance,
+                                                scope_search_structures=True,
+                                                scope_read_structures=True)
 
             # Check if there is a character in the desired alliance. If not, skip this iteration.
             if len(characters) == 0:
@@ -79,7 +81,7 @@ class JumpBridgesBackend:
                       .format(alliance))
                 continue
 
-            character = request.user.characters.get(character_id=character.character_id)
+            character = EveUser.objects.get(character_id=character.character_id)
 
             new_gate_ids, new_gate_info = self.structure_search(character, excluded_gates)
 
@@ -135,7 +137,6 @@ class JumpBridgesBackend:
             ).data.structure)
 
             # Log the length of the structure list after every iteration
-            print(len(structure_ids))
 
         print("List complete with {} structure IDs. Removing duplicates."
               .format(len(structure_ids)))
@@ -209,3 +210,6 @@ class JumpBridgesBackend:
             character.save()
 
         print("Character information updated!")
+
+    def test_function(self, request):
+        print(EveUser.objects.get(character_id=2115162731))
