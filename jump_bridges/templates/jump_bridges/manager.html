@@ -7,9 +7,9 @@
 {% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
-        <div class="col-xl-7 container-alt toggles-ignore mx-auto">
+        <div class="container-alt toggles-ignore mx-auto">
             <h1 class="display-3 mb-0">
-                <span data-ng-bind="selected.palette.name" class="ng-binding">Jump Gate Manager</span>
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Management</span>
             </h1>
         </div>
     </div>
@@ -19,21 +19,94 @@
 {% block content %}
 <div class="container pt-5">
     <div class="row">
-        <div class="alert alert-danger">
-            <h4 class="alert-heading mt-3">Warning!</h4>
-            <p>Currently this form relies heavily on the input being correct. Please exclusively copy/paste the wiki's code box full of the Ansiblex Jump Gates. Nothing more, nothing less.</p>
-        </div>
-        <h2>Update the Jump Gate List</h2>
-        <p>Copy and paste the list from the wiki (found <a class="text-info" href="https://wiki.pleaseignore.com/logistics:jump_bridge_list">here</a>) into this text box and hit submit. 
-        This will clear the current known jump gate table and fill it with these new ones.</p>
-        <form action="/manager/" method="post">
-            <div class="form-group">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <h2 class="text-center"><i class="fas fa-clipboard-list mr-3"></i></i>Update Gates</h2>
+            <p>Select which alliances you want to pull from. Do note that running this completely clears the jump gate
+                database.</p>
+            <form id="updater" action="/manager/" method="post">
                 {% csrf_token %}
-                {{ form }}
-            </div>
-            <input type="hidden" id="character_id" name="character_id" value="">
-            <input type="submit" value="Update list" class="btn btn-primary mt-2 mb-2">
-        </form>
+                <div class="form-row">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                    {% comment %}
+                        <div class="form-row mb-3">
+                            <div class="col-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceTEST" checked>
+                                    <label class="custom-control-label" for="allianceTEST">TEST</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceBRAVE" checked>
+                                    <label class="custom-control-label" for="allianceBRAVE">BRAVE</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceREQ" checked>
+                                    <label class="custom-control-label" for="allianceREQ">REQ</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceTW" checked>
+                                    <label class="custom-control-label" for="allianceTW">TW</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceIOU" checked>
+                                    <label class="custom-control-label" for="allianceIOU">IOU</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceW4RP" checked>
+                                    <label class="custom-control-label" for="allianceW4RP">W4RP</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceRR" checked>
+                                    <label class="custom-control-label" for="allianceRR">R-R</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceFEDUP" checked>
+                                    <label class="custom-control-label" for="allianceFEDUP">FEDUP</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceAARP" checked>
+                                    <label class="custom-control-label" for="allianceAARP">AARP.</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceVINDI" checked>
+                                    <label class="custom-control-label" for="allianceVINDI">VINDI</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceKIA" checked>
+                                    <label class="custom-control-label" for="allianceKIA">KIA</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceXIX" checked>
+                                    <label class="custom-control-label" for="allianceXIX">X.I.X</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceRZR" checked>
+                                    <label class="custom-control-label" for="allianceRZR">-RZR-</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceMI22" checked>
+                                    <label class="custom-control-label" for="allianceMI22">MI22</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allianceURL" checked>
+                                    <label class="custom-control-label" for="allianceURL">URL</label>
+                                </div>
+                            </div>
+                        </div>
+                    {% endcomment %}
+                        <input type="submit" id="update" name="update" value="Update" class="btn btn-block btn-primary">
+                        {% block results %}{% endblock %}
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </form>
+        </div>
+        <div class="col-3"></div>
     </div>
 </div>
 {% endblock %}
@@ -43,7 +116,6 @@
 $(document).ready(function(){
    $(".active").removeClass("active");
    $("#jump_bridges").addClass("active");
-   document.getElementById("character_id").value = get_active_character();
 });
 
 </script>

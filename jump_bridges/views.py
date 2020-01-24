@@ -1,13 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import View
-
-from jump_bridges.forms import JumpBridgeForm
-from jump_bridges.models import AnsiblexJumpGates
-
-from eve_sde.models import SolarSystems
-
-from route_planner.backend import RoutePlannerBackend
 
 from jump_bridges.backend import JumpBridgesBackend
 
@@ -18,44 +11,39 @@ class AccessMixin(LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
-"""
-Need to figure out an interface for the automation tool.
-"""
-
 class ManagerView(AccessMixin, View):
 
     def get(self, request):
-        JumpBridgesBackend().search_routine([498125261])
-        # JumpBridgesBackend.update_characters(self)
-        # JumpBridgesBackend().test_function(request)
-
         return render(
             request,
             'jump_bridges/manager.html'
         )
 
-    # def post(self, request):
-    #     form = JumpBridgeForm(request.POST)
+    def post(self, request):
+        alliances = [
+            498125261,
+            99003214,
+            99003838,
+            99001099,
+            99002367,
+            99004116,
+            99001657,
+            99007289,
+            99008809,
+            99009104,
+            99008469,
+            99005518,
+            741557221,
+            1411711376,
+            99002826
+        ]
 
-    #     if form.is_valid():
-    #         split = request.POST['jumpBridges'].split('\r\n')
-    #         bridges = [item for item in split if '10' in item]
+        gates = JumpBridgesBackend().search_routine(alliances)
 
-    #         AnsiblexJumpGates.objects.all().delete()
-
-    #         for item in bridges:
-    #             structureID = item[0:13]
-    #             fromSolarSystemID = SolarSystems.objects.values_list(
-    #                 'solarSystemID', flat=True).get(
-    #                     solarSystemName=item[14:20])
-    #             toSolarSystemID = SolarSystems.objects.values_list(
-    #                 'solarSystemID', flat=True).get(
-    #                     solarSystemName=item[25:31])
-    #             AnsiblexJumpGates(
-    #                 structureID=structureID,
-    #                 fromSolarSystemID=fromSolarSystemID,
-    #                 toSolarSystemID=toSolarSystemID).save()
-
-    #         RoutePlannerBackend().updateGraph()
-
-    #     return redirect('/manager/')
+        return render(
+            request,
+            'jump_bridges/manager.html',
+            {
+                'gates_added': gates
+            }
+        )

@@ -99,12 +99,9 @@ class JumpBridgesBackend:
         AnsiblexJumpGates.objects.all().delete()
 
         for gate in jump_gates:
-            fromSolarSystemID = SolarSystems.objects.values_list(
-                'solarSystemID', flat=True).get(
-                    solarSystemName=gate['from'])
-            toSolarSystemID = SolarSystems.objects.values_list(
-                'solarSystemID', flat=True).get(
-                    solarSystemName=gate['to'])
+            fromSolarSystemID = SolarSystems.objects.get(solarSystemName=gate['from']).solarSystemID
+            toSolarSystemID = SolarSystems.objects.get(solarSystemName=gate['to']).solarSystemID
+
             AnsiblexJumpGates(
                 structureID=gate['id'],
                 fromSolarSystemID=fromSolarSystemID,
@@ -118,6 +115,8 @@ class JumpBridgesBackend:
         if missing_alliances:
             print("Could not find members in the following alliances: {}"
                   .format(missing_alliances))
+
+        return len(jump_gates)
 
     def structure_search(self, character, known_structures):
         print("Beginning deep search with character {}."
@@ -155,6 +154,21 @@ class JumpBridgesBackend:
         structure_info = self.structure_parse(character, structure_list)
 
         return structure_list, structure_info
+
+    def single_search(self, character, query):
+        try:
+            gate_id = ESI.request(
+                'get_characters_character_id_search',
+                client=character.get_client(),
+                character_id=character.character_id,
+                categories=['structure'],
+                search=query
+            ).data.structure
+        except KeyError:
+            return
+
+        # Note that searching for 2 systems and the "»" character will return two gates
+        return self.structure_parse(character, gate_id)
 
     def structure_parse(self, character, structure_list):
         structure_info = []
@@ -210,6 +224,3 @@ class JumpBridgesBackend:
             character.save()
 
         print("Character information updated!")
-
-    def test_function(self, request):
-        print(EveUser.objects.get(character_id=2115162731))
