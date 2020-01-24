@@ -116,7 +116,7 @@ class JumpBridgesBackend:
 
         print("Completed jump gate update routine.")
         print("Jump gates found: {}"
-              .format(len(jump_gates)))
+              .format(len(final_list)))
         if missing_alliances:
             print("Could not find members in the following alliances: {}"
                   .format(missing_alliances))
