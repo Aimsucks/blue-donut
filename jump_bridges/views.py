@@ -4,6 +4,7 @@ from django.views.generic.base import View
 
 from jump_bridges.backend import JumpBridgesBackend
 
+
 class AccessMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_staff:
@@ -12,38 +13,20 @@ class AccessMixin(LoginRequiredMixin):
 
 
 class ManagerView(AccessMixin, View):
-
     def get(self, request):
-        return render(
-            request,
-            'jump_bridges/manager.html'
-        )
+        return render(request, 'jump_bridges/manager.html')
 
     def post(self, request):
-        alliances = [
-            498125261,
-            99003214,
-            99003838,
-            99001099,
-            99002367,
-            99004116,
-            99001657,
-            99007289,
-            99008809,
-            99009104,
-            99008469,
-            99005518,
-            741557221,
-            1411711376,
-            99002826
-        ]
+        if 'update_gates' in request.POST:
+            alliances = [
+                498125261, 99003214, 99003838, 99001099, 99002367,
+                99004116, 99001657, 99007289, 99008809, 99009104,
+                99008469, 99005518, 741557221, 1411711376, 99002826
+            ]
 
-        gates = JumpBridgesBackend().search_routine(alliances)
+            gates = JumpBridgesBackend().search_routine(alliances)
+            return render(request, 'jump_bridges/updated.html', {'number': gates, 'noun': 'gates'})
 
-        return render(
-            request,
-            'jump_bridges/manager.html',
-            {
-                'gates_added': gates
-            }
-        )
+        elif 'update_characters' in request.POST:
+            characters = JumpBridgesBackend().update_characters()
+            return render(request, 'jump_bridges/updated.html', {'number': characters, 'noun': 'characters'})

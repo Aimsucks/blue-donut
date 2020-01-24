@@ -6,8 +6,8 @@ class AnsiblexJumpGates(models.Model):
     structureID = models.IntegerField(primary_key=True)
     fromSolarSystemID = models.IntegerField()
     toSolarSystemID = models.IntegerField()
-
     ownerID = models.BigIntegerField()
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         fromSolarSystem = SolarSystems.objects.values_list(

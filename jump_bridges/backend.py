@@ -5,7 +5,6 @@ from eve_esi import ESI
 import random
 
 import logging
-
 logger = logging.getLogger(__name__)
 
 search_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -15,9 +14,11 @@ search_string = " » "
 Concerns:
 
 How do we log everyone out so they have to re-authenticate with new scopes?
- - Drop all sessions and force everyone to log in again.
+ - Drop all sessions and force everyone to log in again. (delete session table)
 
 How do we automatically populate alliance and corporation IDs?
+
+Need to check for single sided gates! (I think..)
 """
 
 class JumpBridgesBackend:
@@ -35,7 +36,7 @@ class JumpBridgesBackend:
 
             # Check if there is a character in the desired alliance. If not, skip this iteration.
             if len(characters) == 0:
-                print("No members found. Skipping alliance {}."
+                print("No members found in alliance {}."
                       .format(alliance))
                 missing_alliances.append(alliance)
                 continue
@@ -92,13 +93,17 @@ class JumpBridgesBackend:
 
             # For loop is over - iterate to next alliance after adding the gates to the two lists
 
+        print("Removing single sided gates.")
+        final_list = self.check_single_gates(jump_gates)
+        print("{} gates removed.".format(len(jump_gates)-len(final_list)))
+
         print("Updating database with {} total jump gates."
-              .format(len(jump_gates)))
+              .format(len(final_list)))
 
         # Clear the database and all all the gates to it
         AnsiblexJumpGates.objects.all().delete()
 
-        for gate in jump_gates:
+        for gate in final_list:
             fromSolarSystemID = SolarSystems.objects.get(solarSystemName=gate['from']).solarSystemID
             toSolarSystemID = SolarSystems.objects.get(solarSystemName=gate['to']).solarSystemID
 
@@ -180,6 +185,9 @@ class JumpBridgesBackend:
             Thinking about making it
                 for index, item in enumerate(structure_list):
             so I can print the index every 10 or so times to gauge how fast it's going
+
+            This would only be for when I get websockets working and can stream console
+            output to the manager page to make sure functions are running correctly
             """
 
             req = ESI.request(
@@ -200,6 +208,26 @@ class JumpBridgesBackend:
             structure_info.append(structure.copy())
 
         return structure_info
+
+    def check_single_gates(self, jump_gates):
+        bad_list = []
+        for gate in jump_gates:
+
+            # Gates in "to" but not "from"
+            if not gate["from"] in [d['to'] for d in jump_gates]:
+                bad_list.append(gate["id"])
+
+            # Gates in "from" but not "to"
+            if not gate["to"] in [d['from'] for d in jump_gates]:
+                bad_list.append(gate["id"])
+
+        # Remove duplicates
+        bad_list = list(dict.fromkeys(bad_list))
+
+        # New list with all the single sided gates removed
+        jump_gates = [item for item in jump_gates if item['id'] not in bad_list]
+
+        return jump_gates
 
     def update_characters(self):
         print("Updating character alliances and corporations.")
@@ -223,4 +251,5 @@ class JumpBridgesBackend:
 
             character.save()
 
+        return len(EveUser.objects.all())
         print("Character information updated!")
