@@ -5,25 +5,27 @@ import json
 from eve_sde.models import SolarSystems, SolarSystemJumps
 from jump_bridges.models import AnsiblexJumpGates
 from route_planner.models import PlannerLists
+from django.utils import timezone
 
 import logging
-
 logger = logging.getLogger(__name__)
 
 G = nx.Graph()
-
+test_time = timezone.now()
 
 class RoutePlannerBackend:
     def generate(self, source_id, destination_name):
-        source_name = SolarSystems.objects.values_list(
-            'solarSystemName', flat=True).get(solarSystemID=source_id)
 
-        destination_id = SolarSystems.objects.values_list(
-            'solarSystemID', flat=True).get(solarSystemName=destination_name)
+        # Snippet to make sure graph is up to date
+        global test_time
+        database_time = AnsiblexJumpGates.objects.latest("updated").updated
+        if database_time > test_time:
+            logger.debug("Graph is out of date - updating.")
+            test_time = timezone.now()
+            self.updateGraph()
 
-        print("----------")
-        print("Source: " + source_name)
-        print("Destination: " + destination_name)
+        source_name = SolarSystems.objects.get(solarSystemID=source_id).solarSystemName
+        destination_id = SolarSystems.objects.get(solarSystemName=destination_name).solarSystemID
 
         logger.debug("----------")
         logger.debug("Source: " + source_name)
@@ -35,39 +37,31 @@ class RoutePlannerBackend:
         jb_path = []
         for i in range(len(path)-1):
             if G.get_edge_data(path[i], path[i+1])['type'] == 'bridge':
-                debug_first_system = SolarSystems.objects.values_list(
-                    'solarSystemName', flat=True).get(solarSystemID=path[i])
-                debug_second_system = SolarSystems.objects.values_list(
-                    'solarSystemName', flat=True).get(solarSystemID=path[i+1])
+                debug_first_system = SolarSystems.objects.get(solarSystemID=path[i]).solarSystemName
+                debug_second_system = SolarSystems.objects.get(solarSystemID=path[i+1]).solarSystemName
+
                 print(debug_first_system + " -> " + debug_second_system)
-                logger.debug(debug_first_system + " -> " + debug_second_system)
-                jb_path.append(AnsiblexJumpGates.objects.values_list(
-                    'structureID', flat=True).get(
-                    fromSolarSystemID=path[i], toSolarSystemID=path[i+1]))
+                print(path[i], path[i+1])
+
+                jb_path.append(AnsiblexJumpGates.objects.get(
+                    fromSolarSystemID=path[i], toSolarSystemID=path[i+1]).structureID)
+
         if jb_path[:-1] != destination_id:
             jb_path.append(destination_id)
 
-        print("Route generated successfully!")
         logger.debug("Route generated successfully!")
 
         dotlan_path = source_name
         for i in range(len(path)-1):
             if G.get_edge_data(path[i], path[i+1])['type'] == 'bridge':
-                bridged_path = '::' + SolarSystems.objects.values_list(
-                    'solarSystemName', flat=True).get(solarSystemID=path[i+1])
+                bridged_path = '::' + SolarSystems.objects.get(solarSystemID=path[i+1]).solarSystemName
                 dotlan_path += bridged_path
-
             else:
-                gated_path = ':' + SolarSystems.objects.values_list(
-                    'solarSystemName', flat=True).get(solarSystemID=path[i+1])
+                gated_path = ':' + SolarSystems.objects.get(solarSystemID=path[i+1]).solarSystemName
                 dotlan_path += gated_path
         dotlan_path = re.sub(r'(?<!:)(:[^:\s]+)(?=:)(?!::)', '', dotlan_path)
 
-        result = {
-            'esi': jb_path,
-            'dotlan': dotlan_path,
-            'length': path_length
-        }
+        result = {'esi': jb_path, 'dotlan': dotlan_path, 'length': path_length}
 
         return result
 
