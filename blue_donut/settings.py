@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'homepage',
     'jump_bridges',
     'route_planner',
+    'report',
     'bootstrap4',
     'django.contrib.admin',
     'django.contrib.auth',

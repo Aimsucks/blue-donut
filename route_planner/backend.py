@@ -61,7 +61,7 @@ class RoutePlannerBackend:
                 gated_path = ':' + SolarSystems.objects.values_list(
                     'solarSystemName', flat=True).get(solarSystemID=path[i+1])
                 dotlan_path += gated_path
-        dotlan_path = re.sub('(?<!:)(:[^:\s]+)(?=:)(?!::)', '', dotlan_path)
+        dotlan_path = re.sub(r'(?<!:)(:[^:\s]+)(?=:)(?!::)', '', dotlan_path)
 
         result = {
             'esi': jb_path,

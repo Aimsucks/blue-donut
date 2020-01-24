@@ -4,18 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import View
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.conf import settings
-from django.db.models import Q
 
 from eve_esi import ESI
 from eve_auth.models import EveUser
 
 from route_planner.backend import RoutePlannerBackend
 from eve_sde.models import SolarSystems
-from jump_bridges.models import AnsiblexJumpGates
-
-from dhooks import Webhook, Embed
-hook = Webhook(settings.WEBHOOK_URL)
 
 
 class PlannerView(LoginRequiredMixin, View):
@@ -184,126 +178,6 @@ class PlannerView(LoginRequiredMixin, View):
                     'confirmButton': False,
                 }
             )
-
-
-class ReportView(LoginRequiredMixin, View):
-    def get(self, request):
-        return render(request, 'route_planner/report.html')
-
-    def post(self, request):
-        try:
-            character = request.user.characters.get(character_id=int(
-                request.POST['characterID']
-            ))
-        except EveUser.DoesNotExist:
-            return HttpResponse(status=403)
-
-        reportSubmitter = ESI.request(
-            'get_characters_character_id',
-            client=character.get_client(),
-            character_id=int(request.POST['characterID'])
-        ).data.name
-
-        outageType = request.POST['outageType']
-
-        if outageType == "offline":
-            embedDescription = "A jump gate is offline. Please contact the " \
-                "owner to rectify the situation."
-        elif outageType == "fuel":
-            embedDescription = "A jump gate is out of fuel. Please contact " \
-                "the owner to rectify the situation."
-        elif outageType == "incorrect":
-            embedDescription = "A pair of jump gates is correct. Use " \
-                "addional information or check ingame to verify the report " \
-                "is correct and fix the error."
-        elif outageType == "loopback":
-            embedDescription = "A jump gate has been moved but remains " \
-                "in the same system. Please update the structure ID."
-        elif outageType == "missing":
-            embedDescription = "A jump gate is missing. Check ingame " \
-                "and with logistics teams to see where it disappeared to."
-        else:
-            embedDescription = "There was a script error parsing the outage " \
-                "type."
-
-        embed = Embed(
-            description=embedDescription,
-            color=0x375A7F,
-            timestamp='now'
-        )
-
-        reportSubmitterIcon = "https://image.eveonline.com/Character/" + \
-            request.POST['characterID'] + "_32.jpg"
-        footerIcon = "https://bluedonut.space/static/img/favicon.png"
-
-        embed.set_author(name=reportSubmitter, icon_url=reportSubmitterIcon)
-        embed.add_field(name="From System", value=request.POST['fromSystem'])
-        embed.add_field(name="To System", value=request.POST['toSystem'])
-        embed.set_footer(text="Blue Donut", icon_url=footerIcon)
-
-        if (request.POST['structureID']):
-            embed.add_field(name="Structure ID",
-                            value=request.POST['structureID'],
-                            inline=False)
-
-        if (request.POST['extraInformation']):
-            embed.add_field(name="Extra Information",
-                            value=request.POST['extraInformation'],
-                            inline=False)
-
-        hook.send(embed=embed)
-        
-        system_name_check = SolarSystems.objects.values_list(
-            'solarSystemID', flat=True).get(solarSystemName=request.POST['fromSystem'])
-        gates = AnsiblexJumpGates.objects.filter(Q(fromSolarSystemID=system_name_check ) | Q(toSolarSystemID=system_name_check ))
-        print("Removing", gates)
-        gates.delete()
-
-
-        structure_list = []
-        ansiblex_list = []
-
-        character = request.user.characters.get(character_id=int(request.POST['characterID']))
-
-        try:
-            for item in request.POST['fromSystem']:
-                structure_list.extend(ESI.request(
-                'get_characters_character_id_search',
-                client=character.get_client(),
-                character_id=int(request.POST['characterID']),
-                categories=['structure'],
-                search=" » "+request.POST['fromSystem']
-                ).data.structure)
-                print(len(structure_list))
-                print(request.POST['fromSystem'])
-                print("---")
-        except:
-            print(str(request.POST['characterID']) + " does not have rights in " + str(request.POST['fromSystem']) )
-            
-
-
-        structure_list = list(dict.fromkeys(structure_list))
-        print(len(structure_list))
-
-        print("---")
-        print(structure_list)
-
-        for item in structure_list:
-            req = ESI.request(
-                'get_universe_structures_structure_id',
-                client=character.get_client(),
-                structure_id=item
-            ).data.name.split(' ')
-
-            formatted_string = str(item) + " " + req[0] + " --> " + req[2]
-            addgate = AnsiblexJumpGates(structureID=int(item), fromSolarSystemID=int(SolarSystems.objects.values_list('solarSystemID', flat=True).get(solarSystemName=req[0])), toSolarSystemID=int(SolarSystems.objects.values_list('solarSystemID', flat=True).get(solarSystemName=req[2])))
-            addgate.save()
-            print("added gates", formatted_string)
-
-        print("Finished!")
-
-
-        return redirect('/planner/')
 
 
 class SystemView(LoginRequiredMixin, View):
