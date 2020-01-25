@@ -41,7 +41,6 @@ class RoutePlannerBackend:
                 debug_second_system = SolarSystems.objects.get(solarSystemID=path[i+1]).solarSystemName
 
                 print(debug_first_system + " -> " + debug_second_system)
-                print(path[i], path[i+1])
 
                 jb_path.append(AnsiblexJumpGates.objects.get(
                     fromSolarSystemID=path[i], toSolarSystemID=path[i+1]).structureID)
