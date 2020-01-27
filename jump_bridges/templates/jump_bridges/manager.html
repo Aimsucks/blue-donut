@@ -26,8 +26,7 @@ hr {
 
 {% block content %}
 <div class="container pt-5">
-    <div class="row">
-        <div class="col-3"></div>
+    <div class="row justify-content-center">
         <div class="col-6">
             <form id="updater" action="/manager/" method="post">
                 {% csrf_token %}
@@ -47,7 +46,7 @@ hr {
                 <hr />
                 <div class="form-row">
                     <div class="col">
-                        <h2 class="text-center"><i class="fas fa-user-edit mr-3"></i></i></i>Update Characters</h2>
+                        <h2 class="text-center"><i class="fas fa-user-edit mr-3"></i>Update Characters</h2>
                         <p>Update the alliance and corporation for every character in the database. This will take some time.</p>
                     </div>
                 </div>
@@ -61,7 +60,6 @@ hr {
                 {% block results %}{% endblock %}
             </form>
         </div>
-        <div class="col-3"></div>
     </div>
 </div>
 {% endblock %}
