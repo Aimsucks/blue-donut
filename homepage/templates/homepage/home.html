@@ -9,6 +9,10 @@
     background-repeat: no-repeat; 
     background-position: center 30px;
     }
+
+    hr {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !IMPORTANT;
+    }
 </style>
 {% endblock %}
 {% block header %}
@@ -36,12 +40,38 @@
         <div class="col-md-4 text-center">
             <h2>Scans</h2>
             <p class="lead">Submit a local or directional scan</p>
-            <p><a class="btn btn-lg btn-secondary disabled" href="#" role="button">Currently Disabled</a></p>
+            <p><a class="btn btn-lg btn-secondary disabled" href="#" role="button">Work in progress</a></p>
         </div>
         <div class="col-md-4 text-center">
             <h2>Appraisal</h2>
             <p class="lead">Instantly appraise your inventory</p>
-            <p><a class="btn btn-lg btn-secondary disabled" href="#" role="button">Currently Disabled</a></p>
+            <p><a class="btn btn-lg btn-secondary disabled" href="#" role="button">Work in progress</a></p>
+        </div>
+    </div>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h3 class="text-center">Some changes have been made!</h3>
+
+            <p>
+            The site has been updated to support automatically finding Ansiblex Jump Gates through ESI. This requires
+            additional scopes, so you will notice when you log in that we request the following scopes now:
+            <ul>
+                <li>esi-location.read_location.v1</li>
+                <li>esi-search.search_structures.v1 <i>(new)</i></li>
+                <li>esi-universe.read_structures.v1 <i>(new)</i></li>
+                <li>esi-ui.write_waypoint.v1</li>
+            </ul>
+            These two additional scopes allow the website to search through your alliance's jump gates to automatically keep
+            the master list up to date. 
+
+            <b>Adding these scopes is completely optional, but highly encouraged.</b>
+
+            If you have any questions about the information we will be searching for, don't hesitate to 
+            <a class="text-info" href="https://github.com/Aimsucks/blue_donut">check out the source</a>
+            or contact me through our 
+            <a class="text-info" href="https://discord.gg/UCK8ase">Discord</a>.
+            </p>
         </div>
     </div>
 </div>
