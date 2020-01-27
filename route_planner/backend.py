@@ -11,25 +11,25 @@ import logging
 logger = logging.getLogger(__name__)
 
 G = nx.Graph()
-test_time = timezone.now()
+update_time = timezone.now()
 
 class RoutePlannerBackend:
     def generate(self, source_id, destination_name):
 
         # Snippet to make sure graph is up to date
-        global test_time
+        global update_time
         database_time = AnsiblexJumpGates.objects.latest("updated").updated
-        if database_time > test_time:
+        if database_time > update_time:
             logger.debug("Graph is out of date - updating.")
-            test_time = timezone.now()
+            update_time = timezone.now()
             self.updateGraph()
 
         source_name = SolarSystems.objects.get(solarSystemID=source_id).solarSystemName
         destination_id = SolarSystems.objects.get(solarSystemName=destination_name).solarSystemID
 
         logger.debug("----------")
-        logger.debug("Source: " + source_name)
-        logger.debug("Destination: " + destination_name)
+        logger.debug(f"Source: {source_name}")
+        logger.debug(f"Destination: {destination_name}")
 
         path = nx.shortest_path(G, source_id, destination_id)
         path_length = len(path)-1

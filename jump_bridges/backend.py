@@ -10,20 +10,9 @@ logger = logging.getLogger(__name__)
 search_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 search_string = " » "
 
-"""
-Concerns:
-
-How do we log everyone out so they have to re-authenticate with new scopes?
- - Drop all sessions and force everyone to log in again. (delete session table)
-
-How do we automatically populate alliance and corporation IDs?
-
-Need to check for single sided gates! (I think..)
-"""
-
 class JumpBridgesBackend:
     def search_routine(self, alliances):
-        print("Beginning jump gate search routine.")
+        logger.debug("Beginning jump gate search routine.")
 
         missing_alliances = []
         excluded_gates = []
@@ -35,22 +24,19 @@ class JumpBridgesBackend:
                                                 scope_read_structures=True)
 
             # Check if there is a character in the desired alliance. If not, skip this iteration.
-            if len(characters) == 0:
-                print("No members found in alliance {}."
-                      .format(alliance))
+            if not characters:
+                logger.debug(f"No members found in alliance {alliance}.")
                 missing_alliances.append(alliance)
                 continue
             else:
-                print("Found {} character(s) in {}."
-                      .format(len(characters), alliance))
+                logger.debug(f"Found {len(characters)} character(s) in {alliance}.")
 
             # Verify this person is in the correct alliance.
             exclude_list = []
 
             while True:
                 character = random.choice(characters)
-                print("Checking if character {} is in alliance {}."
-                      .format(character.name, alliance))
+                logger.debug(f"Checking if character {character.name} is in alliance {alliance}.")
 
                 try:
                     alliance_esi = ESI.request(
@@ -61,12 +47,10 @@ class JumpBridgesBackend:
                     alliance_esi = 0
 
                 if alliance == alliance_esi:
-                    print("Character {} is verified as a member of alliance {}."
-                          .format(character.name, alliance))
+                    logger.debug(f"Character {character.name} is verified as a member of alliance {alliance}.")
                     break
                 else:
-                    print("Character's alliance has changed. Updating to {}."
-                          .format(alliance_esi))
+                    logger.debug(f"Character's alliance has changed. Updating to {alliance_esi}.")
                     character.alliance_id = alliance_esi
                     character.save()
 
@@ -78,8 +62,7 @@ class JumpBridgesBackend:
                     break
 
             if not characters:
-                print("Character list has been exhausted. Skipping alliance {}."
-                      .format(alliance))
+                logger.debug(f"Character list has been exhausted. Skipping alliance {alliance}.")
                 continue
 
             character = EveUser.objects.get(character_id=character.character_id)
@@ -93,12 +76,12 @@ class JumpBridgesBackend:
 
             # For loop is over - iterate to next alliance after adding the gates to the two lists
 
-        print("Removing single sided gates.")
+        logger.debug("Removing single sided gates.")
         final_list = self.check_single_gates(jump_gates)
-        print("{} gates removed.".format(len(jump_gates)-len(final_list)))
 
-        print("Updating database with {} total jump gates."
-              .format(len(final_list)))
+        logger.debug(f"{len(jump_gates)-len(final_list)} gates removed.")
+
+        logger.debug(f"Updating database with {len(final_list)} total jump gates.")
 
         # Clear the database and all all the gates to it
         AnsiblexJumpGates.objects.all().delete()
@@ -114,18 +97,15 @@ class JumpBridgesBackend:
                 ownerID=gate['owner']
             ).save()
 
-        print("Completed jump gate update routine.")
-        print("Jump gates found: {}"
-              .format(len(final_list)))
+        logger.debug("Completed jump gate update routine.")
+        logger.debug(f"Jump gates found: {len(final_list)}")
         if missing_alliances:
-            print("Could not find members in the following alliances: {}"
-                  .format(missing_alliances))
+            logger.debug(f"Could not find members in the following alliances: {missing_alliances}")
 
         return len(jump_gates)
 
     def structure_search(self, character, known_structures):
-        print("Beginning deep search with character {}."
-              .format(character.name))
+        logger.debug(f"Beginning deep search with character {character}.")
 
         structure_ids = []
 
@@ -142,18 +122,15 @@ class JumpBridgesBackend:
 
             # Log the length of the structure list after every iteration
 
-        print("List complete with {} structure IDs. Removing duplicates."
-              .format(len(structure_ids)))
+        logger.debug(f"List complete with {structure_ids} structure IDs. Removing duplicates.")
 
-        structure_ids = list(dict.fromkeys(structure_ids))
-        print("Duplicates removed. New total: {}"
-              .format(len(structure_ids)))
+        structure_ids = list(set(structure_ids))
+        logger.debug(f"Duplicates removed. New total: {structure_ids}")
 
         # Remove any structures we've already found
         structure_list = [x for x in structure_ids if x not in known_structures]
 
-        print("Total structures to index: {}"
-              .format(len(structure_list)))
+        logger.debug(f"Total structures to index: {structure_list}")
 
         # Get information about each structure
         structure_info = self.structure_parse(character, structure_list)
@@ -180,16 +157,6 @@ class JumpBridgesBackend:
 
         # Now query /universe/structures/{structure_id}/ to get information about each gate
         for item in structure_list:
-
-            """
-            Thinking about making it
-                for index, item in enumerate(structure_list):
-            so I can print the index every 10 or so times to gauge how fast it's going
-
-            This would only be for when I get websockets working and can stream console
-            output to the manager page to make sure functions are running correctly
-            """
-
             req = ESI.request(
                 'get_universe_structures_structure_id',
                 client=character.get_client(),
@@ -222,7 +189,7 @@ class JumpBridgesBackend:
                 bad_list.append(gate["id"])
 
         # Remove duplicates
-        bad_list = list(dict.fromkeys(bad_list))
+        bad_list = list(set(bad_list))
 
         # New list with all the single sided gates removed
         jump_gates = [item for item in jump_gates if item['id'] not in bad_list]
@@ -230,7 +197,7 @@ class JumpBridgesBackend:
         return jump_gates
 
     def update_characters(self):
-        print("Updating character alliances and corporations.")
+        logger.debug("Updating character alliances and corporations.")
 
         for character in EveUser.objects.all():
 
@@ -252,4 +219,4 @@ class JumpBridgesBackend:
             character.save()
 
         return len(EveUser.objects.all())
-        print("Character information updated!")
+        logger.debug("Character information updated!")
