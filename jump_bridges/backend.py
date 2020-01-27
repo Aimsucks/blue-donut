@@ -218,5 +218,5 @@ class JumpBridgesBackend:
 
             character.save()
 
-        return len(EveUser.objects.all())
         logger.debug("Character information updated!")
+        return len(EveUser.objects.all())
