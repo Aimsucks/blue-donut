@@ -36,6 +36,8 @@ class PlannerView(LoginRequiredMixin, View):
         except EveUser.DoesNotExist:
             return HttpResponse(status=403)
 
+        RoutePlannerBackend().check_alliance(character)
+
         # Get character's current location from ESI
         req = ESI.request(
             'get_characters_character_id_location',

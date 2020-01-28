@@ -7,6 +7,8 @@ from jump_bridges.models import AnsiblexJumpGates
 from route_planner.models import PlannerLists
 from django.utils import timezone
 
+from eve_esi import ESI
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -114,3 +116,17 @@ class RoutePlannerBackend:
         character = PlannerLists.objects.get(user_id=user)
         character.favorites = json.dumps(favorites)
         character.save()
+
+    def check_alliance(self, character):
+        if timezone.now() - character.esi_updated > timezone.timedelta(days=7):
+            logger.debug(f"Updating {character.name}'s alliance and corporation.")
+
+            req = ESI.request(
+                'get_characters_character_id',
+                character_id=character.character_id
+            ).data
+
+            character.alliance_id = req.alliance_id
+            character.corporation_id = req.corporation_id
+
+            character.save()

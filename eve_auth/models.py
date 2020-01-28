@@ -47,6 +47,7 @@ class EveUser(models.Model):
 
     alliance_id = models.BigIntegerField()
     corporation_id = models.BigIntegerField()
+    esi_updated = models.DateTimeField(auto_now=True)
 
     scope_read_location = models.BooleanField()
     scope_write_waypoint = models.BooleanField()
