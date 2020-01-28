@@ -28,11 +28,34 @@ hr {
 <div class="container pt-5">
     <div class="row justify-content-center">
         <div class="col-6">
+            <div class="form-row">
+                <div class="col">
+                    <h2 class="text-center">Statistics</h2>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>Users</h4>
+                            <ul>
+                                <li>Accounts: {{ data.accounts }}</li>
+                                <li>Characters: {{ data.characters }}</li>
+                                <li>Extra Scopes: {{ data.scopes }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <h4>Map</h4>
+                            <ul>
+                                <li>Jump Gates: {{ data.gates }}</li>
+                                <li>Connections: {{ data.connections }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
             <form id="updater" action="/manager/" method="post">
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="col">
-                        <h2 class="text-center"><i class="fas fa-edit mr-3"></i></i>Update Gates</h2>
+                        <h2 class="text-center">Update Gates</h2>
                         <p>Query ESI for all of the jump gates and <b>replace</b> all of the gates in the database with the discovered ones.</p>
                     </div>
                 </div>
@@ -46,7 +69,7 @@ hr {
                 <hr />
                 <div class="form-row">
                     <div class="col">
-                        <h2 class="text-center"><i class="fas fa-user-edit mr-3"></i>Update Characters</h2>
+                        <h2 class="text-center">Update Characters</h2>
                         <p>Update the alliance and corporation for every character in the database. This will take some time.</p>
                     </div>
                 </div>

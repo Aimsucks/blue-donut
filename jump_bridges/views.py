@@ -4,6 +4,10 @@ from django.views.generic.base import View
 
 from jump_bridges.backend import JumpBridgesBackend
 
+from django.contrib.auth.models import User
+from eve_auth.models import EveUser
+from jump_bridges.models import AnsiblexJumpGates
+
 
 class AccessMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
@@ -14,7 +18,15 @@ class AccessMixin(LoginRequiredMixin):
 
 class ManagerView(AccessMixin, View):
     def get(self, request):
-        return render(request, 'jump_bridges/manager.html')
+        data = {
+            "accounts": User.objects.all().count(),
+            "characters": EveUser.objects.all().count(),
+            "scopes": EveUser.objects.filter(scope_search_structures=1).count(),
+            "gates": AnsiblexJumpGates.objects.all().count(),
+            "connections": int(AnsiblexJumpGates.objects.all().count()/2)
+        }
+
+        return render(request, 'jump_bridges/manager.html', {"data": data})
 
     def post(self, request):
         if 'update_gates' in request.POST:
