@@ -11,24 +11,25 @@ from eve_auth.models import EveUser
 
 from route_planner.backend import RoutePlannerBackend
 from eve_sde.models import SolarSystems
+from route_planner.models import PopularSystems
+from jump_bridges.views import AccessMixin
 
 from networkx import NodeNotFound
 
 
 class PlannerView(LoginRequiredMixin, View):
-    """
-    See if the following will work to clean up some of the code.
-
-    def __init__(self):
-        self.recents = RoutePlannerBackend().getInfo(request.user, 'recents')
-        self.favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
-    """
     def get(self, request):
         recents = RoutePlannerBackend().getInfo(request.user, "recents")
         favorites = RoutePlannerBackend().getInfo(request.user, "favorites")
+
+        popular = PopularSystems.objects.all().values_list("system_name", flat=True)
+        if not popular:
+            popular = ["", "", "", "", ""]
+
         return render(request, "route_planner/planner.html",
                       {"recents": recents,
-                       "favorites": favorites})
+                       "favorites": favorites,
+                       "popular": popular})
 
     def post(self, request):
         try:
@@ -140,4 +141,19 @@ class EditView(LoginRequiredMixin, View):
     def post(self, request):
         favorites = request.POST.getlist('favorites')
         RoutePlannerBackend().updateFavorites(request.user, favorites)
+        return redirect('/planner/')
+
+class AdminView(AccessMixin, View):
+    def get(self, request):
+        popular = PopularSystems.objects.all().values_list("system_name", flat=True)
+
+        if not popular:
+            popular = ["", "", "", "", ""]
+
+        return render(request, 'route_planner/admin.html',
+                      {'popular': popular})
+
+    def post(self, request):
+        popular = request.POST.getlist('popular')
+        RoutePlannerBackend().updatePopular(popular)
         return redirect('/planner/')

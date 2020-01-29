@@ -4,7 +4,7 @@ import json
 
 from eve_sde.models import SolarSystems, SolarSystemJumps
 from jump_bridges.models import AnsiblexJumpGates
-from route_planner.models import PlannerLists
+from route_planner.models import PlannerLists, PopularSystems
 from django.utils import timezone
 
 from eve_esi import ESI
@@ -110,12 +110,15 @@ class RoutePlannerBackend:
         character.save()
 
     def updateFavorites(self, user, favorites):
-        for i in range(len(favorites)):
-            if favorites[i] == '':
-                favorites[i] = None
         character = PlannerLists.objects.get(user_id=user)
         character.favorites = json.dumps(favorites)
         character.save()
+
+    def updatePopular(self, popular):
+        PopularSystems.objects.all().delete()
+        for system in popular:
+            popular_system = PopularSystems(system_name=system)
+            popular_system.save()
 
     def check_alliance(self, character):
         if timezone.now() - character.esi_updated > timezone.timedelta(days=7):

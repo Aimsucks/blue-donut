@@ -21,13 +21,15 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="list-group">
-                        <input type="submit" class="list-group-item list-group-item-action" value="D-PNP9" onclick="buttonClick('D-PNP9');">
-                        <input type="submit" class="list-group-item list-group-item-action" value="GE-8JV" onclick="buttonClick('GE-8JV');">
-                        <input type="submit" class="list-group-item list-group-item-action" value="PZMA-E" onclick="buttonClick('PZMA-E');">
-                        <input type="submit" class="list-group-item list-group-item-action" value="U-QVWD" onclick="buttonClick('U-QVWD');">
-                        <input type="submit" class="list-group-item list-group-item-action" value="6E-MOW" onclick="buttonClick('6E-MOW');">
+                    {% for system in popular %}
+                        {% if system %}
+                        <input type="submit" class="list-group-item list-group-item-action" value="{{ system }}" onclick="buttonClick('{{ system }}');">
+                        {% else %}
+                        <input type="submit" class="list-group-item disabled" value="N/A">
+                        {% endif %}
+                    {% endfor %}
                     </div>
-                    <small class="form-text text-muted mt-2 text-center">Popular</small>
+                    <small class="form-text text-muted mt-2 text-center">Popular{% if user.is_staff %} • <a class="text-info" href="{% url 'route_planner:admin' %}">Edit</a>{% endif %}</small>                    
                 </div>
                 <div class="col-md-4">
                     <div class="list-group">

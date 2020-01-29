@@ -12,4 +12,6 @@ urlpatterns = [
          name='system'),
     path('edit/', route_planner.views.EditView.as_view(),
          name='favorites'),
+    path('admin/', route_planner.views.AdminView.as_view(),
+         name='admin'),
 ]
