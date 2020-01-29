@@ -83,7 +83,7 @@ class RoutePlannerBackend:
         G.add_edges_from(bridges, type="bridge")
         logger.debug("Ansiblex gate edges added.")
 
-    def getInfo(self, user, list_name):
+    def getInfo(self, user):
         try:
             character = PlannerLists.objects.get(user_id=user)
         except PlannerLists.DoesNotExist:
@@ -92,10 +92,7 @@ class RoutePlannerBackend:
             character.favorites = json.dumps([None] * 5)
             character.save()
 
-        if list_name == 'favorites':
-            return json.loads(character.favorites)
-        if list_name == 'recents':
-            return json.loads(character.recents)
+        return json.loads(character.favorites), json.loads(character.recents)
 
     def updateRecents(self, user, system):
         character = PlannerLists.objects.get(user_id=user)

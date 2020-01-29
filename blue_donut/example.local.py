@@ -11,6 +11,9 @@ from .settings import *
 # Make sure to not run a production server with debug on.
 DEBUG = True
 
+# Turn this on to enable actually sending the route to the ingame character
+GENERATE_ROUTE = True
+
 # https://randomkeygen.com/
 SECRET_KEY = ""
 

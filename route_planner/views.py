@@ -5,6 +5,7 @@ from django.views.generic.base import View
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 from eve_esi import ESI
 from eve_auth.models import EveUser
@@ -16,12 +17,13 @@ from jump_bridges.views import AccessMixin
 
 from networkx import NodeNotFound
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class PlannerView(LoginRequiredMixin, View):
     def get(self, request):
-        recents = RoutePlannerBackend().getInfo(request.user, "recents")
-        favorites = RoutePlannerBackend().getInfo(request.user, "favorites")
-
+        favorites, recents = RoutePlannerBackend().getInfo(request.user)
         popular = PopularSystems.objects.all().values_list("system_name", flat=True)
         if not popular:
             popular = ["", "", "", "", ""]
@@ -55,7 +57,8 @@ class PlannerView(LoginRequiredMixin, View):
         # Generate the route
         try:
             route = RoutePlannerBackend().generate(req, request.POST['destination'])
-        except NodeNotFound or AttributeError or ObjectDoesNotExist:
+        except NodeNotFound or AttributeError or ObjectDoesNotExist as error:
+            logger.error(error)
             return self.render_page(request, True, None, False, False, source_name, "route")
 
         # Clicking the "Verify" button shows a map and a confirm route button
@@ -82,9 +85,11 @@ class PlannerView(LoginRequiredMixin, View):
 
     def render_page(self, request, error, route, map_bool, confirm_bool, source_name=False, message=None):
 
-        # Grab recents and favorites from database
-        recents = RoutePlannerBackend().getInfo(request.user, "recents")
-        favorites = RoutePlannerBackend().getInfo(request.user, "favorites")
+        # Grab favorites, recents, and popular from database
+        favorites, recents = RoutePlannerBackend().getInfo(request.user)
+        popular = PopularSystems.objects.all().values_list("system_name", flat=True)
+        if not popular:
+            popular = ["", "", "", "", ""]
 
         if error:
             if message == "wormhole":
@@ -95,6 +100,7 @@ class PlannerView(LoginRequiredMixin, View):
             return render(request, 'route_planner/error.html', {
                 'recents': recents,
                 'favorites': favorites,
+                "popular": popular,
                 'mapDisplay': map_bool,
                 'system': source_name,
                 'message': message})
@@ -102,6 +108,7 @@ class PlannerView(LoginRequiredMixin, View):
             return render(request, "route_planner/planner.html", {
                 "recents": recents,
                 "favorites": favorites,
+                "popular": popular,
                 'dotlan': route['dotlan'],
                 'destination': request.POST['destination'],
                 'jumps': route['length'],
@@ -109,23 +116,24 @@ class PlannerView(LoginRequiredMixin, View):
                 'confirmButton': confirm_bool})
 
     def generate_route(self, character, route):
-        for i in range(len(route['esi'])):
-            if i == 0:
-                ESI.request(
-                    'post_ui_autopilot_waypoint',
-                    client=character.get_client(),
-                    add_to_beginning=False,
-                    clear_other_waypoints=True,
-                    destination_id=route['esi'][i]
-                )
-            else:
-                ESI.request(
-                    'post_ui_autopilot_waypoint',
-                    client=character.get_client(),
-                    add_to_beginning=False,
-                    clear_other_waypoints=False,
-                    destination_id=route['esi'][i]
-                )
+        if settings.GENERATE_ROUTE:
+            for i in range(len(route['esi'])):
+                if i == 0:
+                    ESI.request(
+                        'post_ui_autopilot_waypoint',
+                        client=character.get_client(),
+                        add_to_beginning=False,
+                        clear_other_waypoints=True,
+                        destination_id=route['esi'][i]
+                    )
+                else:
+                    ESI.request(
+                        'post_ui_autopilot_waypoint',
+                        client=character.get_client(),
+                        add_to_beginning=False,
+                        clear_other_waypoints=False,
+                        destination_id=route['esi'][i]
+                    )
 
 class SystemView(LoginRequiredMixin, View):
     def get(self, request, system):
