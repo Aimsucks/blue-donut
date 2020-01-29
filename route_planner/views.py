@@ -150,8 +150,7 @@ class AdminView(AccessMixin, View):
         if not popular:
             popular = ["", "", "", "", ""]
 
-        return render(request, 'route_planner/admin.html',
-                      {'popular': popular})
+        return render(request, 'route_planner/admin.html', {'popular': popular})
 
     def post(self, request):
         popular = request.POST.getlist('popular')
