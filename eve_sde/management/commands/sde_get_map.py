@@ -15,14 +15,23 @@ class Command(SDECommand):
         SolarSystems.objects.update_or_create(
             solarSystemID=int(x['solarSystemID']),
             solarSystemName=str(x['solarSystemName']),
-            defaults=None
+            defaults={
+                'x': float(x['x']),
+                'y': float(x['y']),
+                'z': float(x['z']),
+            }
         )
 
     def _create_gates_helper(self, x):
         SolarSystemJumps.objects.update_or_create(
             fromSolarSystemID=int(x['fromSolarSystemID']),
-            toSolarSystemID=str(x['toSolarSystemID']),
-            defaults=None
+            toSolarSystemID=int(x['toSolarSystemID']),
+            defaults={
+                'fromConstellationID': int(x['fromConstellationID']),
+                'toConstellationID': int(x['toConstellationID']),
+                'fromRegionID': int(x['fromRegionID']),
+                'toRegionID': int(x['toRegionID']),
+            }
         )
 
     @transaction.atomic()
@@ -31,7 +40,7 @@ class Command(SDECommand):
             SOLARSYSTEMS_URL,
             'systems',
             self._create_systems_helper,
-            total=8035
+            total=8285
         )
 
     @transaction.atomic()

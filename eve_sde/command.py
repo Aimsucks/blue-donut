@@ -28,7 +28,7 @@ class SDECommand(BaseCommand):
     def _create_helper(self, url, name, fun, total=None):
         count = 0
 
-        print("Start creating %s..." % (name))
+        print(f"Start creating {name}...")
 
         for x in self.get_data_from_bz2_url(url):
             fun(x)
@@ -37,9 +37,8 @@ class SDECommand(BaseCommand):
             if count % 10 == 0 or (total is not None and count == total):
                 limit = "unknown" if total is None else str(total)
                 print(
-                    "    Progress: {count} out of approximately {limit}\r"
-                    .format(count=count, limit=limit),
+                    f"    Progress: {count} out of approximately {limit}\r",
                     end=""
                 )
 
-        print("\nFinish creating %s (%d total)..." % (name, count))
+        print(f"\nFinish creating {name} ({count} total)...")
