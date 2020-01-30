@@ -155,57 +155,57 @@ if(elementExists) {
     });
 }
 
-    $(document).ready(function(){
-       $(".active").removeClass("active");
-       $("#route_planner").addClass("active");
-    });
-    
-    function buttonClick(button) {
-        $("#destinationVerify").prop("disabled", "true");
-        $("#destinationSubmit").prop("disabled", "true");
-        document.getElementById('destinationInput').value = button;
-        document.getElementById("character_id").value = get_active_character();
-        document.getElementById('destinationForm').submit();
+$(document).ready(function(){
+    $(".active").removeClass("active");
+    $("#route_planner").addClass("active");
+});
+
+function buttonClick(button) {
+    $("#destinationVerify").prop("disabled", "true");
+    $("#destinationSubmit").prop("disabled", "true");
+    document.getElementById('destinationInput').value = button;
+    document.getElementById("character_id").value = get_active_character();
+    document.getElementById('destinationForm').submit();
+}
+
+var systems = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.whitespace,
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    // url points to a json file that contains an array of country names, see
+    // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+    prefetch: '../static/json/systems.json'
+});
+
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+var $typeahead = $('#prefetch .typeahead').typeahead(null, {
+    name: 'systems',
+    source: systems
+});
+
+var selected      = null;
+var originalVal   = null;
+
+// When the typeahead becomes active reset these values.
+$typeahead.on("typeahead:active", function(aEvent) {
+    selected       = null;
+    originalVal    = $typeahead.typeahead("val");
+})
+
+// When a suggestion gets selected save that
+$typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
+    selected = aSuggestion;
+});
+
+// Once user leaves the component and a change was registered
+// check whether or not something was selected. If not reset to
+// the original value.
+$typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
+    if (!selected) {
+        $typeahead.typeahead("val", originalVal);
     }
-    
-    var systems = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.whitespace,
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      // url points to a json file that contains an array of country names, see
-      // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-      prefetch: '../static/json/systems.json'
-    });
-    
-    // passing in `null` for the `options` arguments will result in the default
-    // options being used
-    var $typeahead = $('#prefetch .typeahead').typeahead(null, {
-      name: 'systems',
-      source: systems
-    });
-    
-    var selected      = null;
-    var originalVal   = null;
-    
-    // When the typeahead becomes active reset these values.
-    $typeahead.on("typeahead:active", function(aEvent) {
-       selected       = null;
-       originalVal    = $typeahead.typeahead("val");
-    })
-    
-    // When a suggestion gets selected save that
-    $typeahead.on("typeahead:select", function(aEvent, aSuggestion) {
-       selected = aSuggestion;
-    });
-    
-    // Once user leaves the component and a change was registered
-    // check whether or not something was selected. If not reset to
-    // the original value.
-    $typeahead.on("typeahead:change", function(aEvent, aSuggestion) {
-       if (!selected) {
-          $typeahead.typeahead("val", originalVal);
-       }
-    
-       // Do something with the selected value here as needed...
-    });   
+
+    // Do something with the selected value here as needed...
+});   
 </script>
 {% endblock %}

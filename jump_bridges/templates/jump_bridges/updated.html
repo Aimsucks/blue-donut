@@ -2,9 +2,12 @@
 {% load static %}
 {% load bootstrap4 %}
 
-{% block results %}
-<hr />
-<div class="form-row">
-    <h2 class="text-center">{{ number }} {{ noun }} have been updated!</h2>
+{% block content %}
+<div class="container pt-5">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h2 class="text-center">{{ number }} {{ noun }} have been updated!</h2>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -28,7 +28,7 @@ hr {
 <div class="container pt-5">
     <div class="row justify-content-center">
         <div class="col-6">
-            <div class="form-row">
+            <div class="row">
                 <div class="col">
                     <h2 class="text-center">Statistics</h2>
                     <div class="row">
@@ -51,36 +51,68 @@ hr {
                 </div>
             </div>
             <hr />
+            <form id="export" action="/manager/" method="post">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col">
+                    <h2 class="text-center">Gate Export</h2>
+                    <div class="form-row text-center">
+                        <div class="col-6">
+                            <h4>JSON</h4>
+                            <div class="form-row justify-content-center">
+                                <div class="col-4">
+                                    <button type="button" id="json_clipboard_button" data-clipboard-text="{{ data.json }}" class="btn btn-block btn-secondary">Copy</button>
+                                </div>
+                                <div class="col-4">
+                                    <input type="submit" name="print_json" class="btn btn-block btn-secondary" value="Raw">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4>Wiki</h4>
+                            <div class="form-row justify-content-center">
+                                <div class="col-4">
+                                    <button type="button" id="wiki_clipboard_button" data-clipboard-text="{{ data.wiki }}" class="btn btn-block btn-secondary">Copy</button>
+                                </div>
+                                <div class="col-4">
+                                    <input type="submit" name="print_wiki" class="btn btn-block btn-secondary" value="Raw">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
             <form id="updater" action="/manager/" method="post">
-                {% csrf_token %}
-                <div class="form-row">
-                    <div class="col">
-                        <h2 class="text-center">Update Gates</h2>
-                        <p>Query ESI for all of the jump gates and <b>replace</b> all of the gates in the database with the discovered ones.</p>
-                    </div>
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col">
+                    <h2 class="text-center">Update Gates</h2>
+                    <p>Query ESI for all of the jump gates and <b>replace</b> all of the gates in the database with the discovered ones.</p>
                 </div>
-                <div class="form-row">
-                    <div class="col-2"></div>
-                    <div class="col-8">
-                        <input type="submit" id="update_gates" name="update_gates" value="Update" class="btn btn-block btn-primary">
-                    </div>
-                    <div class="col-2"></div>
+            </div>
+            <div class="form-row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <input type="submit" id="update_gates" name="update_gates" value="Update" class="btn btn-block btn-primary">
                 </div>
-                <hr />
-                <div class="form-row">
-                    <div class="col">
-                        <h2 class="text-center">Update Characters</h2>
-                        <p>Update the alliance and corporation for every character in the database. This will take some time.</p>
-                    </div>
+                <div class="col-2"></div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="col">
+                    <h2 class="text-center">Update Characters</h2>
+                    <p>Update the alliance and corporation for every character in the database. This will take some time.</p>
                 </div>
-                <div class="form-row">
-                    <div class="col-2"></div>
-                    <div class="col-8"> 
-                        <input type="submit" id="update_characters" name="update_characters" value="Update" class="btn btn-block btn-primary">
-                    </div>
-                    <div class="col-2"></div>
+            </div>
+            <div class="form-row">
+                <div class="col-2"></div>
+                <div class="col-8"> 
+                    <input type="submit" id="update_characters" name="update_characters" value="Update" class="btn btn-block btn-primary">
                 </div>
-                {% block results %}{% endblock %}
+                <div class="col-2"></div>
+            </div>
+            {% block results %}{% endblock %}
             </form>
         </div>
     </div>
@@ -94,5 +126,51 @@ $(document).ready(function(){
    $("#jump_bridges").addClass("active");
 });
 
+$('button').tooltip({
+  trigger: 'click',
+  placement: 'bottom'
+});
+
+function setTooltip(btn, message) {
+  $(btn).tooltip('hide')
+    .attr('data-original-title', message)
+    .tooltip('show');
+}
+
+function hideTooltip(btn) {
+  setTimeout(function() {
+    $(btn).tooltip('hide');
+  }, 1000);
+}
+
+var jsonClipboardButton = document.getElementById('json_clipboard_button');
+var jsonClipboard = new ClipboardJS(jsonClipboardButton);
+
+jsonClipboard.on('success', function(e) {
+  e.clearSelection();
+  setTooltip(e.trigger, 'Copied!');
+  hideTooltip(e.trigger);
+});
+
+jsonClipboard.on('error', function(e) {
+  e.clearSelection();
+  setTooltip(e.trigger, 'Failed!');
+  hideTooltip(e.trigger);
+});
+
+var wikiClipboardButton = document.getElementById('wiki_clipboard_button');
+var wikiClipboard = new ClipboardJS(wikiClipboardButton);
+
+wikiClipboard.on('success', function(e) {
+  e.clearSelection();
+  setTooltip(e.trigger, 'Copied!');
+  hideTooltip(e.trigger);
+});
+
+wikiClipboard.on('error', function(e) {
+  e.clearSelection();
+  setTooltip(e.trigger, 'Failed!');
+  hideTooltip(e.trigger);
+});
 </script>
 {% endblock %}
