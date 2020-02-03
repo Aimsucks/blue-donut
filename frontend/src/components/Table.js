@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import key from "weak-key";
-
 const Table = ({ data }) =>
   !data.length ? (
     <p>Nothing to show</p>

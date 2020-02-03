@@ -1,11 +1,31 @@
-import React from "react";
+import React , {Component} from "react";
 import ReactDOM from "react-dom";
-import DataProvider from "./DataProvider";
-import Table from "./Table";
 
-const App = () => (
-  <DataProvider endpoint="map/region/" 
-                render={data => <Table data={data} />} />
-);
-const wrapper = document.getElementById("app");
-wrapper ? ReactDOM.render(<App />, wrapper) : null;
+import {
+    Navbar,
+    NavbarBrand,
+    Nav,
+    NavItem,
+    NavLink
+  } from 'reactstrap';
+
+class App extends Component {
+    render() {
+        return <h1>React App</h1>
+        // <div>
+        //     <Navbar color="light" light>
+        //         <NavbarBrand href="/">Blue Donut</NavbarBrand>
+        //         <Nav className="mr-auto" navbar>
+        //             <NavItem>
+        //                 <NavLink href="/map/region/">Regions</NavLink>
+        //             </NavItem>
+        //             <NavItem>
+        //                 <NavLink href="/map/system/D-PNP9">Systems</NavLink>
+        //             </NavItem>
+        //         </Nav>
+        //     </Navbar>
+        // </div>
+    }
+}
+
+ReactDOM.render(<App />, document.getElementById('app'))
