@@ -26,7 +26,7 @@
 
 <div align="center">
   This is a website that hosts a multitude of features. Currently the only supported feature (and on this repo) is a built-in route planner that is still being actively developed.
-  The route planner currently only supports manual input. Automatic updates are being actively worked on.
+  The route planner currently supports manual activation (but automatic search) for jump gate discovery.
 </div>
 
 ## Installation
