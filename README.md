@@ -36,20 +36,21 @@ Install Poetry and then install the requirements.
 ```commandline
 pip install poetry
 poetry install
+
+npm i
 ```
 
-Configure your settings by copying/renaming `blue_donut/example.local.py` to `blue_donut/local.py` and editing the file to fill in missing information.
+Make the bundle, run migrations, and populate the database.
 
 ```commandline
-cp blue_donut/example.local.py blue_donut/local.py
-nano blue_donut/local.py
-```
+npm run dev
 
-Run all migrations, download the maps, and then run the development server.
-
-```commandline
 poetry run python manage.py migrate
 poetry run python manage.py sde_get_map
+```
+
+Finally, run the server.
+```commandline
 poetry run python manage.py runserver
 ```
 
