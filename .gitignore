@@ -311,4 +311,5 @@ db.sqlite3
 local.py
 resources/
 
-*/main.js
+
+frontend/static/frontend/main.js

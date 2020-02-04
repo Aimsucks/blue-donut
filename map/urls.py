@@ -2,6 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('region/', views.RegionList.as_view()),
-    path('system/', views.SystemList.as_view()),
+    path('map/region/', views.RegionList.as_view()),
+    path('map/system/', views.SystemList.as_view()),
 ]

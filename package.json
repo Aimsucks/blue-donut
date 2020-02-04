@@ -4,7 +4,7 @@
   "description": "<h1 align=\"center\">Blue Donut</h1>",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
+    "dev": "webpack --mode development --watch ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
     "build": "webpack --mode production ./frontend/src/index.js --output ./frontend/static/frontend/main.js"
   },
   "repository": {
