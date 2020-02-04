@@ -310,3 +310,5 @@ production.py
 db.sqlite3
 local.py
 resources/
+
+*/main.js
