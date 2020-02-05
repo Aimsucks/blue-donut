@@ -49,7 +49,7 @@ WSGI_APPLICATION = 'blue_donut.wsgi.application'
 ############################
 
 AUTHENTICATION_BACKENDS = [
-    'eve_auth.backend.EveAuthBackend',
+    # 'eve_auth.backend.EveAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -80,6 +80,12 @@ DATETIME_FORMAT = 'F j, Y, H:i'
 ############################
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 ############################
 # Logging
@@ -119,18 +125,6 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
-        },
-        'eve_esi': {
-            'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
-        },
-        'route_planner': {
-            'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
-        },
-        'eve_auth': {
-            'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
         },
     }
 }
