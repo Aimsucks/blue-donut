@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 export class Header extends React.Component {
     constructor(props) {
@@ -57,13 +57,20 @@ export class Header extends React.Component {
                             </Nav>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <NavLink href="">
+                                    <NavLink href="/auth/login/">
                                         <FontAwesomeIcon
                                             className="mr-2"
                                             icon={faSignInAlt}
                                         />
                                         Log in
                                     </NavLink>
+                                    {/* <NavLink href="/auth/logout/">
+                                        <FontAwesomeIcon
+                                            className="mr-2"
+                                            icon={faSignOutAlt}
+                                        />
+                                        Log out
+                                    </NavLink> */}
                                 </NavItem>
                             </Nav>
                         </Collapse>

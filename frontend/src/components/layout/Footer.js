@@ -19,16 +19,16 @@ export class Footer extends React.Component {
                                         className="text-info"
                                         href="https://evewho.com/character/2113697818"
                                     >
-                                        Aimsucks
+                                        Aimsucks{" "}
                                     </a>
-                                    with help from
+                                    with help from{" "}
                                     <a
                                         className="text-info"
                                         href="https://evewho.com/character/94944046"
                                     >
-                                        Callum Lul
+                                        Callum Lul{" "}
                                     </a>
-                                    and
+                                    and{" "}
                                     <a
                                         className="text-info"
                                         href="https://evewho.com/character/94854191"

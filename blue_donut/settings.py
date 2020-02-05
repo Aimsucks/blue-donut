@@ -10,6 +10,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'auth',
+    'esi',
     'frontend',
     'map',
 ]
@@ -49,7 +51,7 @@ WSGI_APPLICATION = 'blue_donut.wsgi.application'
 ############################
 
 AUTHENTICATION_BACKENDS = [
-    # 'eve_auth.backend.EveAuthBackend',
+    'auth.backend.EVEAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -58,6 +60,12 @@ AUTH_USER_MODEL = 'auth.User'
 LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 ############################
 # Internationalization
