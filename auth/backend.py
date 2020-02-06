@@ -49,6 +49,9 @@ class EVEAuthBackend:
             character.alliance_id = 0
         character.corporation_id = esi_data.corporation_id
 
+        character.owner.characters.all().update(active=False)
+        character.active = True
+
         character.save()
 
         return character.owner

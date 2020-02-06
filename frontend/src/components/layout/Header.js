@@ -7,12 +7,13 @@ import {
     NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
+    NavLink as BootstrapNavLink,
     Container
 } from "reactstrap";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { NavLink } from "react-router-dom";
+
+import Account from "./Account";
 
 export class Header extends React.Component {
     constructor(props) {
@@ -40,38 +41,29 @@ export class Header extends React.Component {
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="mr-auto" navbar>
                                 <NavItem>
-                                    <NavLink href="/map/region/">
+                                    <NavLink to="/planner" className="nav-link">
                                         Route Planner
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink disabled href="">
+                                    <NavLink
+                                        to="/scanner"
+                                        className="nav-link disabled"
+                                    >
                                         Scans
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink disabled href="">
+                                    <NavLink
+                                        to="/appraisal"
+                                        className="nav-link disabled"
+                                    >
                                         Appraisal
                                     </NavLink>
                                 </NavItem>
                             </Nav>
                             <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <NavLink href="/auth/login/">
-                                        <FontAwesomeIcon
-                                            className="mr-2"
-                                            icon={faSignInAlt}
-                                        />
-                                        Log in
-                                    </NavLink>
-                                    {/* <NavLink href="/auth/logout/">
-                                        <FontAwesomeIcon
-                                            className="mr-2"
-                                            icon={faSignOutAlt}
-                                        />
-                                        Log out
-                                    </NavLink> */}
-                                </NavItem>
+                                <Account />
                             </Nav>
                         </Collapse>
                     </Container>

@@ -1,32 +1,33 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import { Container } from "reactstrap";
+import { Provider } from "react-redux";
+import store from "../store";
 
-import Header from "./layout/Header";
-import Footer from "./layout/Footer";
-
-import Splash from "./home/Splash";
-import Tools from "./home/Tools";
-
-import Banner from "./Banner";
+import Home from "./home/Home";
 import Planner from "./planner/Planner";
+import Error from "./error/Error";
 
 class App extends Component {
     render() {
         return (
-            <>
-                <Header />
-                {/* <Splash /> */}
-                <Banner />
-                <Container className="pt-5">
-                    {/* <Tools /> */}
-                    <Planner />
-                </Container>
-                <Footer />
-            </>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route path="/planner" component={Planner} />
+                        <Route component={Error} />
+                    </Switch>
+                </BrowserRouter>
+            </Provider>
         );
     }
 }
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>,
+    document.getElementById("app")
+);
