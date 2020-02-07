@@ -18,15 +18,15 @@ export class Create extends Component {
                     Create Your Own
                 </h2>
                 <Row className="px-2">
-                    <Col className="col-6 px-1">
+                    <Col md="6" className="px-1">
                         <Input name="system" placeholder="Destination" />
                     </Col>
-                    <Col className="col-3 px-1">
+                    <Col md="3" className="px-1">
                         <Button href="" className="btn-block" color="primary">
                             Verify
                         </Button>
                     </Col>
-                    <Col className="col-3 px-1">
+                    <Col md="3" className="px-1">
                         <Button href="" className="btn-block" color="primary">
                             Generate
                         </Button>

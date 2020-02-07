@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+  {% load static %}
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition.">
+  <meta name="author" content="Aimsucks">
+  <meta name="theme-color" content="#375A7F">
+  <meta content="Blue Donut" property="og:title">
+  <meta content="Easy-to-use route planner (and a few more features soon!) for Legacy Coalition." property="og:description">
+  <meta content="{% static 'img/favicon.png' %}" property='og:image'>
+  <title>Blue Donut</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.4.1/darkly/bootstrap.min.css">
   <link rel="stylesheet" href="/static/css/blue_donut.css">
-  <title>Blue Donut</title>
 </head>
 <body>
 <div id="app"></div>
 </body>
-{% load static %}
 <script src="{% static "frontend/main.js" %}"></script>
 </html>

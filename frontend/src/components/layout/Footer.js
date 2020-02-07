@@ -12,7 +12,7 @@ export class Footer extends React.Component {
                 <div className="fixed-bottom">
                     <Navbar dark>
                         <Container>
-                            <Nav className="mr-auto">
+                            <Nav navbar className="mr-auto">
                                 <NavItem className="text-muted">
                                     Made by{" "}
                                     <a
@@ -37,10 +37,10 @@ export class Footer extends React.Component {
                                     </a>
                                 </NavItem>
                             </Nav>
-                            <Nav className="ml-auto">
+                            <Nav navbar className="ml-auto navbar-expand-md">
                                 <NavItem>
                                     <NavLink
-                                        className="text-muted px-2"
+                                        className="px-2"
                                         href="https://github.com/Aimsucks/blue-donut"
                                     >
                                         <FontAwesomeIcon
@@ -51,7 +51,7 @@ export class Footer extends React.Component {
                                 </NavItem>
                                 <NavItem>
                                     <NavLink
-                                        className="text-muted px-2"
+                                        className="px-2"
                                         href="https://discord.gg/UCK8ase"
                                     >
                                         <FontAwesomeIcon

@@ -22,13 +22,13 @@ export class Destinations extends Component {
                     Destinations
                 </h2>
                 <Row>
-                    <Col className="col-4">
+                    <Col md="4">
                         <Popular />
                     </Col>
-                    <Col className="col-4">
+                    <Col md="4">
                         <Favorites />
                     </Col>
-                    <Col className="col-4">
+                    <Col cmd="4">
                         <Recents />
                     </Col>
                 </Row>

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import store from "../store";
+
+import Header from "./layout/Header"
+import Footer from "./layout/Footer"
 
 import Home from "./home/Home";
 import Planner from "./planner/Planner";
@@ -13,21 +16,21 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <BrowserRouter>
-                    <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route path="/planner" component={Planner} />
-                        <Route component={Error} />
-                    </Switch>
-                </BrowserRouter>
+                <Router>
+                    <>
+                        <Header />
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <Route exact path="/planner" component={Planner} />
+                            <Route component={Error} />
+                        </Switch>
+                        <Footer />
+                    </>
+                </Router>
             </Provider>
         );
     }
 }
 
-ReactDOM.render(
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>,
-    document.getElementById("app")
+ReactDOM.render(<App />, document.getElementById("app")
 );

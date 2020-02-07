@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 
+import { Container, Row, Col } from "reactstrap";
+
 export class Banner extends Component {
     render() {
         return (
             <>
-                <div className="bg-primary py-5">
-                    <div className="text-center">
-                        <h1 className="display-3 mb-0">Route Planner</h1>
-                    </div>
-                </div>
+                <Container fluid>
+                    <Row className="bg-primary py-5">
+                        <Col className="text-center">
+                            <h1 className="display-3 mb-0">Route Planner</h1>
+                        </Col>
+                    </Row>
+                </Container>
             </>
         );
     }

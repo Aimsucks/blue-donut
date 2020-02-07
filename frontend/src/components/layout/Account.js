@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getCharacters } from "../../actions/characters";
+import { getCharacters, updateActive } from "../../actions/characters";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -50,13 +50,18 @@ export class Account extends Component {
                             tag="a"
                             type="button"
                             className="nav-link py-1 mr-2"
+                            nav
                         >
                             <img
-                                src="https://image.eveonline.com/Character/2113697818_32.jpg"
+                                src={
+                                    this.props.characters.length ?
+                                        "https://image.eveonline.com/Character/" + this.props.characters.find(x => x.active === true).character_id + "_32.jpg" :
+                                        "https://image.eveonline.com/Character/1_32.jpg"
+                                }
                                 height="32px"
                                 className="avatar mr-2"
                             />
-                            <span>Aimsucks</span>
+                            <span>{this.props.characters.length ? this.props.characters.find(x => x.active === true).name : "Loading..."}</span>
                             <FontAwesomeIcon
                                 className="ml-2"
                                 icon={faChevronDown}
@@ -64,11 +69,13 @@ export class Account extends Component {
                         </DropdownToggle>
                         <DropdownMenu>
                             {this.props.characters.map(character => (
-                                <DropdownItem key={character.id}>
+                                <DropdownItem key={character.character_id}
+                                    disabled={this.props.characters.find(x => x.active === true).character_id === character.character_id ? true : null}
+                                    onClick={this.props.updateActive.bind(this, character.character_id)}>
                                     <img
                                         src={
                                             "https://image.eveonline.com/Character/" +
-                                            character.id +
+                                            character.character_id +
                                             "_32.jpg"
                                         }
                                         height="24px"
@@ -102,4 +109,4 @@ const mapStateToProps = state => ({
     characters: state.characters.characters
 });
 
-export default connect(mapStateToProps, { getCharacters })(Account);
+export default connect(mapStateToProps, { getCharacters, updateActive })(Account);

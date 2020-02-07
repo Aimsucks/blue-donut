@@ -9,7 +9,7 @@ export class Options extends Component {
         return (
             <>
                 <Row>
-                    <Col className="col-4 text-center">
+                    <Col md="4" className="text-center">
                         <h2>Route Planner</h2>
                         <p className="lead">
                             Navigate via our jump bridge network
@@ -20,7 +20,7 @@ export class Options extends Component {
                             </Button>
                         </Link>
                     </Col>
-                    <Col className="col-4 text-center">
+                    <Col md="4" className="text-center">
                         <h2>Scans</h2>
                         <p className="lead">
                             Submit a local or directional scan
@@ -35,7 +35,7 @@ export class Options extends Component {
                             </Button>
                         </Link>
                     </Col>
-                    <Col className="col-4 text-center">
+                    <Col md="4" className="text-center">
                         <h2>Appraisal</h2>
                         <p className="lead">
                             Instantly appraise your inventory
