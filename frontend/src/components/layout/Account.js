@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getCharacters, updateActive } from "../../actions/characters";
+import { getCharacters } from "../../actions/characters";
+// import { getCharacters, updateActive } from "../../actions/characters";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,7 +28,13 @@ export class Account extends Component {
     };
 
     componentDidMount() {
-        this.props.getCharacters();
+        console.log("lmao");
+        this.props.getCharacters().then(() => {
+            if (localStorage.getItem("activeCharacter")) {
+                let character = localStorage.getItem("activeCharacter");
+                console.log(character);
+            }
+        });
     }
 
     render() {
@@ -90,10 +97,10 @@ export class Account extends Component {
                                             ? true
                                             : null
                                     }
-                                    onClick={this.props.updateActive.bind(
-                                        this,
-                                        character
-                                    )}
+                                    // onClick={this.props.updateActive.bind(
+                                    //     this,
+                                    //     character
+                                    // )}
                                 >
                                     <img
                                         src={
@@ -132,6 +139,5 @@ const mapStateToProps = state => ({
     characters: state.characters.characters
 });
 
-export default connect(mapStateToProps, { getCharacters, updateActive })(
-    Account
-);
+// export default connect(mapStateToProps, { getCharacters, updateActive })(
+export default connect(mapStateToProps, { getCharacters })(Account);

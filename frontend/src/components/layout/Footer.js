@@ -4,6 +4,7 @@ import { Navbar, Container, Nav, NavItem, NavLink } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { faMugHot } from "@fortawesome/free-solid-svg-icons";
 
 export class Footer extends React.Component {
     render() {
@@ -41,7 +42,20 @@ export class Footer extends React.Component {
                                 <NavItem>
                                     <NavLink
                                         className="px-2"
+                                        href="https://ko-fi.com/aimsucks"
+                                        target="_blank"
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faMugHot}
+                                            size="2x"
+                                        />
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink
+                                        className="px-2"
                                         href="https://github.com/Aimsucks/blue-donut"
+                                        target="_blank"
                                     >
                                         <FontAwesomeIcon
                                             icon={faGithub}
@@ -53,6 +67,7 @@ export class Footer extends React.Component {
                                     <NavLink
                                         className="px-2"
                                         href="https://discord.gg/UCK8ase"
+                                        target="_blank"
                                     >
                                         <FontAwesomeIcon
                                             icon={faDiscord}

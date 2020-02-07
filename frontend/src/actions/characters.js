@@ -18,18 +18,18 @@ export const getCharacters = () => dispatch => {
         .catch(err => console.log(err));
 };
 
-export const updateActive = id => dispatch => {
-    axios
-        .patch("/api/characters/", id, {
-            headers: {
-                "X-CSRFTOKEN": cookie.load("csrftoken")
-            }
-        })
-        .then(res => {
-            dispatch({
-                type: UPDATE_ACTIVE,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-};
+// export const updateActive = id => dispatch => {
+//     axios
+//         .patch("/api/characters/", id, {
+//             headers: {
+//                 "X-CSRFTOKEN": cookie.load("csrftoken")
+//             }
+//         })
+//         .then(res => {
+//             dispatch({
+//                 type: UPDATE_ACTIVE,
+//                 payload: res.data
+//             });
+//         })
+//         .catch(err => console.log(err));
+// };
