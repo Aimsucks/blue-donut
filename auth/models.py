@@ -37,7 +37,7 @@ def create_eve_data(sender, instance, created, **kwargs):
 
 
 class EVEUser(models.Model):
-    character_id = models.BigIntegerField(db_index=True, unique=True)
+    character_id = models.BigIntegerField(primary_key=True, db_index=True, unique=True)
     name = models.CharField(max_length=64, db_index=True, unique=True)
     owner = models.ForeignKey(User, models.CASCADE, db_index=True,
                               related_name='characters')

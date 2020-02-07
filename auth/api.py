@@ -3,21 +3,40 @@ from rest_framework.response import Response
 from .serializers import CharacterSerializer
 
 
-class CharacterViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+class CharacterViewSet(mixins.ListModelMixin,
+                       mixins.UpdateModelMixin,
+                       viewsets.GenericViewSet):
+
+    def get_permissions(self):
+        if self.action == 'list':
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    # permission_classes = [permissions.AllowAny]
     serializer_class = CharacterSerializer
+    queryset = ""
 
-    def get_queryset(self):
-        return self.request.user.characters.all()
+    def list(self, request):
+        if request.user.is_anonymous:
+            return Response(None)
 
-    def patch(self, request):
-        character = request.user.characters.get(character_id=request.data)
+        queryset = request.user.characters.all()
+        serializer = CharacterSerializer(queryset, many=True)
+        return Response(serializer.data)
 
-        if character:
-            request.user.characters.all().update(active=False)
-            print(character)
-            character.active = True
-            character.save()
-            return request.user.characters.all()
+    def patch(self, request, pk=None):
+        if request.user.is_anonymous:
+            return Response(None)
 
-        return Response(status=400, data="Wrong parameters.")
+        request.user.characters.all().update(active=False)
+
+        character = request.user.characters.get(character_id=request.data["character_id"])
+        character.active = True
+        character.save()
+
+        queryset = request.user.characters.all()
+        serializer = CharacterSerializer(queryset, many=True)
+
+        return Response(serializer.data)

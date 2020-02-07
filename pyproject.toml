@@ -10,6 +10,7 @@ python = "^3.8"
 django = "^3.0.3"
 djangorestframework = "^3.11.0"
 esipy = "^1.0.0"
+django-cors-headers = "^3.2.1"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5"

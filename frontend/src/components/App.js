@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import store from "../store";
 
-import Header from "./layout/Header"
-import Footer from "./layout/Footer"
+import Header from "./layout/Header";
+import Footer from "./layout/Footer";
 
 import Home from "./home/Home";
 import Planner from "./planner/Planner";
@@ -32,5 +32,4 @@ class App extends Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById("app")
-);
+ReactDOM.render(<App />, document.getElementById("app"));

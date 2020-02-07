@@ -31,7 +31,8 @@ export class Account extends Component {
     }
 
     render() {
-        if (!this.props.characters) {
+        console.log(this.props.characters);
+        if (!this.props.characters.length) {
             return (
                 <>
                     <NavLink href="/auth/login/">
@@ -54,14 +55,24 @@ export class Account extends Component {
                         >
                             <img
                                 src={
-                                    this.props.characters.length ?
-                                        "https://image.eveonline.com/Character/" + this.props.characters.find(x => x.active === true).character_id + "_32.jpg" :
-                                        "https://image.eveonline.com/Character/1_32.jpg"
+                                    this.props.characters.length > 0
+                                        ? "https://image.eveonline.com/Character/" +
+                                          this.props.characters.find(
+                                              x => x.active === true
+                                          ).character_id +
+                                          "_32.jpg"
+                                        : "https://image.eveonline.com/Character/1_32.jpg"
                                 }
                                 height="32px"
                                 className="avatar mr-2"
                             />
-                            <span>{this.props.characters.length ? this.props.characters.find(x => x.active === true).name : "Loading..."}</span>
+                            <span>
+                                {this.props.characters.length
+                                    ? this.props.characters.find(
+                                          x => x.active === true
+                                      ).name
+                                    : "Loading..."}
+                            </span>
                             <FontAwesomeIcon
                                 className="ml-2"
                                 icon={faChevronDown}
@@ -69,9 +80,21 @@ export class Account extends Component {
                         </DropdownToggle>
                         <DropdownMenu>
                             {this.props.characters.map(character => (
-                                <DropdownItem key={character.character_id}
-                                    disabled={this.props.characters.find(x => x.active === true).character_id === character.character_id ? true : null}
-                                    onClick={this.props.updateActive.bind(this, character.character_id)}>
+                                <DropdownItem
+                                    key={character.character_id}
+                                    disabled={
+                                        this.props.characters.find(
+                                            x => x.active === true
+                                        ).character_id ===
+                                        character.character_id
+                                            ? true
+                                            : null
+                                    }
+                                    onClick={this.props.updateActive.bind(
+                                        this,
+                                        character
+                                    )}
+                                >
                                     <img
                                         src={
                                             "https://image.eveonline.com/Character/" +
@@ -109,4 +132,6 @@ const mapStateToProps = state => ({
     characters: state.characters.characters
 });
 
-export default connect(mapStateToProps, { getCharacters, updateActive })(Account);
+export default connect(mapStateToProps, { getCharacters, updateActive })(
+    Account
+);
