@@ -11,11 +11,6 @@ export default function(state = initialState, action) {
                 ...state,
                 characters: action.payload
             };
-        case UPDATE_ACTIVE:
-            return{
-                ...state,
-                characters: action.payload
-            }
         default:
             return state;
     }

@@ -5,4 +5,5 @@ from auth.models import EVEUser
 class CharacterSerializer(serializers.ModelSerializer):
     class Meta:
         model = EVEUser
-        fields = ['character_id', 'name', 'active']
+        # fields = ['character_id', 'name', 'active']
+        fields = ['character_id', 'name']

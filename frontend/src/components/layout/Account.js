@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getCharacters } from "../../actions/characters";
-// import { getCharacters, updateActive } from "../../actions/characters";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,17 +27,10 @@ export class Account extends Component {
     };
 
     componentDidMount() {
-        console.log("lmao");
-        this.props.getCharacters().then(() => {
-            if (localStorage.getItem("activeCharacter")) {
-                let character = localStorage.getItem("activeCharacter");
-                console.log(character);
-            }
-        });
+        this.props.getCharacters();
     }
 
     render() {
-        console.log(this.props.characters);
         if (!this.props.characters.length) {
             return (
                 <>
@@ -62,12 +54,10 @@ export class Account extends Component {
                         >
                             <img
                                 src={
-                                    this.props.characters.length > 0
+                                    this.props.characters.length
                                         ? "https://image.eveonline.com/Character/" +
-                                          this.props.characters.find(
-                                              x => x.active === true
-                                          ).character_id +
-                                          "_32.jpg"
+                                        JSON.parse(localStorage.getItem('activeCharacter')) +
+                                        "_32.jpg"
                                         : "https://image.eveonline.com/Character/1_32.jpg"
                                 }
                                 height="32px"
@@ -75,9 +65,7 @@ export class Account extends Component {
                             />
                             <span>
                                 {this.props.characters.length
-                                    ? this.props.characters.find(
-                                          x => x.active === true
-                                      ).name
+                                    ? this.props.characters.find(o => o.character_id === JSON.parse(localStorage.getItem('activeCharacter'))).name
                                     : "Loading..."}
                             </span>
                             <FontAwesomeIcon
@@ -90,17 +78,14 @@ export class Account extends Component {
                                 <DropdownItem
                                     key={character.character_id}
                                     disabled={
-                                        this.props.characters.find(
-                                            x => x.active === true
-                                        ).character_id ===
-                                        character.character_id
+                                        JSON.parse(localStorage.getItem('activeCharacter')).character_id ===
+                                            character.character_id
                                             ? true
                                             : null
                                     }
-                                    // onClick={this.props.updateActive.bind(
-                                    //     this,
-                                    //     character
-                                    // )}
+                                    onClick={
+                                        () => { localStorage.setItem('activeCharacter', JSON.stringify(character.character_id)); this.setState({}) }
+                                    }
                                 >
                                     <img
                                         src={
@@ -139,5 +124,4 @@ const mapStateToProps = state => ({
     characters: state.characters.characters
 });
 
-// export default connect(mapStateToProps, { getCharacters, updateActive })(
 export default connect(mapStateToProps, { getCharacters })(Account);

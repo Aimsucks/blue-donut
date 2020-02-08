@@ -4,17 +4,17 @@ from .serializers import CharacterSerializer
 
 
 class CharacterViewSet(mixins.ListModelMixin,
-                       mixins.UpdateModelMixin,
+                       #    mixins.UpdateModelMixin,
                        viewsets.GenericViewSet):
 
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [permissions.AllowAny]
-        else:
-            permission_classes = [permissions.IsAuthenticated]
-        return [permission() for permission in permission_classes]
+    # def get_permissions(self):
+    #     if self.action == 'list':
+    #         permission_classes = [permissions.AllowAny]
+    #     else:
+    #         permission_classes = [permissions.IsAuthenticated]
+    #     return [permission() for permission in permission_classes]
 
-    # permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
     serializer_class = CharacterSerializer
     queryset = ""
 
@@ -26,17 +26,17 @@ class CharacterViewSet(mixins.ListModelMixin,
         serializer = CharacterSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def patch(self, request, pk=None):
-        if request.user.is_anonymous:
-            return Response(None)
+    # def patch(self, request, pk=None):
+    #     if request.user.is_anonymous:
+    #         return Response(None)
 
-        request.user.characters.all().update(active=False)
+    #     request.user.characters.all().update(active=False)
 
-        character = request.user.characters.get(character_id=request.data["character_id"])
-        character.active = True
-        character.save()
+    #     character = request.user.characters.get(character_id=request.data["character_id"])
+    #     character.active = True
+    #     character.save()
 
-        queryset = request.user.characters.all()
-        serializer = CharacterSerializer(queryset, many=True)
+    #     queryset = request.user.characters.all()
+    #     serializer = CharacterSerializer(queryset, many=True)
 
-        return Response(serializer.data)
+    #     return Response(serializer.data)
