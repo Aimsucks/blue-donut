@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
-from .api import CharacterViewSet
+from .api import CharacterViewSet, LoginViewSet
 
 import auth.views as auth
 
@@ -10,6 +10,7 @@ app_name = 'auth'
 
 router = routers.SimpleRouter()
 router.register('api/characters', CharacterViewSet, 'characters')
+router.register('api/status', LoginViewSet, 'status')
 
 urlpatterns = [
     path('auth/login/', auth.Login.as_view(), name='login'),

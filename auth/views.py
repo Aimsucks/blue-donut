@@ -12,26 +12,16 @@ class Login(View):
         scopes = [
             'esi-location.read_location.v1',
             'esi-ui.write_waypoint.v1',
-            'esi-search.search_structures.v1',
-            'esi-universe.read_structures.v1',
-        ]
-        return redirect(ESI.get_security().get_auth_uri(state=str(uuid4()), scopes=scopes))
-
-    def post(self, request):
-        scopes = [
-            'esi-location.read_location.v1',
-            'esi-ui.write_waypoint.v1',
         ]
 
-        if "approve" in request.POST:
+        if "scopes" in request.GET:
             scopes.extend([
                 'esi-search.search_structures.v1',
                 'esi-universe.read_structures.v1'
             ])
 
-        return redirect(
-            ESI.get_security().get_auth_uri(state=str(uuid4()), scopes=scopes)
-        )
+        return redirect(ESI.get_security().get_auth_uri(state=str(uuid4()), scopes=scopes))
+
 
 class Callback(View):
     def get(self, request):

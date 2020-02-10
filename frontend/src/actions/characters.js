@@ -1,5 +1,6 @@
 import axios from "axios";
-// import cookie from "react-cookies";
+
+import { returnErrors } from './messages'
 
 import { GET_CHARACTERS } from "./types";
 
@@ -13,7 +14,8 @@ export const getCharacters = () => dispatch => {
             let current = JSON.parse(localStorage.getItem('activeCharacter'))
             let characters = res.data.map(character => character.character_id)
 
-            if (current == null || !(current in characters)) {
+            if (current == null || !(characters.includes(current))) {
+                console.log("lmao")
                 localStorage.setItem('activeCharacter', res.data[0].character_id)
             }
 
@@ -22,8 +24,10 @@ export const getCharacters = () => dispatch => {
                 payload: res.data
             });
         })
-        .catch(err => console.log(err));
-};
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status))
+        });
+}
 
 // export const updateActive = id => dispatch => {
 //     axios

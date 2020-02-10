@@ -41,7 +41,6 @@ class EVEUser(models.Model):
     name = models.CharField(max_length=64, db_index=True, unique=True)
     owner = models.ForeignKey(User, models.CASCADE, db_index=True,
                               related_name='characters')
-    # active = models.BooleanField(default=False)
 
     alliance_id = models.BigIntegerField(default=0)
     corporation_id = models.BigIntegerField(default=0)

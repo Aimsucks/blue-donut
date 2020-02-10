@@ -36,7 +36,7 @@ export class Header extends React.Component {
             <>
                 <Navbar color="primary" dark expand="md">
                     <Container>
-                        <NavbarBrand href="/">Blue Donut</NavbarBrand>
+                        <NavbarBrand href="#/">Blue Donut</NavbarBrand>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="mr-auto" navbar>
@@ -57,6 +57,7 @@ export class Header extends React.Component {
                                     <NavLink
                                         to="/appraisal"
                                         className="nav-link disabled"
+                                        disabled
                                     >
                                         Appraisal
                                     </NavLink>

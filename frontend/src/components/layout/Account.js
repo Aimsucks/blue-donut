@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { getStatus } from "../../actions/status";
 import { getCharacters } from "../../actions/characters";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +12,8 @@ import {
     faChevronDown,
     faPlus
 } from "@fortawesome/free-solid-svg-icons";
+
+import { NavLink as RouterLink } from "react-router-dom";
 
 import {
     NavItem,
@@ -23,21 +26,30 @@ import {
 
 export class Account extends Component {
     static propTypes = {
-        characters: PropTypes.array
+        characters: PropTypes.array,
+        status: PropTypes.bool
     };
 
     componentDidMount() {
-        this.props.getCharacters();
+        this.props.getStatus()
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.status == false & this.props.status == true) {
+            this.props.getCharacters();
+        }
     }
 
     render() {
-        if (!this.props.characters.length) {
+        if (!this.props.status) {
             return (
                 <>
-                    <NavLink href="/auth/login/">
-                        <FontAwesomeIcon className="mr-2" icon={faSignInAlt} />
-                        Log in
-                    </NavLink>
+                    <NavItem>
+                        <RouterLink to="/login" className="nav-link">
+                            <FontAwesomeIcon className="mr-2" icon={faSignInAlt} />
+                            Log in
+                        </RouterLink>
+                    </NavItem>
                 </>
             );
         }
@@ -121,7 +133,8 @@ export class Account extends Component {
 }
 
 const mapStateToProps = state => ({
-    characters: state.characters.characters
+    characters: state.characters.characters,
+    status: state.status.status
 });
 
-export default connect(mapStateToProps, { getCharacters })(Account);
+export default connect(mapStateToProps, { getStatus, getCharacters })(Account);
