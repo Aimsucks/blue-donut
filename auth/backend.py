@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 from auth.models import EVEUser
 
 from esi import ESI
@@ -61,3 +61,19 @@ class EVEAuthBackend:
             return User.objects.get(pk=user_id)
         except EVEUser.DoesNotExist:
             return None
+
+    def check_alliance(self, character):
+        if timezone.now() - character.esi_updated > timezone.timedelta(days=7):
+            # logger.debug(f"Updating {character.name}'s alliance and corporation.")
+
+            req = ESI.request(
+                'get_characters_character_id',
+                character_id=character.character_id
+            ).data
+
+            character.alliance_id = req.alliance_id
+            character.corporation_id = req.corporation_id
+
+            character.save()
+            return
+        return

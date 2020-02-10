@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'esi',
     'frontend',
     'map',
+    'planner',
 ]
 
 MIDDLEWARE = [
