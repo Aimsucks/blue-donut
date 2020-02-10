@@ -142,7 +142,7 @@ class SystemView(LoginRequiredMixin, View):
 
 class EditView(LoginRequiredMixin, View):
     def get(self, request):
-        favorites = RoutePlannerBackend().getInfo(request.user, 'favorites')
+        favorites = RoutePlannerBackend().getInfo(request.user)[0]
         return render(request, 'route_planner/favorites.html',
                       {'favorites': favorites})
 
