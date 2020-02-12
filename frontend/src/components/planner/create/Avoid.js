@@ -28,6 +28,7 @@ export class Avoid extends Component {
                 {this.props.systems.length ? (
                     <Select
                         id="excludedSystems"
+                        name="avoid"
                         isMulti
                         value={selectedOption}
                         options={

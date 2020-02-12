@@ -19,6 +19,7 @@ class GenerateRoute(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
+        print(request.GET)
         planner = GraphGenerator()
 
         # Making sure we have all the parameters we need
@@ -41,23 +42,29 @@ class GenerateRoute(APIView):
             return Response(status=400)
 
         # Handling if the user wants to specify a start point
-        if request.GET['from']:
+        if request.GET.get('from', False):
             try:
                 from_system = System.objects.get(name=request.GET['from']).id
             except System.DoesNotExist:
                 return Response(status=400)
         else:
-            from_system = ESI.request(
-                'get_characters_character_id_location',
-                client=character.get_client(),
-                character_id=int(request.GET['id'])
-            ).data.solar_system_id
+            # from_system = ESI.request(
+            #     'get_characters_character_id_location',
+            #     client=character.get_client(),
+            #     character_id=int(request.GET['id'])
+            # ).data.solar_system_id
+            from_system = 30003135
 
         # Wormhole system check
         if from_system > 31000000:
             return Response(status=400)
 
-        route = planner.generate_route(from_system, to_system)
+        if request.GET.get('avoid', False):
+            avoid_systems = [request.GET['avoid']]
+        else:
+            avoid_systems = None
+
+        route = planner.generate_route(from_system, to_system, avoid_systems)
         if 'confirm' in request.GET:
             planner.send_route(character, route['network_path'])
         return Response(route)

@@ -27,7 +27,8 @@ export class Destination extends Component {
             <>
                 {this.props.systems.length ? (
                     <Select
-                        id="excludedSystems"
+                        id="destinationSystem"
+                        name="to"
                         value={selectedOption}
                         options={
                             this.state.showOptions

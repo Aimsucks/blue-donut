@@ -50,7 +50,8 @@ export const customStyles = {
     }),
     multiValue: (provided, state) => ({
         ...provided,
-        backgroundColor: "#375a7f"
+        backgroundColor: "#375a7f",
+        cursor: "default"
     }),
     multiValueLabel: (provided, state) => ({
         ...provided,

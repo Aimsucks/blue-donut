@@ -15,10 +15,16 @@ update_time = timezone.now()
 
 
 class GraphGenerator:
-    def generate_route(self, source, destination):
+    def generate_route(self, source, destination, avoid=None):
         self.update_check()
 
-        route = nx.shortest_path(G, source, destination)
+        if avoid:
+            E = G.copy()
+            for system in avoid:
+                E.remove_node(System.objects.get(name=system).id)
+            route = nx.shortest_path(E, source, destination)
+        else:
+            route = nx.shortest_path(G, source, destination)
 
         return {'network_path': self.network_path(route),
                 'dotlan_path': self.dotlan_path(route),
