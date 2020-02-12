@@ -6,4 +6,6 @@ urlpatterns = [
     path('', include('frontend.urls')),
     path('', include('auth.urls')),
     path('', include('planner.urls')),
+    path('', include('bridges.urls')),
+    path('', include('map.urls')),
 ]

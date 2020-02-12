@@ -1,22 +1,20 @@
 import axios from "axios";
-
-import { returnErrors } from './messages'
-
+import { returnErrors } from "./messages";
 import { GET_CHARACTERS } from "./types";
-
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
 export const getCharacters = () => dispatch => {
     axios
         .get("/api/characters/")
         .then(res => {
-            let current = JSON.parse(localStorage.getItem('activeCharacter'))
-            let characters = res.data.map(character => character.character_id)
+            let current = JSON.parse(localStorage.getItem("activeCharacter"));
+            let characters = res.data.map(character => character.character_id);
 
-            if (current == null || !(characters.includes(current))) {
-                console.log("lmao")
-                localStorage.setItem('activeCharacter', res.data[0].character_id)
+            if (current == null || !characters.includes(current)) {
+                console.log("lmao");
+                localStorage.setItem(
+                    "activeCharacter",
+                    res.data[0].character_id
+                );
             }
 
             dispatch({
@@ -25,9 +23,12 @@ export const getCharacters = () => dispatch => {
             });
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status))
+            dispatch(returnErrors(err.response.data, err.response.status));
         });
-}
+};
+
+// axios.defaults.xsrfCookieName = "csrftoken";
+// axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
 // export const updateActive = id => dispatch => {
 //     axios

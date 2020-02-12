@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'auth',
+    'bridges',
     'esi',
     'frontend',
     'map',

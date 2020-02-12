@@ -51,20 +51,6 @@ class System(models.Model):
         related_name='gate_set',
     )
 
-    """
-    Consider adding:
-
-    bridges = models.ManyToManyField(
-        'self',
-        symmetrical=False,
-        through='Bridges',
-        through_fields=('from_system', 'to_system'),
-        related_name='bridge_set',
-    )
-
-    This would mean that we need a table for bridges, which I want to do separately.
-    """
-
     def __str__(self):
         return self.name
 

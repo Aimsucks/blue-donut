@@ -1,13 +1,13 @@
 import axios from "axios";
 import { returnErrors } from "./messages";
-import { GET_STATUS } from "./types";
+import { GET_SYSTEMS } from "./types";
 
-export const getStatus = () => dispatch => {
+export const getSystems = () => dispatch => {
     axios
-        .get("/api/status/")
+        .get("/api/systems/")
         .then(res => {
             dispatch({
-                type: GET_STATUS,
+                type: GET_SYSTEMS,
                 payload: res.data
             });
         })

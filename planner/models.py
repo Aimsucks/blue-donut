@@ -11,4 +11,4 @@ class PlannerLists(models.Model):
 
 
 class PopularSystems(models.Model):
-    system_name = models.CharField(max_length=8192)
+    popular = models.CharField(max_length=8192)

@@ -1,15 +1,15 @@
-import { GET_CHARACTERS } from "../actions/types.js";
+import { GET_SYSTEMS } from "../actions/types.js";
 
 const initialState = {
-    characters: []
+    systems: []
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case GET_CHARACTERS:
+        case GET_SYSTEMS:
             return {
                 ...state,
-                characters: action.payload
+                systems: action.payload
             };
         default:
             return state;

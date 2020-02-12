@@ -3,37 +3,8 @@ from esipy.exceptions import APIException
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from esi import ESI
-
-
-class EVEData(models.Model):
-    user = models.OneToOneField(User, models.CASCADE, primary_key=True,
-                                related_name='eve')
-
-    @property
-    def character_id(self):
-        return self.primary_character.character_id
-
-    @property
-    def name(self):
-        return self.primary_character.name
-
-    @property
-    def primary_character(self):
-        return self.user.characters.all()[0]
-
-    @property
-    def all_character_ids(self):
-        return self.user.characters.values_list('character_id', flat=True)
-
-
-@receiver(post_save, sender=User)
-def create_eve_data(sender, instance, created, **kwargs):
-    if created:
-        EVEData.objects.create(user=instance)
 
 
 class EVEUser(models.Model):
