@@ -7,12 +7,13 @@ import { getSystems } from "../../actions/map";
 import { Container, Row, Col } from "reactstrap";
 
 import Banner from "./Banner";
-import Destinations from "./Destinations";
-import Create from "./Create";
+import Destinations from "./destinations/Destinations";
+import Create from "./create/Create";
 
 export class Planner extends Component {
     static propTypes = {
-        systems: PropTypes.array
+        systems: PropTypes.array,
+        route: PropTypes.object
     };
 
     componentDidMount() {
@@ -32,6 +33,7 @@ export class Planner extends Component {
                             <Create systems={this.props.systems} />
                         </Col>
                     </Row>
+                    <Row></Row>
                 </Container>
             </>
         );
@@ -39,7 +41,8 @@ export class Planner extends Component {
 }
 
 const mapStateToProps = state => ({
-    systems: state.map.systems
+    systems: state.map.systems,
+    route: state.route.route
 });
 
 export default connect(mapStateToProps, { getSystems })(Planner);

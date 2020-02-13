@@ -2,18 +2,27 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getSystems } from "../../actions/map";
+import { getRoute } from "../../../actions/route";
 
 import { Row, Col, Form, Input, Button } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 
-import { Destination } from "./create/Destination";
-import { Origin } from "./create/Origin";
-import { Avoid } from "./create/Avoid";
+import { Destination } from "./Destination";
+import { Origin } from "./Origin";
+import { Avoid } from "./Avoid";
 
 export class Create extends Component {
+    static propTypes = {
+        route: PropTypes.object
+    };
+
+    formSubmit = event => {
+        event.preventDefault();
+        console.log(event.target.elements.destinationSystem.value)
+    }
+
     render() {
         return (
             <>
@@ -25,7 +34,7 @@ export class Create extends Component {
                     />
                     Create Your Own
                 </h2>
-                <Form action="/api/route/">
+                <Form onSubmit={this.formSubmit}>
                     <Input
                         name="id"
                         id="characterID"
@@ -71,4 +80,8 @@ export class Create extends Component {
     }
 }
 
-export default Create;
+const mapStateToProps = state => ({
+    route: state.route.route
+});
+
+export default connect(mapStateToProps, { getRoute })(Create);

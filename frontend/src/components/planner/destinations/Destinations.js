@@ -5,9 +5,9 @@ import { Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
-import Popular from "./destinations/Popular";
-import Favorites from "./destinations/Favorites";
-import Recents from "./destinations/Recents";
+import Popular from "./Popular";
+import Favorites from "./Favorites";
+import Recents from "./Recents";
 
 export class Destinations extends Component {
     render() {
