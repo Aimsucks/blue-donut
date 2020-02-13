@@ -48,12 +48,11 @@ class GenerateRoute(APIView):
             except System.DoesNotExist:
                 return Response(status=400)
         else:
-            # from_system = ESI.request(
-            #     'get_characters_character_id_location',
-            #     client=character.get_client(),
-            #     character_id=int(request.GET['id'])
-            # ).data.solar_system_id
-            from_system = 30003135
+            from_system = ESI.request(
+                'get_characters_character_id_location',
+                client=character.get_client(),
+                character_id=int(request.GET['id'])
+            ).data.solar_system_id
 
         # Wormhole system check
         if from_system > 31000000:

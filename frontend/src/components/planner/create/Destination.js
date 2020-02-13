@@ -22,7 +22,7 @@ export class Destination extends Component {
         }
     };
     render() {
-        const { selectedOption } = this.state;
+        const { selectedOption } = this.state.showOptions;
         return (
             <>
                 {this.props.systems.length ? (
@@ -33,9 +33,9 @@ export class Destination extends Component {
                         options={
                             this.state.showOptions
                                 ? this.props.systems.map(t => ({
-                                      value: t,
-                                      label: t
-                                  }))
+                                    value: t,
+                                    label: t
+                                }))
                                 : []
                         }
                         onChange={this.handleChange}
@@ -53,8 +53,8 @@ export class Destination extends Component {
                         placeholder="Destination"
                     />
                 ) : (
-                    <Input name="system" placeholder="Destination" />
-                )}
+                        <Input name="system" placeholder="Destination" />
+                    )}
             </>
         );
     }

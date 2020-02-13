@@ -46,7 +46,7 @@ export class Create extends Component {
                             <Avoid systems={this.props.systems} />
                         </Col>
                         <Col md="3" className="px-1">
-                            <Button href="" block color="primary" type="submit">
+                            <Button name="verify" value={true} block color="primary" type="submit">
                                 Verify
                             </Button>
                         </Col>
