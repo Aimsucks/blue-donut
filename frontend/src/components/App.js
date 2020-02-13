@@ -21,9 +21,9 @@ import Error from "./error/Error";
 // Alert options
 const alertOptions = {
     timeout: 3000,
-    position: 'top center',
-    offset: '60px'
-}
+    position: "top center",
+    offset: "60px"
+};
 
 class App extends Component {
     render() {
@@ -37,9 +37,14 @@ class App extends Component {
                             <Switch>
                                 <Route exact path="/" component={Home} />
                                 <Route exact path="/login" component={Login} />
-                                <Route exact path="/planner" component={Planner} />
+                                <Route
+                                    exact
+                                    path="/planner"
+                                    component={Planner}
+                                />
                                 <Route component={Error} />
                             </Switch>
+                            <div className="extra-space"></div>
                             <Footer />
                         </>
                     </Router>

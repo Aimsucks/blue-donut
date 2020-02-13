@@ -9,6 +9,8 @@ import { Container, Row, Col } from "reactstrap";
 import Banner from "./Banner";
 import Destinations from "./destinations/Destinations";
 import Create from "./create/Create";
+import Map from "./info/Map";
+import Trip from "./info/Trip";
 
 export class Planner extends Component {
     static propTypes = {
@@ -33,7 +35,16 @@ export class Planner extends Component {
                             <Create systems={this.props.systems} />
                         </Col>
                     </Row>
-                    <Row></Row>
+                    {this.props.route.length ? (
+                        <Row className="justify-content-center mt-2">
+                            <Col md="6">
+                                <Map route={this.props.route} />
+                            </Col>
+                            <Col md="2">
+                                <Trip route={this.props.route} />
+                            </Col>
+                        </Row>
+                    ) : null}
                 </Container>
             </>
         );

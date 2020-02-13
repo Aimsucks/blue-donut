@@ -10,7 +10,7 @@ export class Footer extends React.Component {
     render() {
         return (
             <>
-                <div className="fixed-bottom">
+                <div className="footer fixed-bottom">
                     <Navbar dark>
                         <Container>
                             <Nav navbar className="mr-auto">

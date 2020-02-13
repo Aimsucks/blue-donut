@@ -33,7 +33,10 @@
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "^0.1.8",
+    "@material-ui/core": "^4.9.2",
+    "@material-ui/icons": "^4.9.1",
     "axios": "^0.19.2",
+    "js-cookie": "^2.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-alert": "^6.0.0",
@@ -47,6 +50,7 @@
     "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
+    "redux-form": "^8.3.0",
     "redux-thunk": "^2.3.0"
   }
 }

@@ -4,26 +4,86 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getRoute } from "../../../actions/route";
 
-import { Row, Col, Form, Input, Button } from "reactstrap";
+import {
+    Row,
+    Col,
+    Form,
+    Input,
+    Button,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
+    CustomInput
+} from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 
-import { Destination } from "./Destination";
-import { Origin } from "./Origin";
-import { Avoid } from "./Avoid";
+import Select from "react-select";
+import { customStyles, flexCustomStyles } from "../../common/SelectStyle";
+
+const checkboxStyle = {
+    backgroundColor: "rgb(25,26,27)",
+    borderColor: "rgb(95, 95, 95)"
+};
 
 export class Create extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showOptions: false,
+            isChecked: false,
+            selectedOption: null,
+            from: "",
+            to: "",
+            avoid: [],
+            confirm: false
+        };
+    }
+
+    onChange = name => value => {
+        name !== "avoid"
+            ? this.setState({ [name]: value })
+            : this.setState({ [name]: value });
+    };
+
+    handleConfirmButton = e => {
+        this.setState({ confirm: true });
+    };
+
+    onSubmit = e => {
+        e.preventDefault();
+        let character = localStorage.getItem("activeCharacter");
+        let { from, to, avoid, confirm } = this.state;
+        if (avoid) avoid = avoid.map(a => a.value);
+        if (from) from = from.value;
+        to = to.value;
+        const plan = { character, from, to, avoid, confirm };
+        this.props.getRoute(plan);
+        this.setState({ confirm: false });
+    };
+
     static propTypes = {
         route: PropTypes.object
     };
 
-    formSubmit = event => {
-        event.preventDefault();
-        console.log(event.target.elements.destinationSystem.value)
+    handleSelectInputChange = typedOption => {
+        if (typedOption.length > 2) {
+            this.setState({ showOptions: true });
+        } else {
+            this.setState({ showOptions: false });
+        }
+    };
+
+    handleCheckbox() {
+        if (this.state.isChecked == true) {
+            this.setState({ from: null });
+        }
+        this.setState({ isChecked: !this.state.isChecked });
     }
 
     render() {
+        const { from, to, avoid } = this.state;
         return (
             <>
                 <h2 className="text-center">
@@ -34,33 +94,149 @@ export class Create extends Component {
                     />
                     Create Your Own
                 </h2>
-                <Form onSubmit={this.formSubmit}>
-                    <Input
-                        name="id"
-                        id="characterID"
-                        value={localStorage.getItem("activeCharacter")}
-                        hidden
-                        readOnly
-                    />
+                <Form onSubmit={this.onSubmit}>
                     <Row className="px-2">
                         <Col md="6" className="px-1">
-                            <Origin systems={this.props.systems} />
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText
+                                        className="px-1"
+                                        style={checkboxStyle}
+                                    >
+                                        <CustomInput
+                                            value={this.state.isChecked}
+                                            onChange={this.handleCheckbox.bind(
+                                                this
+                                            )}
+                                            className="ml-2 pl-4"
+                                            type="checkbox"
+                                            id="originEnable"
+                                        />
+                                    </InputGroupText>
+                                </InputGroupAddon>
+                                {this.props.systems.length ? (
+                                    <Select
+                                        id="originSystem"
+                                        name="from"
+                                        value={from}
+                                        onChange={this.onChange("from")}
+                                        options={
+                                            this.state.showOptions
+                                                ? this.props.systems.map(t => ({
+                                                      value: t,
+                                                      label: t
+                                                  }))
+                                                : []
+                                        }
+                                        onInputChange={
+                                            this.handleSelectInputChange
+                                        }
+                                        components={{
+                                            DropdownIndicator: () => null
+                                        }}
+                                        styles={flexCustomStyles}
+                                        openMenuOnClick={false}
+                                        noOptionsMessage={() =>
+                                            this.state.showOptions
+                                                ? "Didn't find any systems"
+                                                : "Not enough characters"
+                                        }
+                                        placeholder="Origin"
+                                        isDisabled={!this.state.isChecked}
+                                    />
+                                ) : (
+                                    <Input name="from" placeholder="Origin" />
+                                )}
+                            </InputGroup>
                         </Col>
                         <Col md="6" className="px-1">
-                            <Destination systems={this.props.systems} />
+                            {this.props.systems.length ? (
+                                <Select
+                                    id="destinationSystem"
+                                    name="to"
+                                    value={to}
+                                    options={
+                                        this.state.showOptions
+                                            ? this.props.systems.map(t => ({
+                                                  value: t,
+                                                  label: t
+                                              }))
+                                            : []
+                                    }
+                                    onChange={this.onChange("to")}
+                                    onInputChange={this.handleSelectInputChange}
+                                    components={{
+                                        DropdownIndicator: () => null
+                                    }}
+                                    styles={customStyles}
+                                    openMenuOnClick={false}
+                                    noOptionsMessage={() =>
+                                        this.state.showOptions
+                                            ? "Didn't find any systems"
+                                            : "Not enough characters"
+                                    }
+                                    placeholder="Destination"
+                                />
+                            ) : (
+                                <Input name="to" placeholder="Destination" />
+                            )}
                         </Col>
                     </Row>
                     <Row className="px-2 pt-2">
                         <Col md="6" className="px-1">
-                            <Avoid systems={this.props.systems} />
+                            {this.props.systems.length ? (
+                                <Select
+                                    id="excludedSystems"
+                                    name="avoid"
+                                    isMulti
+                                    value={avoid}
+                                    options={
+                                        this.state.showOptions
+                                            ? this.props.systems.map(t => ({
+                                                  value: t,
+                                                  label: t
+                                              }))
+                                            : []
+                                    }
+                                    onChange={this.onChange("avoid")}
+                                    onInputChange={this.handleSelectInputChange}
+                                    components={{
+                                        DropdownIndicator: () => null
+                                    }}
+                                    styles={customStyles}
+                                    openMenuOnClick={false}
+                                    noOptionsMessage={() =>
+                                        this.state.showOptions
+                                            ? "Didn't find any systems"
+                                            : "Not enough characters"
+                                    }
+                                    placeholder="Excluded systems"
+                                />
+                            ) : (
+                                <Input
+                                    name="excludedSystem"
+                                    placeholder="Excluded systems"
+                                />
+                            )}
                         </Col>
                         <Col md="3" className="px-1">
-                            <Button name="verify" value={true} block color="primary" type="submit">
+                            <Button
+                                name="verify"
+                                block
+                                color="primary"
+                                type="submit"
+                            >
                                 Verify
                             </Button>
                         </Col>
                         <Col md="3" className="px-1">
-                            <Button href="" block color="primary">
+                            <Button
+                                name="confirm"
+                                block
+                                color="primary"
+                                type="submit"
+                                onClick={this.handleConfirmButton}
+                            >
                                 Generate
                             </Button>
                         </Col>

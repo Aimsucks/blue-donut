@@ -12,23 +12,21 @@ from planner.models import PopularSystems
 
 from .backend import GraphGenerator, Lister
 
-# http://localhost:8000/api/route/?to=YAP-TN&from=D-PNP9&id=2113697818
-
 
 class GenerateRoute(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, format=None):
-        print(request.GET)
+    def post(self, request):
+        print(request.data)
         planner = GraphGenerator()
 
         # Making sure we have all the parameters we need
-        if 'to' not in request.GET or 'id' not in request.GET:
+        if 'to' not in request.data or 'character' not in request.data:
             return Response(status=400)
 
         # Character ID check
         try:
-            character = request.user.characters.get(character_id=int(request.GET['id']))
+            character = request.user.characters.get(character_id=int(request.data['character']))
         except EVEUser.DoesNotExist:
             return Response(status=400)
 
@@ -37,35 +35,38 @@ class GenerateRoute(APIView):
 
         # Making sure we're going to a real system
         try:
-            to_system = System.objects.get(name=request.GET['to']).id
+            to_system = System.objects.get(name=request.data['to']).id
         except System.DoesNotExist:
             return Response(status=400)
 
         # Handling if the user wants to specify a start point
-        if request.GET.get('from', False):
+        if request.data.get('from', False):
             try:
-                from_system = System.objects.get(name=request.GET['from']).id
+                from_system = System.objects.get(name=request.data['from']).id
             except System.DoesNotExist:
                 return Response(status=400)
         else:
             from_system = ESI.request(
                 'get_characters_character_id_location',
                 client=character.get_client(),
-                character_id=int(request.GET['id'])
+                character_id=int(request.data['character'])
             ).data.solar_system_id
 
         # Wormhole system check
         if from_system > 31000000:
             return Response(status=400)
 
-        if request.GET.get('avoid', False):
-            avoid_systems = [request.GET['avoid']]
+        if request.data.get('avoid', False):
+            avoid_systems = request.data['avoid']
         else:
             avoid_systems = None
 
         route = planner.generate_route(from_system, to_system, avoid_systems)
-        if 'confirm' in request.GET:
+        route['destination'] = request.data['to']
+        route['confirm_button'] = True
+        if 'confirm' in request.data:
             planner.send_route(character, route['network_path'])
+            route['confirm_button'] = False
         return Response(route)
 
 
