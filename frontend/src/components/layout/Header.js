@@ -11,7 +11,7 @@ import {
     Container
 } from "reactstrap";
 
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import Account from "./Account";
 
@@ -36,7 +36,9 @@ export class Header extends React.Component {
             <>
                 <Navbar color="primary" dark expand="md">
                     <Container>
-                        <NavbarBrand href="#/">Blue Donut</NavbarBrand>
+                        <Link className="navbar-brand" to="/">
+                            Blue Donut
+                        </Link>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="mr-auto" navbar>
