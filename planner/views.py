@@ -66,6 +66,8 @@ class GenerateRoute(APIView):
 
         route = planner.generate_route(from_system, to_system, avoid_systems)
         route['destination'] = request.data['to']
+        if request.data.get('from', False):
+            route['origin'] = request.data['from']
         route['confirm_button'] = True
         if 'confirm' in request.data and request.data['confirm']:
             planner.send_route(character, route['network_path'])

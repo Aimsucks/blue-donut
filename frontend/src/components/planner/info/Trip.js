@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { sendRoute } from "../../../actions/route";
 
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import { Row, Col, Button } from "reactstrap";
 
 export class Trip extends Component {
@@ -36,9 +38,21 @@ export class Trip extends Component {
                                 Set destination
                             </Button>
                         ) : null}
-                        <Button block color="secondary">
-                            Copy sharable link
-                        </Button>
+                        <CopyToClipboard
+                            text={
+                                this.props.route.origin
+                                    ? "https://bluedonut.space/planner?to=" +
+                                      this.props.route.destination +
+                                      "&from=" +
+                                      this.props.route.origin
+                                    : "https://bluedonut.space/planner?to=" +
+                                      this.props.route.destination
+                            }
+                        >
+                            <Button block color="secondary">
+                                Copy sharable link
+                            </Button>
+                        </CopyToClipboard>
                     </Col>
                 </Row>
             </>

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import queryString from "query-string";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -20,6 +22,9 @@ export class Planner extends Component {
 
     componentDidMount() {
         this.props.getSystems();
+        const values = queryString.parse(this.props.location.search);
+        this.props.route.to = { value: values.to, label: values.to };
+        this.props.route.from = { value: values.from, label: values.from };
     }
 
     render() {

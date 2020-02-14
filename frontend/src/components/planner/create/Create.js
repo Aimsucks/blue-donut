@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import queryString from "query-string";
+import { withRouter } from "react-router-dom";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -34,11 +36,29 @@ export class Create extends Component {
             showOptions: false,
             isChecked: false,
             selectedOption: null,
-            from: "",
-            to: "",
+            from: null,
+            to: null,
             avoid: [],
             confirm: false
         };
+    }
+
+    static propTypes = {
+        route: PropTypes.object
+    };
+
+    componentDidUpdate(prevProps, prevState) {
+        const parameters = queryString.parse(this.props.location.search);
+        if (prevState.from == null && parameters.from) {
+            this.setState({
+                from: { value: parameters.from, label: parameters.from }
+            });
+        }
+        if (prevState.to == null && parameters.to) {
+            this.setState({
+                to: { value: parameters.to, label: parameters.to }
+            });
+        }
     }
 
     onChange = name => value => {
@@ -63,10 +83,6 @@ export class Create extends Component {
         this.setState({ confirm: false });
     };
 
-    static propTypes = {
-        route: PropTypes.object
-    };
-
     handleSelectInputChange = typedOption => {
         if (typedOption.length > 2) {
             this.setState({ showOptions: true });
@@ -84,7 +100,6 @@ export class Create extends Component {
 
     render() {
         const { from, to, avoid } = this.state;
-        console.log(this.state.confirm);
         return (
             <>
                 <h2 className="text-center">
@@ -261,4 +276,4 @@ const mapStateToProps = state => ({
     route: state.route.route
 });
 
-export default connect(mapStateToProps, { getRoute })(Create);
+export default connect(mapStateToProps, { getRoute })(withRouter(Create));

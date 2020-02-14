@@ -9,3 +9,7 @@ export const GET_SYSTEMS = "GET_SYSTEMS";
 
 export const GET_ROUTE = "GET_ROUTE";
 export const CONFIRM_ROUTE = "CONFIRM_ROUTE";
+
+export const GET_LIST_POPULAR = "GET_LIST_POPULAR";
+export const GET_LIST_FAVORITES = "GET_LIST_FAVORITES";
+export const GET_LIST_RECENTS = "GET_LIST_RECENTS";
