@@ -87,6 +87,8 @@ class GraphGenerator:
                         clear_other_waypoints=False,
                         destination_id=id
                     )
+        else:
+            print(f'Sending route {route}.')
         return
 
 

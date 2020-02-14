@@ -84,6 +84,7 @@ export class Create extends Component {
 
     render() {
         const { from, to, avoid } = this.state;
+        console.log(this.state.confirm);
         return (
             <>
                 <h2 className="text-center">

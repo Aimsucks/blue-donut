@@ -2,22 +2,22 @@ import json
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 
 from auth.models import EVEUser
 from auth.backend import EVEAuthBackend
 from esi import ESI
 from map.models import System
 from planner.models import PopularSystems
+from django.conf import settings
 
 from .backend import GraphGenerator, Lister
 
 
 class GenerateRoute(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        print(request.data)
         planner = GraphGenerator()
 
         # Making sure we have all the parameters we need
@@ -46,11 +46,14 @@ class GenerateRoute(APIView):
             except System.DoesNotExist:
                 return Response(status=400)
         else:
-            from_system = ESI.request(
-                'get_characters_character_id_location',
-                client=character.get_client(),
-                character_id=int(request.data['character'])
-            ).data.solar_system_id
+            if settings.DEBUG:
+                from_system = 30003135
+            else:
+                from_system = ESI.request(
+                    'get_characters_character_id_location',
+                    client=character.get_client(),
+                    character_id=int(request.data['character'])
+                ).data.solar_system_id
 
         # Wormhole system check
         if from_system > 31000000:
@@ -64,14 +67,29 @@ class GenerateRoute(APIView):
         route = planner.generate_route(from_system, to_system, avoid_systems)
         route['destination'] = request.data['to']
         route['confirm_button'] = True
-        if 'confirm' in request.data:
+        if 'confirm' in request.data and request.data['confirm']:
             planner.send_route(character, route['network_path'])
             route['confirm_button'] = False
         return Response(route)
 
+class SendRoute(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        if 'path' not in request.data:
+            return Response(status=400)
+
+        try:
+            character = request.user.characters.get(character_id=int(request.data['character']))
+        except EVEUser.DoesNotExist:
+            return Response(status=400)
+
+        GraphGenerator().send_route(character, request.data['path'])
+        return Response("Route has been set!")
+
 
 class Popular(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         try:
@@ -84,7 +102,7 @@ class Popular(APIView):
 
 
 class Favorites(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         favorites, recents = Lister().get_lists(request.user)
@@ -96,7 +114,7 @@ class Favorites(APIView):
 
 
 class Recents(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         favorites, recents = Lister().get_lists(request.user)

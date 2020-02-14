@@ -6,7 +6,7 @@ import { getSystems } from "../../actions/map";
 
 import { Container, Row, Col } from "reactstrap";
 
-import Banner from "./Banner";
+import Banner from "../common/Banner";
 import Destinations from "./destinations/Destinations";
 import Create from "./create/Create";
 import Map from "./info/Map";
@@ -25,7 +25,7 @@ export class Planner extends Component {
     render() {
         return (
             <>
-                <Banner />
+                <Banner name="Route Planner" />
                 <Container className="pt-5">
                     <Row>
                         <Col md="6">
@@ -33,15 +33,15 @@ export class Planner extends Component {
                         </Col>
                         <Col md="6">
                             <Create systems={this.props.systems} />
+                            {this.props.route.length ? (
+                                <Trip route={this.props.route} />
+                            ) : null}
                         </Col>
                     </Row>
                     {this.props.route.length ? (
                         <Row className="justify-content-center mt-2">
-                            <Col md="6">
+                            <Col>
                                 <Map route={this.props.route} />
-                            </Col>
-                            <Col md="2">
-                                <Trip route={this.props.route} />
                             </Col>
                         </Row>
                     ) : null}

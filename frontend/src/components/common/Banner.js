@@ -7,9 +7,11 @@ export class Banner extends Component {
         return (
             <>
                 <Container fluid>
-                    <Row className="bg-primary py-5">
+                    <Row className="bg-primary pt-2 pb-4">
                         <Col className="text-center">
-                            <h1 className="display-3 mb-0">Route Planner</h1>
+                            <h1 className="display-3 mb-0">
+                                {this.props.name}
+                            </h1>
                         </Col>
                     </Row>
                 </Container>

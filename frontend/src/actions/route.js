@@ -24,16 +24,18 @@ export const getRoute = plan => dispatch => {
         });
 };
 
-export const confirmRoute = plan => dispatch => {
+export const sendRoute = plan => dispatch => {
     axios
-        .post("/api/route/", plan, {
+        .post("/api/route/confirm/", plan, {
             headers: {
                 "X-CSRFTOKEN": Cookies.get("csrftoken")
             }
         })
         .then(res => {
+            console.log(res.data);
+            dispatch(createMessage({ sendRoute: res.data }));
             dispatch({
-                type: GET_ROUTE,
+                type: CONFIRM_ROUTE,
                 payload: res.data
             });
         })
