@@ -7,8 +7,20 @@
     background-color: #222222;
 }
 
+.invisible {
+    visibility: hidden;
+}
+
+.clickable-link {
+    cursor: pointer;
+}
+
+.editor-input {
+    height: 2em;
+}
+
 .extra-space {
-    height: 80px
+    height: 80px;
 }
 
 .list-group-item {
@@ -53,7 +65,7 @@
     flex-grow: 1;
 }
 
-.navbar-light .navbar-nav .active>.nav-link {
+.navbar-light .navbar-nav .active > .nav-link {
     color: #fff !important;
 }
 

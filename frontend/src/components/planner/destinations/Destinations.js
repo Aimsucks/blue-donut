@@ -23,10 +23,10 @@ export class Destinations extends Component {
                 </h2>
                 <Row>
                     <Col md="4">
-                        <Popular />
+                        <Popular systems={this.props.systems} />
                     </Col>
                     <Col md="4">
-                        <Favorites />
+                        <Favorites systems={this.props.systems} />
                     </Col>
                     <Col cmd="4">
                         <Recents />

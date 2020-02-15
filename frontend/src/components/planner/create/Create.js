@@ -67,7 +67,7 @@ export class Create extends Component {
             : this.setState({ [name]: value });
     };
 
-    handleConfirmButton = e => {
+    handleConfirmButton = () => {
         this.setState({ confirm: true });
     };
 
@@ -77,11 +77,11 @@ export class Create extends Component {
         let { from, to, avoid, confirm } = this.state;
         if (avoid) avoid = avoid.map(a => a.value);
         if (from) from = from.value;
-        to = to.value;
+        to = to ? to.value : null;
         const plan = { character, from, to, avoid, confirm };
-        this.props.getRoute(plan);
+        this.props.getRoute(plan)
         this.setState({ confirm: false });
-    };
+    }
 
     handleSelectInputChange = typedOption => {
         if (typedOption.length > 2) {
@@ -139,9 +139,9 @@ export class Create extends Component {
                                         options={
                                             this.state.showOptions
                                                 ? this.props.systems.map(t => ({
-                                                      value: t,
-                                                      label: t
-                                                  }))
+                                                    value: t,
+                                                    label: t
+                                                }))
                                                 : []
                                         }
                                         onInputChange={
@@ -161,8 +161,8 @@ export class Create extends Component {
                                         isDisabled={!this.state.isChecked}
                                     />
                                 ) : (
-                                    <Input name="from" placeholder="Origin" />
-                                )}
+                                        <Input name="from" placeholder="Origin" disabled />
+                                    )}
                             </InputGroup>
                         </Col>
                         <Col md="6" className="px-1">
@@ -174,9 +174,9 @@ export class Create extends Component {
                                     options={
                                         this.state.showOptions
                                             ? this.props.systems.map(t => ({
-                                                  value: t,
-                                                  label: t
-                                              }))
+                                                value: t,
+                                                label: t
+                                            }))
                                             : []
                                     }
                                     onChange={this.onChange("to")}
@@ -194,8 +194,8 @@ export class Create extends Component {
                                     placeholder="Destination"
                                 />
                             ) : (
-                                <Input name="to" placeholder="Destination" />
-                            )}
+                                    <Input name="to" placeholder="Destination" />
+                                )}
                         </Col>
                     </Row>
                     <Row className="px-2 pt-2">
@@ -209,9 +209,9 @@ export class Create extends Component {
                                     options={
                                         this.state.showOptions
                                             ? this.props.systems.map(t => ({
-                                                  value: t,
-                                                  label: t
-                                              }))
+                                                value: t,
+                                                label: t
+                                            }))
                                             : []
                                     }
                                     onChange={this.onChange("avoid")}
@@ -229,11 +229,11 @@ export class Create extends Component {
                                     placeholder="Excluded systems"
                                 />
                             ) : (
-                                <Input
-                                    name="excludedSystem"
-                                    placeholder="Excluded systems"
-                                />
-                            )}
+                                    <Input
+                                        name="excludedSystem"
+                                        placeholder="Excluded systems"
+                                    />
+                                )}
                         </Col>
                         <Col md="3" className="px-1">
                             <Button

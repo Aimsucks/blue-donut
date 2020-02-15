@@ -16,7 +16,6 @@ export class Trip extends Component {
         });
     };
     render() {
-        console.log(this.props.route);
         return (
             <>
                 <Row className="pt-2 px-2">
@@ -42,11 +41,11 @@ export class Trip extends Component {
                             text={
                                 this.props.route.origin
                                     ? "https://bluedonut.space/planner?to=" +
-                                      this.props.route.destination +
-                                      "&from=" +
-                                      this.props.route.origin
+                                    this.props.route.destination +
+                                    "&from=" +
+                                    this.props.route.origin
                                     : "https://bluedonut.space/planner?to=" +
-                                      this.props.route.destination
+                                    this.props.route.destination
                             }
                         >
                             <Button block color="secondary">

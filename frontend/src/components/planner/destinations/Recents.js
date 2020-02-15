@@ -6,6 +6,8 @@ import { getRecents } from "../../../actions/lists";
 
 import { ListGroup, ListGroupItem } from "reactstrap";
 
+const placeholderList = [1, 2, 3, 4, 5]
+
 export class Recents extends Component {
     static propTypes = {
         recents: PropTypes.array
@@ -14,24 +16,38 @@ export class Recents extends Component {
         this.props.getRecents();
     }
     render() {
-        console.log(this.props.recents);
         return (
             <>
                 <ListGroup className="text-center">
-                    {this.props.recents.map((system, index) => (
-                        <ListGroupItem
-                            tag="a"
-                            href=""
-                            className="py-2"
-                            action
-                            disabled={system ? false : true}
-                            key={index}
-                        >
-                            {system ? system : "N/A"}
-                        </ListGroupItem>
-                    ))}
-                    <small className="text-muted mt-2">Recents</small>
+                    {this.props.recents ?
+                        this.props.recents.map((system, index) => (
+                            <ListGroupItem
+                                tag="a"
+                                href=""
+                                className="py-2"
+                                action
+                                disabled={system ? false : true}
+                                key={index}
+                            >
+                                {system ? system : "N/A"}
+                            </ListGroupItem>
+                        ))
+                        : placeholderList.map(index => (
+                            <ListGroupItem
+                                tag="a"
+                                href=""
+                                className="py-2"
+                                action
+                                disabled
+                                key={index}>
+
+                            </ListGroupItem>
+                        ))
+                    }
                 </ListGroup>
+                <div className="text-center">
+                    <small className="text-muted mt-2">Recents</small>
+                </div>
             </>
         );
     }

@@ -3,6 +3,7 @@ import { returnErrors } from "./messages";
 import {
     GET_LIST_POPULAR,
     GET_LIST_FAVORITES,
+    POST_LIST_FAVORITES,
     GET_LIST_RECENTS
 } from "./types";
 import Cookies from "js-cookie";
@@ -30,6 +31,24 @@ export const getFavorites = () => dispatch => {
         .then(res => {
             dispatch({
                 type: GET_LIST_FAVORITES,
+                payload: res.data
+            });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
+};
+
+export const sendFavorites = favorites => dispatch => {
+    axios
+        .post("/api/favorites/", favorites, {
+            headers: {
+                "X-CSRFTOKEN": Cookies.get("csrftoken")
+            }
+        })
+        .then(res => {
+            dispatch({
+                type: POST_LIST_FAVORITES,
                 payload: res.data
             });
         })
