@@ -105,6 +105,15 @@ class Popular(APIView):
             popular = PopularSystems.objects.get(id=1).popular
         return Response(json.loads(popular))
 
+    def post(self, request, format=None):
+        if not request.user.is_staff or request.user.is_anonymous:
+            return Response(status=400, data="You are not allowed to perform this action")
+        popular = PopularSystems.objects.get(id=1)
+        popular.popular = json.dumps(request.data)
+        popular.save()
+        popular = PopularSystems.objects.get(id=1).popular
+        return Response(json.loads(popular))
+
 
 class Favorites(APIView):
     permission_classes = [AllowAny]
@@ -129,4 +138,11 @@ class Recents(APIView):
         if request.user.is_anonymous:
             return Response([None, None, None, None, None])
         favorites, recents = Lister().get_lists(request.user)
+        print(recents)
+        return Response(recents)
+
+    def post(self, request, format=None):
+        if request.user.is_anonymous:
+            return Response([None, None, None, None, None])
+        recents = Lister().update_recents(request.user, request.data['to'])
         return Response(recents)

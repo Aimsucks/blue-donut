@@ -27,7 +27,7 @@ export class Favorites extends Component {
 
     static propTypes = {
         favorites: PropTypes.array.isRequired,
-        status: PropTypes.bool.isRequired
+        status: PropTypes.object.isRequired
     };
     componentDidMount() {
         this.props.getFavorites();
@@ -128,7 +128,7 @@ export class Favorites extends Component {
                         ))
                     }
                 </ListGroup>
-                {this.props.status ?
+                {this.props.status.logged_in ?
                     <div className="d-flex justify-content-around">
                         <div className={this.state.editMode ? "" : "invisible"} onClick={this.handleClearClick}><FontAwesomeIcon icon={this.state.editMode ? faTimes : faEdit} size="sm" className="text-info" /></div>
                         <div><small className="text-muted">Favorites</small></div>

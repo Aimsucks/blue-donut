@@ -27,7 +27,7 @@ import {
 export class Account extends Component {
     static propTypes = {
         characters: PropTypes.array,
-        status: PropTypes.bool
+        status: PropTypes.object
     };
 
     componentDidMount() {
@@ -35,13 +35,13 @@ export class Account extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.status == false & this.props.status == true) {
+        if (!prevProps.status.logged_in & this.props.status.logged_in == true) {
             this.props.getCharacters();
         }
     }
 
     render() {
-        if (!this.props.status) {
+        if (!this.props.status.logged_in) {
             return (
                 <>
                     <NavItem>
@@ -90,10 +90,10 @@ export class Account extends Component {
                                 <DropdownItem
                                     key={character.character_id}
                                     disabled={
-                                        JSON.parse(localStorage.getItem('activeCharacter')).character_id ===
+                                        JSON.parse(localStorage.getItem('activeCharacter')) ===
                                             character.character_id
                                             ? true
-                                            : null
+                                            : false
                                     }
                                     onClick={
                                         () => { localStorage.setItem('activeCharacter', JSON.stringify(character.character_id)); this.setState({}) }

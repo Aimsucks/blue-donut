@@ -8,9 +8,19 @@ class LoginViewSet(viewsets.ViewSet):
 
     def list(self, request):
         if request.user.is_anonymous:
-            return Response(False)
-        return Response(True)
-
+            return Response({
+                "logged_in": False,
+                "is_staff": False,
+            })
+        if request.user.is_staff:
+            return Response({
+                "logged_in": True,
+                "is_staff": True,
+            })
+        return Response({
+            "logged_in": True,
+            "is_staff": False,
+        })
 
 class CharacterViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]

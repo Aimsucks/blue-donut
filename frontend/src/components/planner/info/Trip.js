@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { sendRoute } from "../../../actions/route";
+import { sendRecents } from "../../../actions/lists";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -14,6 +15,7 @@ export class Trip extends Component {
             path: this.props.route.network_path,
             character: localStorage.getItem("activeCharacter")
         });
+        this.props.sendRecents({ to: this.props.route.destination })
     };
     render() {
         return (
@@ -59,4 +61,4 @@ export class Trip extends Component {
     }
 }
 
-export default connect(null, { sendRoute })(Trip);
+export default connect(null, { sendRoute, sendRecents })(Trip);

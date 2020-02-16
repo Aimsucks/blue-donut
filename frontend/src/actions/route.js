@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createMessage, returnErrors } from "./messages";
+import { getRecents } from "./lists"
 import { GET_ROUTE } from "./types";
 import Cookies from "js-cookie";
 
@@ -25,7 +26,6 @@ export const getRoute = plan => dispatch => {
 };
 
 export const sendRoute = plan => dispatch => {
-    console.log("lmao")
     axios
         .post("/api/route/confirm/", plan, {
             headers: {

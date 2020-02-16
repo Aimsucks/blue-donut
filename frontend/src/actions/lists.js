@@ -2,9 +2,11 @@ import axios from "axios";
 import { returnErrors } from "./messages";
 import {
     GET_LIST_POPULAR,
+    POST_LIST_POPULAR,
     GET_LIST_FAVORITES,
     POST_LIST_FAVORITES,
-    GET_LIST_RECENTS
+    GET_LIST_RECENTS,
+    POST_LIST_RECENTS
 } from "./types";
 import Cookies from "js-cookie";
 
@@ -17,6 +19,24 @@ export const getPopular = () => dispatch => {
         .then(res => {
             dispatch({
                 type: GET_LIST_POPULAR,
+                payload: res.data
+            });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
+};
+
+export const sendPopular = popular => dispatch => {
+    axios
+        .post("/api/popular/", popular, {
+            headers: {
+                "X-CSRFTOKEN": Cookies.get("csrftoken")
+            }
+        })
+        .then(res => {
+            dispatch({
+                type: POST_LIST_POPULAR,
                 payload: res.data
             });
         })
@@ -69,4 +89,22 @@ export const getRecents = () => dispatch => {
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status));
         });
+};
+
+export const sendRecents = recents => dispatch => {
+    axios
+        .post("/api/recents/", recents, {
+            headers: {
+                "X-CSRFTOKEN": Cookies.get("csrftoken")
+            }
+        })
+        .then(res => {
+            dispatch({
+                type: POST_LIST_RECENTS,
+                payload: res.data
+            });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        })
 };

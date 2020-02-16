@@ -1,7 +1,7 @@
 import { GET_STATUS } from '../actions/types'
 
 const initialState = {
-    status: false
+    status: {}
 }
 
 export default function (state = initialState, action) {

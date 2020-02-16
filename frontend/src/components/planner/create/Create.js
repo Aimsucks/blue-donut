@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getRoute } from "../../../actions/route";
+import { sendRecents } from "../../../actions/lists"
 
 import {
     Row,
@@ -80,6 +81,9 @@ export class Create extends Component {
         to = to ? to.value : null;
         const plan = { character, from, to, avoid, confirm };
         this.props.getRoute(plan)
+        if (confirm && to) {
+            this.props.sendRecents({ to: to })
+        }
         this.setState({ confirm: false });
     }
 
@@ -276,4 +280,4 @@ const mapStateToProps = state => ({
     route: state.route.route
 });
 
-export default connect(mapStateToProps, { getRoute })(withRouter(Create));
+export default connect(mapStateToProps, { getRoute, sendRecents })(withRouter(Create));
