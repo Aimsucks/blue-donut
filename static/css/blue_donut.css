@@ -11,6 +11,10 @@
     visibility: hidden;
 }
 
+body {
+    padding-right: 0 !important;
+}
+
 .clickable-link {
     cursor: pointer;
 }

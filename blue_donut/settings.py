@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'frontend',
     'map',
     'planner',
+    'report',
 ]
 
 MIDDLEWARE = [

@@ -138,7 +138,6 @@ class Recents(APIView):
         if request.user.is_anonymous:
             return Response([None, None, None, None, None])
         favorites, recents = Lister().get_lists(request.user)
-        print(recents)
         return Response(recents)
 
     def post(self, request, format=None):

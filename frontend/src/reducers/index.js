@@ -9,6 +9,7 @@ import route from "./route";
 import popular from "./popular";
 import favorites from "./favorites";
 import recents from "./recents";
+import report from "./report"
 
 export default combineReducers({
     characters,
@@ -19,5 +20,6 @@ export default combineReducers({
     popular,
     favorites,
     recents,
-    route
+    route,
+    report
 });

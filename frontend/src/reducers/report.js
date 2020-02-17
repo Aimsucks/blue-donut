@@ -1,15 +1,15 @@
-import { GET_SYSTEMS } from "../actions/types.js";
+import { SEND_REPORT } from "../actions/types.js";
 
 const initialState = {
-    systems: []
+    report: {}
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case GET_SYSTEMS:
+        case SEND_REPORT:
             return {
                 ...state,
-                systems: action.payload
+                report: action.payload
             };
         default:
             return state;

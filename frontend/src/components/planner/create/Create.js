@@ -24,6 +24,7 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 import Select from "react-select";
 import { customStyles, flexCustomStyles } from "../../common/SelectStyle";
+import Report from "../report/Report";
 
 const checkboxStyle = {
     backgroundColor: "rgb(25,26,27)",
@@ -262,12 +263,8 @@ export class Create extends Component {
                         </Col>
                     </Row>
                     <Row className="px-2">
-                        <Col className="px-1">
-                            <small className="mt-1 ml-2">
-                                <a href="" className="text-info">
-                                    Report an incorrect jump gate.
-                                </a>
-                            </small>
+                        <Col>
+                            <Report />
                         </Col>
                     </Row>
                 </Form>
