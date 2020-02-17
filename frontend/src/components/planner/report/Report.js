@@ -1,12 +1,24 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState } from "react";
 
 import { connect } from "react-redux";
 import { sendReport } from "../../../actions/report";
 
-import { Modal, ModalHeader, ModalBody, Form, Row, Col, FormGroup, Label, Input, ModalFooter, Button } from 'reactstrap'
+import {
+    Modal,
+    ModalHeader,
+    ModalBody,
+    Form,
+    Row,
+    Col,
+    FormGroup,
+    Label,
+    Input,
+    ModalFooter,
+    Button
+} from "reactstrap";
 
-import { OutageType } from './OutageType'
-import { SystemPicker } from './SystemPicker'
+import { OutageType } from "./OutageType";
+import { SystemPicker } from "./SystemPicker";
 
 export class Report extends Component {
     constructor(props) {
@@ -14,15 +26,15 @@ export class Report extends Component {
         this.state = {
             modal: false,
             outageType: "offline",
-            incorrectFrom: "",
-            incorrectTo: "",
-            correctFrom: "",
-            correctTo: "",
+            incorrectFrom: null,
+            incorrectTo: null,
+            correctFrom: null,
+            correctTo: null,
             extraInformation: "",
             characterID: ""
         };
 
-        this.toggle = this.toggle.bind(this)
+        this.toggle = this.toggle.bind(this);
     }
 
     toggle() {
@@ -34,7 +46,7 @@ export class Report extends Component {
                 correctFrom: "",
                 correctTo: "",
                 extraInformation: ""
-            })
+            });
         }
         this.setState({
             modal: !this.state.modal
@@ -42,39 +54,32 @@ export class Report extends Component {
     }
 
     onValueChange(key, event) {
-        this.setState({ [key]: event.target.value })
+        this.setState({ [key]: event.target.value });
+    }
+
+    onSelectChange(key, value) {
+        console.log(key, value);
+        // this.setState({ [key]: value });
     }
 
     onFormSubmit() {
         this.setState({
             characterID: localStorage.getItem("activeCharacter")
-        })
+        });
         if (this.state.characterID) {
-            this.props.sendReport(this.state)
+            this.props.sendReport(this.state);
         }
-        this.toggle()
-    }
-
-    onSubmit = e => {
-        e.preventDefault();
-        let character = localStorage.getItem("activeCharacter");
-        let { from, to, avoid, confirm } = this.state;
-        if (avoid) avoid = avoid.map(a => a.value);
-        if (from) from = from.value;
-        to = to ? to.value : null;
-        const plan = { character, from, to, avoid, confirm };
-        this.props.getRoute(plan)
-        if (confirm && to) {
-            this.props.sendRecents({ to: to })
-        }
-        this.setState({ confirm: false });
+        this.toggle();
     }
 
     render() {
         return (
             <>
                 <small>
-                    <a className="text-info clickable-link" onClick={this.toggle}>
+                    <a
+                        className="text-info clickable-link"
+                        onClick={this.toggle}
+                    >
                         Report an incorrect jump gate.
                     </a>
                 </small>
@@ -87,50 +92,89 @@ export class Report extends Component {
                             <Row form>
                                 <Col md="12">
                                     <FormGroup>
-                                        <OutageType value={this.state.outageType} onValueChange={this.onValueChange.bind(this, 'outageType')} />
+                                        <OutageType
+                                            value={this.state.outageType}
+                                            onValueChange={this.onValueChange.bind(
+                                                this,
+                                                "outageType"
+                                            )}
+                                        />
                                     </FormGroup>
                                 </Col>
                             </Row>
-                            {["offline", "fuel", "incorrect", "loopback", "missingTool"].includes(this.state.outageType) ?
+                            {[
+                                "offline",
+                                "fuel",
+                                "incorrect",
+                                "loopback",
+                                "missingTool"
+                            ].includes(this.state.outageType) ? (
                                 <SystemPicker
                                     incorrect
                                     name="incorrect"
                                     from={this.state.incorrectFrom}
-                                    handleFrom={this.onValueChange.bind(this, 'incorrectFrom')}
+                                    onSelectChangeFrom={this.onSelectChange(
+                                        "incorrectFrom"
+                                    )}
                                     to={this.state.incorrectTo}
-                                    handleTo={this.onValueChange.bind(this, 'incorrectTo')} />
-                                : null}
-                            {["incorrect", "missingIngame"].includes(this.state.outageType) ?
+                                    onSelectChangeTo={this.onSelectChange(
+                                        "incorrectTo"
+                                    )}
+                                />
+                            ) : null}
+                            {["incorrect", "missingIngame"].includes(
+                                this.state.outageType
+                            ) ? (
                                 <SystemPicker
                                     name="correct"
                                     from={this.state.correctFrom}
-                                    handleFrom={this.onValueChange.bind(this, 'correctFrom')}
+                                    handleFrom={this.onSelectChange.bind(
+                                        this,
+                                        "correctFrom"
+                                    )}
                                     to={this.state.correctTo}
-                                    handleTo={this.onValueChange.bind(this, 'correctTo')} />
-                                : null}
+                                    handleTo={this.onSelectChange.bind(
+                                        this,
+                                        "correctTo"
+                                    )}
+                                />
+                            ) : null}
                             <Row form>
                                 <Col md="12">
                                     <FormGroup>
-                                        <Label for="extraInformation">Extra Information</Label>
+                                        <Label for="extraInformation">
+                                            Extra Information
+                                        </Label>
                                         <Input
                                             type="textarea"
                                             name="extraInformation"
                                             id="extraInformation"
                                             value={this.state.extraInformation}
-                                            onChange={this.onValueChange.bind(this, 'extraInformation')} />
+                                            onChange={this.onValueChange.bind(
+                                                this,
+                                                "extraInformation"
+                                            )}
+                                        />
                                     </FormGroup>
                                 </Col>
                             </Row>
                         </Form>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={() => this.onFormSubmit()}>Submit</Button>
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        <Button
+                            color="primary"
+                            onClick={() => this.onFormSubmit()}
+                        >
+                            Submit
+                        </Button>
+                        <Button color="secondary" onClick={this.toggle}>
+                            Cancel
+                        </Button>
                     </ModalFooter>
                 </Modal>
             </>
-        )
+        );
     }
 }
 
-export default connect(null, { sendReport })(Report)
+export default connect(null, { sendReport })(Report);
