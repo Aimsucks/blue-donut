@@ -8,9 +8,6 @@ from django.dispatch import receiver
 
 from eve_esi import ESI
 
-"""
-Add a datetime field to a user so I can check their alliance and corp every day or so.
-"""
 
 class EVEData(models.Model):
     user = models.OneToOneField(User, models.CASCADE, primary_key=True,

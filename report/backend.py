@@ -9,7 +9,7 @@ hook = Webhook(settings.WEBHOOK_URL)
 
 
 class ReportBackend:
-    def send_webhook(self, request, status):
+    def send_webhook(self, request, status=None):
 
         # Get character object from database and process report
         character = request.user.characters.get(character_id=int(
@@ -23,7 +23,7 @@ class ReportBackend:
             embedDescription = "A jump gate is out of fuel. Please contact " \
                 "the owner to rectify the situation."
         elif request.POST['outageType'] == "incorrect":
-            embedDescription = "A pair of jump gates is correct. Use " \
+            embedDescription = "A pair of jump gates is incorrect. Use " \
                 "addional information or check ingame to verify the report " \
                 "is correct and fix the error."
         elif request.POST['outageType'] == "loopback":
@@ -49,9 +49,19 @@ class ReportBackend:
             request.POST['characterID'] + "_32.jpg"
         footer_icon = "https://bluedonut.space/static/img/favicon.png"
 
+        if not request.POST['correctFromSystem']:
+            fromSystem = request.POST['plannerFromSystem']
+        else:
+            fromSystem = request.POST['correctFromSystem']
+
+        if not request.POST['correctToSystem']:
+            toSystem = request.POST['plannerToSystem']
+        else:
+            toSystem = request.POST['correctToSystem']
+
         embed.set_author(name=character.name, icon_url=submitter_icon)
-        embed.add_field(name="From System", value=request.POST['correctFromSystem'])
-        embed.add_field(name="To System", value=request.POST['correctToSystem'])
+        embed.add_field(name="From System", value=fromSystem)
+        embed.add_field(name="To System", value=toSystem)
         embed.set_footer(text="Blue Donut", icon_url=footer_icon)
 
         if request.POST['extraInformation']:
