@@ -4,6 +4,7 @@ import json
 
 from django.utils import timezone
 from django.conf import settings
+from django.db.utils import OperationalError
 
 from esi import ESI
 from map.models import System, Gate
@@ -62,10 +63,13 @@ class GraphGenerator:
         return path
 
     def update_graph(self):
-        G.clear()
-        G.add_nodes_from(System.objects.values_list('id', flat=True))
-        G.add_edges_from(Gate.objects.values_list('from_system__id', 'to_system__id'), type="gate")
-        G.add_edges_from(Bridge.objects.values_list('from_system__id', 'to_system__id'), type="bridge")
+        try:
+            G.clear()
+            G.add_nodes_from(System.objects.values_list('id', flat=True))
+            G.add_edges_from(Gate.objects.values_list('from_system__id', 'to_system__id'), type="gate")
+            G.add_edges_from(Bridge.objects.values_list('from_system__id', 'to_system__id'), type="bridge")
+        except OperationalError:
+            return
         return
 
     def send_route(self, character, route):

@@ -31,12 +31,12 @@
 
 ## Installation
 
+Configure everything in the `local.py` file in `blue_donut`.
+
 Install Poetry and then install the requirements.
 
 ```commandline
-pip install poetry
 poetry install
-
 npm i
 ```
 
@@ -46,7 +46,7 @@ Make the bundle, run migrations, and populate the database.
 npm run dev
 
 poetry run python manage.py migrate
-poetry run python manage.py sde_get_map
+poetry run python manage.py download_sde
 ```
 
 Finally, run the server.
