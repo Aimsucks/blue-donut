@@ -33,7 +33,7 @@ class ReportBackend:
                 "the owner to rectify the situation."
             which_gates = True
         elif request.data['outageType'] == "incorrect":
-            embed_description = "A pair of jump gates is correct. Use " \
+            embed_description = "A pair of jump gates is incorrect. Use " \
                 "addional information or check ingame to verify the report " \
                 "is correct and fix the error."
             which_gates = False
