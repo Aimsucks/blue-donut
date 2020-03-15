@@ -19,6 +19,7 @@ import {
 
 import { OutageType } from "./OutageType";
 import { SystemPicker } from "./SystemPicker";
+import { faThList } from "@fortawesome/free-solid-svg-icons";
 
 export class Report extends Component {
     constructor(props) {
@@ -35,6 +36,7 @@ export class Report extends Component {
         };
 
         this.toggle = this.toggle.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
     }
 
     toggle() {
@@ -57,17 +59,24 @@ export class Report extends Component {
         this.setState({ [key]: event.target.value });
     }
 
-    onSelectChange(key, value) {
-        console.log(key, value);
-        // this.setState({ [key]: value });
-    }
+    onSelectChange = name => value => {
+        this.setState({ [name]: value });
+    };
 
     onFormSubmit() {
         this.setState({
             characterID: localStorage.getItem("activeCharacter")
         });
         if (this.state.characterID) {
-            this.props.sendReport(this.state);
+            this.props.sendReport({
+                outageType: this.state.outageType,
+                incorrectFrom: this.state.incorrectFrom.value,
+                incorrectTo: this.state.incorrectTo.value,
+                correctFrom: this.state.correctFrom.value,
+                correctTo: this.state.correctTo.value,
+                extraInformation: this.state.extraInformation,
+                characterID: this.state.characterID
+            });
         }
         this.toggle();
     }

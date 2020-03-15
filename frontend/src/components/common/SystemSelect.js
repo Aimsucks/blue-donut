@@ -23,8 +23,7 @@ export class SystemSelect extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showOptions: false,
-            selectedOption: null
+            showOptions: false
         };
     }
 
@@ -40,22 +39,14 @@ export class SystemSelect extends Component {
         }
     };
 
-    onChange = selectedOption => {
-        this.setState({ selectedOption }, () =>
-            console.log(`Option selected: ${this.state.selectedOption}`)
-        );
-    };
-
     render() {
-        const { selectedOption } = this.state;
         return (
             <>
                 {this.props.systems.length ? (
                     <Select
                         id={this.props.name + "Select"}
                         name={this.props.name}
-                        // value={this.props.selectedOption}
-                        value={selectedOption}
+                        value={this.props.value}
                         options={
                             this.state.showOptions
                                 ? this.props.systems.map(t => ({
@@ -64,8 +55,7 @@ export class SystemSelect extends Component {
                                   }))
                                 : []
                         }
-                        // onChange={this.props.onSelectChange}
-                        onChange={this.onChange}
+                        onChange={this.props.onSelectChange}
                         onInputChange={this.onInputChange}
                         components={{
                             DropdownIndicator: () => null

@@ -6,7 +6,6 @@ import SystemSelect from "../../common/SystemSelect";
 
 export class SystemPicker extends Component {
     render() {
-        console.log(this.props.to);
         return (
             <>
                 <Row form>
@@ -30,17 +29,9 @@ export class SystemPicker extends Component {
                             <Label for={this.props.name + "FromSystem"}>
                                 From
                             </Label>
-                            {/* <Input
-                                type="text"
-                                name={this.props.name + "From"}
-                                id={this.props.name + "FromSystem"}
-                                placeholder="System name"
-                                value={this.props.from}
-                                onChange={this.props.handleFrom}
-                            /> */}
                             <SystemSelect
                                 name={this.props.name + "FromSystem"}
-                                selectedOption={this.props.from}
+                                value={this.props.from}
                                 onSelectChange={this.props.onSelectChangeFrom}
                                 placeholder="System"
                             />
@@ -49,17 +40,9 @@ export class SystemPicker extends Component {
                     <Col md="6">
                         <FormGroup>
                             <Label for={this.props.name + "ToSystem"}>To</Label>
-                            {/* <Input
-                                type="text"
-                                name={this.props.name + "To"}
-                                id={this.props.name + "ToSystem"}
-                                placeholder="System name"
-                                value={this.props.to}
-                                onChange={this.props.handleTo}
-                            /> */}
                             <SystemSelect
                                 name={this.props.name + "ToSystem"}
-                                selectedOption={this.props.to}
+                                value={this.props.to}
                                 onSelectChange={this.props.onSelectChangeTo}
                                 placeholder="System"
                             />

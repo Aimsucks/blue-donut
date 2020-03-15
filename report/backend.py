@@ -10,8 +10,8 @@ hook = Webhook(settings.WEBHOOK_URL)
 
 class ReportBackend:
     def send_webhook(self, request):
-        if not ((request.data['incorrectFrom'] and request.data['incorrectTo'])
-                or (request.data['correctFrom'] and request.data['correctTo'])):
+        if not (('incorrectFrom' in request.data.keys() and 'incorrectTo' in request.data.keys())
+                or ('correctFrom' in request.data.keys() and 'correctTo' in request.data.keys())):
             return 400, "Missing information"
 
         status = self.update_gate(request)
@@ -20,38 +20,7 @@ class ReportBackend:
         character = request.user.characters.get(character_id=int(
             request.data['characterID']))
 
-        # True to show incorrect gates in Discord hook, false to show correct ones
-        which_gates = True
-
-        # I really have no idea how to do this better
-        if request.data['outageType'] == "offline":
-            embed_description = "A jump gate is offline. Please contact the " \
-                "owner to rectify the situation."
-            which_gates = True
-        elif request.data['outageType'] == "fuel":
-            embed_description = "A jump gate is out of fuel. Please contact " \
-                "the owner to rectify the situation."
-            which_gates = True
-        elif request.data['outageType'] == "incorrect":
-            embed_description = "A pair of jump gates is incorrect. Use " \
-                "addional information or check ingame to verify the report " \
-                "is correct and fix the error."
-            which_gates = False
-        elif request.data['outageType'] == "loopback":
-            embed_description = "A jump gate has been moved but remains " \
-                "in the same system. Please update the structure ID."
-            which_gates = True
-        elif request.data['outageType'] == "missingTool":
-            embed_description = "A jump gate is missing. Check ingame " \
-                "and with logistics teams to see where it disappeared to."
-            which_gates = True
-        elif request.data['outageType'] == "missingIngame":
-            embed_description = "Blue Donut is missing a jump bridge that " \
-                "appears ingame."
-            which_gates = False
-        else:
-            embed_description = "There was a script error parsing the outage " \
-                "type."
+        embed_description = self.set_description(request.data["outageType"])
 
         embed = Embed(
             description=embed_description,
@@ -61,18 +30,25 @@ class ReportBackend:
 
         submitter_icon = "https://image.eveonline.com/Character/" + \
             str(character.character_id) + "_32.jpg"
-        footer_icon = "https://bluedonut.space/static/img/favicon.png"
-
         embed.set_author(name=character.name, icon_url=submitter_icon)
-        if which_gates:
-            embed.add_field(name="From System", value=request.data['incorrectFrom'])
-            embed.add_field(name="To System", value=request.data['incorrectTo'])
+
+        if 'correctFrom' not in request.data.keys():
+            fromSystem = request.data['incorrectFrom']
         else:
-            embed.add_field(name="From System", value=request.data['correctFrom'])
-            embed.add_field(name="To System", value=request.data['correctTo'])
+            fromSystem = request.data['correctFrom']
+
+        if 'correctTo' not in request.data.keys():
+            toSystem = request.data['incorrectTo']
+        else:
+            toSystem = request.data['correctTo']
+
+        embed.add_field(name="From System", value=fromSystem)
+        embed.add_field(name="To System", value=toSystem)
+
+        footer_icon = "https://bluedonut.space/static/img/favicon.png"
         embed.set_footer(text="Blue Donut", icon_url=footer_icon)
 
-        if request.data['extraInformation']:
+        if 'extraInformation' in request.data.keys():
             embed.add_field(name="Extra Information",
                             value=request.data['extraInformation'],
                             inline=False)
@@ -85,6 +61,32 @@ class ReportBackend:
         hook.send(embed=embed)
 
         return 200, "Report successful"
+
+    def set_description(self, outage):
+        if outage == "offline":
+            embed_description = "A jump gate is offline. Please contact the " \
+                "owner to rectify the situation."
+        elif outage == "fuel":
+            embed_description = "A jump gate is out of fuel. Please contact " \
+                "the owner to rectify the situation."
+        elif outage == "incorrect":
+            embed_description = "A pair of jump gates is incorrect. Use " \
+                "addional information or check ingame to verify the report " \
+                "is correct and fix the error."
+        elif outage == "loopback":
+            embed_description = "A jump gate has been moved but remains " \
+                "in the same system. Please update the structure ID."
+        elif outage == "missingTool":
+            embed_description = "A jump gate is missing. Check ingame " \
+                "and with logistics teams to see where it disappeared to."
+        elif outage == "missingIngame":
+            embed_description = "Blue Donut is missing a jump bridge that " \
+                "appears ingame."
+        else:
+            embed_description = "There was a script error parsing the outage " \
+                "type."
+
+        return embed_description
 
     def update_gate(self, request):
         """
@@ -105,7 +107,7 @@ class ReportBackend:
             return
 
         # We can't help people who don't give us the corrected gate
-        if not (request.data["correctFrom"] and request.data["correctTo"]):
+        if not ("correctFrom" in request.data.keys() and "correctTo" in request.data.keys()):
             return "Cannot take further action because report is missing corrected systems."
 
         # Check if any of their characters have the required scopes

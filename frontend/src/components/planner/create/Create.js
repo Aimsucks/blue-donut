@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getRoute } from "../../../actions/route";
-import { sendRecents } from "../../../actions/lists"
+import { sendRecents } from "../../../actions/lists";
 
 import {
     Row,
@@ -64,9 +64,7 @@ export class Create extends Component {
     }
 
     onChange = name => value => {
-        name !== "avoid"
-            ? this.setState({ [name]: value })
-            : this.setState({ [name]: value });
+        this.setState({ [name]: value });
     };
 
     handleConfirmButton = () => {
@@ -81,12 +79,12 @@ export class Create extends Component {
         if (from) from = from.value;
         to = to ? to.value : null;
         const plan = { character, from, to, avoid, confirm };
-        this.props.getRoute(plan)
+        this.props.getRoute(plan);
         if (confirm && to) {
-            this.props.sendRecents({ to: to })
+            this.props.sendRecents({ to: to });
         }
         this.setState({ confirm: false });
-    }
+    };
 
     handleSelectInputChange = typedOption => {
         if (typedOption.length > 2) {
@@ -144,9 +142,9 @@ export class Create extends Component {
                                         options={
                                             this.state.showOptions
                                                 ? this.props.systems.map(t => ({
-                                                    value: t,
-                                                    label: t
-                                                }))
+                                                      value: t,
+                                                      label: t
+                                                  }))
                                                 : []
                                         }
                                         onInputChange={
@@ -166,8 +164,12 @@ export class Create extends Component {
                                         isDisabled={!this.state.isChecked}
                                     />
                                 ) : (
-                                        <Input name="from" placeholder="Origin" disabled />
-                                    )}
+                                    <Input
+                                        name="from"
+                                        placeholder="Origin"
+                                        disabled
+                                    />
+                                )}
                             </InputGroup>
                         </Col>
                         <Col md="6" className="px-1">
@@ -179,9 +181,9 @@ export class Create extends Component {
                                     options={
                                         this.state.showOptions
                                             ? this.props.systems.map(t => ({
-                                                value: t,
-                                                label: t
-                                            }))
+                                                  value: t,
+                                                  label: t
+                                              }))
                                             : []
                                     }
                                     onChange={this.onChange("to")}
@@ -199,8 +201,8 @@ export class Create extends Component {
                                     placeholder="Destination"
                                 />
                             ) : (
-                                    <Input name="to" placeholder="Destination" />
-                                )}
+                                <Input name="to" placeholder="Destination" />
+                            )}
                         </Col>
                     </Row>
                     <Row className="px-2 pt-2">
@@ -214,9 +216,9 @@ export class Create extends Component {
                                     options={
                                         this.state.showOptions
                                             ? this.props.systems.map(t => ({
-                                                value: t,
-                                                label: t
-                                            }))
+                                                  value: t,
+                                                  label: t
+                                              }))
                                             : []
                                     }
                                     onChange={this.onChange("avoid")}
@@ -234,11 +236,11 @@ export class Create extends Component {
                                     placeholder="Excluded systems"
                                 />
                             ) : (
-                                    <Input
-                                        name="excludedSystem"
-                                        placeholder="Excluded systems"
-                                    />
-                                )}
+                                <Input
+                                    name="excludedSystem"
+                                    placeholder="Excluded systems"
+                                />
+                            )}
                         </Col>
                         <Col md="3" className="px-1">
                             <Button
@@ -277,4 +279,6 @@ const mapStateToProps = state => ({
     route: state.route.route
 });
 
-export default connect(mapStateToProps, { getRoute, sendRecents })(withRouter(Create));
+export default connect(mapStateToProps, { getRoute, sendRecents })(
+    withRouter(Create)
+);
