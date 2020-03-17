@@ -7,6 +7,10 @@
     background-color: #222222;
 }
 
+hr {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !IMPORTANT;
+}
+
 .invisible {
     visibility: hidden;
 }
@@ -69,7 +73,7 @@ body {
     flex-grow: 1;
 }
 
-.navbar-light .navbar-nav .active > .nav-link {
+.navbar-light .navbar-nav .active>.nav-link {
     color: #fff !important;
 }
 

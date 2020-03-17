@@ -1,5 +1,8 @@
 import React from "react";
 
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 import {
     Collapse,
     Navbar,
@@ -24,6 +27,10 @@ export class Header extends React.Component {
             isOpen: false
         };
     }
+
+    static propTypes = {
+        status: PropTypes.object.isRequired
+    };
 
     toggle() {
         this.setState({
@@ -64,6 +71,16 @@ export class Header extends React.Component {
                                         Appraisal
                                     </NavLink>
                                 </NavItem>
+                                {this.props.status.is_staff && (
+                                    <NavItem>
+                                        <NavLink
+                                            to="/admin"
+                                            className="nav-link"
+                                        >
+                                            Admin
+                                        </NavLink>
+                                    </NavItem>
+                                )}
                             </Nav>
                             <Nav className="ml-auto" navbar>
                                 <Account />
@@ -76,4 +93,8 @@ export class Header extends React.Component {
     }
 }
 
-export default Header;
+const mapStateToProps = state => ({
+    status: state.status.status
+});
+
+export default connect(mapStateToProps)(Header);

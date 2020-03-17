@@ -16,6 +16,7 @@ import Alerts from "./layout/Alerts";
 import Home from "./home/Home";
 import Login from "./login/Login";
 import Planner from "./planner/Planner";
+import Admin from "./admin/Admin";
 import Error from "./error/Error";
 
 // Alert options
@@ -42,6 +43,7 @@ class App extends Component {
                                     path="/planner"
                                     component={Planner}
                                 />
+                                <Route exact path="/admin" component={Admin} />
                                 <Route component={Error} />
                             </Switch>
                             <div className="extra-space"></div>
