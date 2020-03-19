@@ -8,5 +8,6 @@ urlpatterns = [
     path('', include('bridges.urls')),
     path('', include('map.urls')),
     path('', include('report.urls')),
+    path('', include('management.urls')),
     path('', include('frontend.urls')),
 ]

@@ -1,7 +1,7 @@
 {
-  "name": "blue_donut_v2",
+  "name": "blue_donut",
   "version": "1.0.0",
-  "description": "<h1 align=\"center\">Blue Donut</h1>",
+  "description": "Tools to help Legacy Coalition members live in their space.",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode development --watch ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
@@ -48,7 +48,6 @@
     "react-router-dom": "^5.1.2",
     "react-select": "^3.0.8",
     "react-transition-group": "^4.3.0",
-    "react-windowed-select": "^2.0.2",
     "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
