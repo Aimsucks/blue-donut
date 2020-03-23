@@ -9,5 +9,7 @@ urlpatterns = [
     path('', include('map.urls')),
     path('', include('report.urls')),
     path('', include('management.urls')),
+    path('', include('feedback.urls')),
     path('', include('frontend.urls')),
+
 ]

@@ -21,3 +21,7 @@ export const SEND_REPORT = "SEND_REPORT";
 
 export const GET_STATISTICS = "GET_STATISTICS";
 export const SEND_BRIDGES = "SEND_BRIDGES";
+
+export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
+export const HIDE_FEEDBACK = "HIDE_FEEDBACK";
+export const SEND_FEEDBACK = "SEND_FEEDBACK";

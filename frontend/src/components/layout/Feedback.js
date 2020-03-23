@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { hideFeedback, sendFeedback } from "../../actions/feedback";
 
 import {
     Modal,
@@ -8,6 +10,7 @@ import {
     Row,
     Col,
     FormGroup,
+    CustomInput,
     Label,
     Input,
     ModalFooter,
@@ -15,17 +18,109 @@ import {
 } from "reactstrap";
 
 export class Feedback extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            experience: "good",
+            feedback: ""
+        };
+    }
+
+    onChange(key, event) {
+        this.setState({
+            [key]: event.target.value
+        });
+    }
+
+    onFormSubmit() {
+        this.props.sendFeedback({
+            experience: this.state.experience,
+            feedback: this.state.feedback,
+            characterID: localStorage.getItem("activeCharacter")
+        });
+        this.props.hideFeedback();
+        this.setState({
+            experience: "good",
+            feedback: ""
+        });
+    }
+
     render() {
         return (
             <>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Feedback</ModalHeader>
+                <Modal isOpen={this.props.show}>
+                    <ModalHeader>Feedback</ModalHeader>
                     <ModalBody>
-                        <p>Hello!</p>
+                        <Form>
+                            <Row form>
+                                <Col md="12">
+                                    <FormGroup>
+                                        <Label for="experience">
+                                            How was your experience?
+                                        </Label>
+                                        <CustomInput
+                                            type="radio"
+                                            id="bad"
+                                            label="Bad"
+                                            name="experienceRadio"
+                                            checked={
+                                                this.state.experience === "bad"
+                                            }
+                                            onChange={this.onChange.bind(
+                                                this,
+                                                "experience"
+                                            )}
+                                            value="bad"
+                                        />
+                                        <CustomInput
+                                            type="radio"
+                                            id="good"
+                                            label="Good"
+                                            name="experienceRadio"
+                                            checked={
+                                                this.state.experience === "good"
+                                            }
+                                            onChange={this.onChange.bind(
+                                                this,
+                                                "experience"
+                                            )}
+                                            value="good"
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row form>
+                                <Col md="12">
+                                    <FormGroup>
+                                        <Label for="experience">Feedback</Label>
+                                        <Input
+                                            type="textarea"
+                                            maxLength="2000"
+                                            rows="4"
+                                            value={this.state.feedback}
+                                            onChange={this.onChange.bind(
+                                                this,
+                                                "feedback"
+                                            )}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Form>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary">Submit</Button>
-                        <Button color="secondary">Cancel</Button>
+                        <Button
+                            color="primary"
+                            onClick={() => this.onFormSubmit()}
+                        >
+                            Submit
+                        </Button>
+                        <Button
+                            color="secondary"
+                            onClick={this.props.hideFeedback}
+                        >
+                            Cancel
+                        </Button>
                     </ModalFooter>
                 </Modal>
             </>
@@ -33,4 +128,10 @@ export class Feedback extends Component {
     }
 }
 
-export default Feedback;
+const mapStateToProps = state => ({
+    show: state.feedback.show
+});
+
+export default connect(mapStateToProps, { hideFeedback, sendFeedback })(
+    Feedback
+);

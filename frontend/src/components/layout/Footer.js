@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Navbar, Container, Nav, NavItem, NavLink } from "reactstrap";
+import { connect } from "react-redux";
+import { showFeedback } from "../../actions/feedback";
+
+import {
+    Navbar,
+    Container,
+    Nav,
+    NavItem,
+    NavLink,
+    UncontrolledTooltip
+} from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { faMugHot } from "@fortawesome/free-solid-svg-icons";
+import { faMugHot, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 
 export class Footer extends React.Component {
     render() {
@@ -42,38 +52,78 @@ export class Footer extends React.Component {
                                 <NavItem>
                                     <NavLink
                                         className="px-2"
+                                        onClick={this.props.showFeedback}
+                                        href="#"
+                                        id="feedback"
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faCommentDots}
+                                            size="2x"
+                                        />
+                                    </NavLink>
+                                    <UncontrolledTooltip
+                                        placement="top"
+                                        target={"feedback"}
+                                    >
+                                        Feedback
+                                    </UncontrolledTooltip>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink
+                                        className="px-2"
                                         href="https://ko-fi.com/aimsucks"
                                         target="_blank"
+                                        id="donate"
                                     >
                                         <FontAwesomeIcon
                                             icon={faMugHot}
                                             size="2x"
                                         />
                                     </NavLink>
+                                    <UncontrolledTooltip
+                                        placement="top"
+                                        target={"donate"}
+                                    >
+                                        Donate
+                                    </UncontrolledTooltip>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink
                                         className="px-2"
                                         href="https://github.com/Aimsucks/blue-donut"
                                         target="_blank"
+                                        id="github"
                                     >
                                         <FontAwesomeIcon
                                             icon={faGithub}
                                             size="2x"
                                         />
                                     </NavLink>
+                                    <UncontrolledTooltip
+                                        placement="top"
+                                        target={"github"}
+                                    >
+                                        GitHub
+                                    </UncontrolledTooltip>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink
                                         className="px-2"
                                         href="https://discord.gg/UCK8ase"
                                         target="_blank"
+                                        id="discord"
                                     >
                                         <FontAwesomeIcon
                                             icon={faDiscord}
                                             size="2x"
                                         />
                                     </NavLink>
+                                    <UncontrolledTooltip
+                                        placement="top"
+                                        target={"discord"}
+                                    >
+                                        Discord
+                                    </UncontrolledTooltip>
                                 </NavItem>
                             </Nav>
                         </Container>
@@ -84,4 +134,4 @@ export class Footer extends React.Component {
     }
 }
 
-export default Footer;
+export default connect(null, { showFeedback })(Footer);

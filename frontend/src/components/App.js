@@ -11,6 +11,8 @@ import AlertTemplate from "react-alert-template-basic";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 
+import Feedback from "./layout/Feedback";
+
 import Alerts from "./layout/Alerts";
 
 import Home from "./home/Home";
@@ -19,7 +21,6 @@ import Planner from "./planner/Planner";
 import Manager from "./manager/Manager";
 import Error from "./error/Error";
 
-// Alert options
 const alertOptions = {
     timeout: 3000,
     position: "top center",
@@ -52,6 +53,7 @@ class App extends Component {
                             </Switch>
                             <div className="extra-space"></div>
                             <Footer />
+                            <Feedback />
                         </>
                     </Router>
                 </AlertProvider>

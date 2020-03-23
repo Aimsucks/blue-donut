@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 from dhooks import Webhook, Embed
 hook = Webhook(settings.FEEDBACK_WEBHOOK)
@@ -12,15 +13,25 @@ class Feedback(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+
+        if request.data["experience"] == "good":
+            color = (0x00bc8c)
+        elif request.data["experience"] == "bad":
+            color = (0xE74C3C)
+
+        print(request.data)
         embed = Embed(
-            description=request.data["textarea"],
-            color=0x375A7F,
+            description=request.data["feedback"],
             timestamp='now',
-            title="Feedback"
+            color=color
         )
 
-        character = request.user.characters.get(character_id=int(
-            request.data['characterID']))
+        try:
+            character = request.user.characters.get(character_id=int(
+                request.data['characterID']))
+        except ObjectDoesNotExist:
+            return Response(status=400, data="Need to be logged in")
+
         submitter_icon = "https://image.eveonline.com/Character/" + \
             str(character.character_id) + "_32.jpg"
         embed.set_author(name=character.name, icon_url=submitter_icon)
@@ -30,4 +41,4 @@ class Feedback(APIView):
 
         hook.send(embed=embed)
 
-        return Response(status=200, data="Okay!")
+        return Response(status=200, data="Submitted")

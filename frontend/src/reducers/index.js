@@ -12,6 +12,7 @@ import recents from "./recents";
 import report from "./report";
 import statistics from "./statistics";
 import bridges from "./bridges";
+import feedback from "./feedback";
 
 export default combineReducers({
     characters,
@@ -25,5 +26,6 @@ export default combineReducers({
     route,
     report,
     statistics,
-    bridges
+    bridges,
+    feedback
 });
