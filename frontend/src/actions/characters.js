@@ -26,22 +26,3 @@ export const getCharacters = () => dispatch => {
             dispatch(returnErrors(err.response.data, err.response.status));
         });
 };
-
-// axios.defaults.xsrfCookieName = "csrftoken";
-// axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-
-// export const updateActive = id => dispatch => {
-//     axios
-//         .patch("/api/characters/", id, {
-//             headers: {
-//                 "X-CSRFTOKEN": cookie.load("csrftoken")
-//             }
-//         })
-//         .then(res => {
-//             dispatch({
-//                 type: UPDATE_ACTIVE,
-//                 payload: res.data
-//             });
-//         })
-//         .catch(err => console.log(err));
-// };

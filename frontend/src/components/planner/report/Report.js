@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { sendReport } from "../../../actions/report";
@@ -64,20 +64,15 @@ export class Report extends Component {
     };
 
     onFormSubmit() {
-        this.setState({
+        this.props.sendReport({
+            outageType: this.state.outageType,
+            incorrectFrom: this.state.incorrectFrom.value,
+            incorrectTo: this.state.incorrectTo.value,
+            correctFrom: this.state.correctFrom.value,
+            correctTo: this.state.correctTo.value,
+            extraInformation: this.state.extraInformation,
             characterID: localStorage.getItem("activeCharacter")
         });
-        if (this.state.characterID) {
-            this.props.sendReport({
-                outageType: this.state.outageType,
-                incorrectFrom: this.state.incorrectFrom.value,
-                incorrectTo: this.state.incorrectTo.value,
-                correctFrom: this.state.correctFrom.value,
-                correctTo: this.state.correctTo.value,
-                extraInformation: this.state.extraInformation,
-                characterID: this.state.characterID
-            });
-        }
         this.toggle();
     }
 
