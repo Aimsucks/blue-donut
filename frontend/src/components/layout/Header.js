@@ -74,10 +74,10 @@ export class Header extends React.Component {
                                 {this.props.status.is_staff && (
                                     <NavItem>
                                         <NavLink
-                                            to="/admin"
+                                            to="/manager"
                                             className="nav-link"
                                         >
-                                            Admin
+                                            Manager
                                         </NavLink>
                                     </NavItem>
                                 )}
