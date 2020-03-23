@@ -20,3 +20,4 @@ export const POST_LIST_RECENTS = "POST_LIST_RECENTS";
 export const SEND_REPORT = "SEND_REPORT";
 
 export const GET_STATISTICS = "GET_STATISTICS";
+export const SEND_BRIDGES = "SEND_BRIDGES";

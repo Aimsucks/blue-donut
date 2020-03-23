@@ -9,7 +9,8 @@ export class Export extends Component {
                 <Row>
                     <Col>
                         <h2>Export</h2>
-                        <Row>
+                        <p>Temporarily disabled.</p>
+                        {/* <Row>
                             <Col md="6">
                                 <h4>JSON</h4>
                                 <Row>
@@ -40,7 +41,7 @@ export class Export extends Component {
                                     </Col>
                                 </Row>
                             </Col>
-                        </Row>
+                        </Row> */}
                     </Col>
                 </Row>
             </>

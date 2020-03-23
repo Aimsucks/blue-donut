@@ -11,6 +11,7 @@ import favorites from "./favorites";
 import recents from "./recents";
 import report from "./report";
 import statistics from "./statistics";
+import bridges from "./bridges";
 
 export default combineReducers({
     characters,
@@ -23,5 +24,6 @@ export default combineReducers({
     recents,
     route,
     report,
-    statistics
+    statistics,
+    bridges
 });

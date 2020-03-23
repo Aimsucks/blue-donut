@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getStatistics } from "../../actions/admin";
+import { getStatistics } from "../../actions/manager";
 
 import { Row, Col, Table } from "reactstrap";
 

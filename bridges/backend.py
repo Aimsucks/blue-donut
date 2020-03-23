@@ -1,9 +1,13 @@
 from esi import ESI
 from django.db import transaction
+from django.core.exceptions import ObjectDoesNotExist
 from auth.models import EVEUser
 from bridges.models import Bridge
 from map.models import System
 import random
+import re
+
+from rest_framework.response import Response
 
 import logging
 logger = logging.getLogger(__name__)
@@ -13,6 +17,46 @@ search_string = " » "
 
 
 class BridgesBackend:
+    def manual_update(self, data):
+        items = re.findall(r"(\d{13})\s([a-zA-Z0-9-]{6})\s-->\s([a-zA-Z0-9-]{6})", data)
+        bridges = [{"id": int(x[0]), "from": x[1], "to": x[2]} for x in items]
+        new_bridges = []
+        for bridge in bridges:
+            try:
+                from_system = System.objects.get(name=bridge["from"])
+            except ObjectDoesNotExist:
+                return Response(status=400, data=f'System {bridge["from"]} does not exist')
+
+            try:
+                to_system = System.objects.get(name=bridge["to"])
+            except ObjectDoesNotExist:
+                return Response(status=400, data=f'System {bridge["to"]} does not exist')
+
+            new_bridges.append({
+                "id": bridge["id"],
+                "from": from_system,
+                "to": to_system,
+            })
+
+        new_bridges = self.check_anomalies(new_bridges)
+
+        Bridge.objects.all().delete()
+        with transaction.atomic():
+            print(f'Beginning to add {len(new_bridges)} bridges to database...')
+            for index, bridge in enumerate(new_bridges):
+                Bridge(
+                    id=bridge['id'],
+                    from_system=bridge['from'],
+                    to_system=bridge['to'],
+                ).save()
+                print(
+                    f'    Progress: {index} out of approximately {len(new_bridges)}\r',
+                    end=''
+                )
+            print(f'\nFinished adding {len(new_bridges)} bridges.')
+
+        return Response(status=200, data=f'Added {len(new_bridges)} bridges')
+
     def search_routine(self, alliances):
         known_bridges = []
         bridges = []
@@ -42,7 +86,7 @@ class BridgesBackend:
         if bridges:
             Bridge.objects.all().delete()
             with transaction.atomic():
-                print(f'Beginning to add {len(bridges)} to database...')
+                print(f'Beginning to add {len(bridges)} bridges to database...')
                 for index, bridge in enumerate(bridges):
                     Bridge(
                         id=bridge['id'],
