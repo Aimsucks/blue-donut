@@ -56,10 +56,10 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
-
 ############################
 # Extra Settings
 ############################
 
 # Webhook URL for Discord notifications about reports. Comment out if you want to disable.
-WEBHOOK_URL = "https://discordapp.com/api/webhooks/647096557669187609/XBxdtSoMNU1S5K4Nko0UQ8-ov1BRgd7u-GKlXcD1NZqvP4pzK1Ge6jXN30TvmyUQT5Z_"
+REPORT_WEBHOOK = "https://discordapp.com/api/webhooks/647096557669187609/XBxdtSoMNU1S5K4Nko0UQ8-ov1BRgd7u-GKlXcD1NZqvP4pzK1Ge6jXN30TvmyUQT5Z_"
+FEEDBACK_WEBHOOK = "https://discordapp.com/api/webhooks/691452521658712125/QoePtNxR1s-3Lxn_3nduyjLe7a7eD92UvJBWW_KAz7INN-rvTPSAIL5Te3Z1fX0z__nz"

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db.models import Q
 
 from dhooks import Webhook, Embed
-hook = Webhook(settings.WEBHOOK_URL)
+hook = Webhook(settings.REPORT_WEBHOOK)
 
 
 class ReportBackend:

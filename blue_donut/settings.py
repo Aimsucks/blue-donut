@@ -15,11 +15,12 @@ INSTALLED_APPS = [
     'auth',
     'bridges',
     'esi',
+    "feedback",
     'frontend',
+    'management',
     'map',
     'planner',
     'report',
-    'management',
 ]
 
 MIDDLEWARE = [
