@@ -20,5 +20,5 @@ class ManualUpdateBridges(APIView):
     permission_classes = [permissions.IsAdminUser]
 
     def post(self, request):
-        response = BridgesBackend().manual_update(request.data["data"])
-        return response
+        status, text = BridgesBackend().manual_update(request.data["data"])
+        return Response(status=status, data=text)

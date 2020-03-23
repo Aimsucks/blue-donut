@@ -25,12 +25,12 @@ class BridgesBackend:
             try:
                 from_system = System.objects.get(name=bridge["from"])
             except ObjectDoesNotExist:
-                return Response(status=400, data=f'System {bridge["from"]} does not exist')
+                return 400, f'System {bridge["from"]} does not exist'
 
             try:
                 to_system = System.objects.get(name=bridge["to"])
             except ObjectDoesNotExist:
-                return Response(status=400, data=f'System {bridge["to"]} does not exist')
+                return 400, f'System {bridge["to"]} does not exist'
 
             new_bridges.append({
                 "id": bridge["id"],
@@ -55,7 +55,7 @@ class BridgesBackend:
                 )
             print(f'\nFinished adding {len(new_bridges)} bridges.')
 
-        return Response(status=200, data=f'Added {len(new_bridges)} bridges')
+        return 200, f'Added {len(new_bridges)} bridges'
 
     def search_routine(self, alliances):
         known_bridges = []
