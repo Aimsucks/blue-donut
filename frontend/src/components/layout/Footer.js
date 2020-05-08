@@ -32,20 +32,6 @@ export class Footer extends React.Component {
                                     >
                                         Aimsucks{" "}
                                     </a>
-                                    with help from{" "}
-                                    <a
-                                        className="text-info"
-                                        href="https://evewho.com/character/94944046"
-                                    >
-                                        Callum Lul{" "}
-                                    </a>
-                                    and{" "}
-                                    <a
-                                        className="text-info"
-                                        href="https://evewho.com/character/94854191"
-                                    >
-                                        Telltak Laellithor
-                                    </a>
                                 </NavItem>
                             </Nav>
                             <Nav navbar className="ml-auto navbar-expand-md">
