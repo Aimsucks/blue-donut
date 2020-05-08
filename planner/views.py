@@ -47,7 +47,7 @@ class GenerateRoute(APIView):
                 return Response(status=400, data="Incorrect origin")
         else:
             if settings.DEBUG:
-                from_system = 30003135
+                from_system = 30000142
             else:
                 from_system = ESI.request(
                     'get_characters_character_id_location',

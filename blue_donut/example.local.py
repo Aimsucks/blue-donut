@@ -17,6 +17,10 @@ SECRET_KEY = ""
 DEBUG = True
 SEND_ROUTE = False
 
+# These need to be false if you are not using HTTPS
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+
 # Add your domain name here.
 ALLOWED_HOSTS = []
 
@@ -63,8 +67,8 @@ else:
 ############################
 
 # Webhook URL for Discord notifications about reports. Comment out if you want to disable.
-REPORT_WEBHOOK = "https://discordapp.com/api/webhooks/647096557669187609/XBxdtSoMNU1S5K4Nko0UQ8-ov1BRgd7u-GKlXcD1NZqvP4pzK1Ge6jXN30TvmyUQT5Z_"
-FEEDBACK_WEBHOOK = "https://discordapp.com/api/webhooks/691452521658712125/QoePtNxR1s-3Lxn_3nduyjLe7a7eD92UvJBWW_KAz7INN-rvTPSAIL5Te3Z1fX0z__nz"
+REPORT_WEBHOOK = ""
+FEEDBACK_WEBHOOK = ""
 
 # Sentry configuration - if you don't want to use it, comment it out!
 if not DEBUG:
