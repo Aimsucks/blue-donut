@@ -1,3 +1,5 @@
+### A good alternative to this project is EVE Route. Check it's source out [here](https://github.com/tkhamez/eve-route), join their support Discord [here](https://discord.gg/EjzHx8p), and see an example working [here](https://eve-route.herokuapp.com/).
+
 <h1 align="center">Blue Donut</h1>
 
 <div align="center">
